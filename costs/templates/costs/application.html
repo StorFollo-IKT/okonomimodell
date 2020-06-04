@@ -27,7 +27,7 @@
         <p>
             <strong>Kostnad for {{ application.servers.count }} server(e):</strong> {{ application.cost }}kr
         </p>
+        <a href="{% url 'costs:application_form' %}?customer={{ application.customer.id }}&amp;application={{ application.name }}">Endre {{ application.name }} hos {{application.customer }}</a>
     {% endfor %}
-
 
 {% endblock %}

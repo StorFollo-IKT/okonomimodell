@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 from costs.forms import ApplicationForm
@@ -15,12 +15,29 @@ def application_form(request):
 
     if customer and application_name:
         application_obj = Application.objects.get(name=application_name, customer__id=customer)
+        servers = application_obj.servers.all()
     else:
         application_obj = None
+        servers = None
 
     form = ApplicationForm(request.POST or None, instance=application_obj)
+    if request.method == 'POST' and form.is_valid():
+        application_obj = form.save()
+        servers = request.POST.getlist('servers_list')
 
-    return render(request, 'costs/application_form.htm', {'form': form, 'customers': Customer.objects.all()})
+        for server in servers:
+            if server == '':
+                continue
+            application_obj.servers.add(Server.objects.get(name=server))
+        return redirect('costs:application', name=application_obj.name)
+
+    context = {'form': form,
+               'customers': Customer.objects.all(),
+               'servers': servers,
+               'application': application_obj,
+               }
+
+    return render(request, 'costs/application_form.htm', context)
 
 
 def applications(request, customer=None, vendor=None, department=None, sector=None):

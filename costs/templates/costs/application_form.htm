@@ -1,0 +1,42 @@
+{% extends 'costs/base.html' %}
+{% load static %}
+{% block body %}
+    {{ form.non_field_errors }}
+    <form method="POST" class="post-form">
+        {% csrf_token %}
+        {% for customer in customers %}
+            <datalist id="servers_{{ customer.id }}">
+                {% for server in customer.servers.all %}
+                    <option value="{{ server.name }}">
+                {% endfor %}
+            </datalist>
+        {% endfor %}
+        <table>
+            {% for field in form %}
+                <tr>
+                    <th><label for="{{ field.id_for_label }}">{{ field.label_tag }}</label>{{ field.errors }}
+                    </th>
+                    {% if field.name == 'servers' %}
+                        <td id="server_inputs">
+                            {% if application %}
+                                {% for server in application.servers.all %}
+                                    <input type="text" name="servers_list" id="{{ field.id_for_label }}"
+                                           list="servers_{{ application.customer.id }}" value="{{ server.name }}"><br/>
+                                {% endfor %}
+                                <input type="text" name="servers_list" id="{{ field.id_for_label }}"
+                                       list="servers_{{ application.customer.id }}">
+                            {% else %}
+                                <input type="text" name="servers_list" id="{{ field.id_for_label }}">
+                            {% endif %}
+                        </td>
+                    {% else %}
+                        <td>{{ field }}</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+
+        </table>
+        <button type="submit" class="save btn btn-default">Lagre</button>
+    </form>
+    <script type="text/javascript" src="{% static 'costs/application_form.js' %}"></script>
+{% endblock %}
