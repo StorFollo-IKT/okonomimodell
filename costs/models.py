@@ -68,6 +68,8 @@ class Server(models.Model):
         return apps_string
 
     def application_cost(self):
+        if not self.product or not self.product.price:
+            return 0
         return round(self.product.price/self.applications.count())
 
 
