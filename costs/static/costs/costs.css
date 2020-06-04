@@ -1,0 +1,34 @@
+/*table, th, td {
+  border: 1px solid black;
+}*/
+
+#changelist-filter {
+  top: auto;
+}
+
+body {
+  font-family: "Roboto","Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+}
+
+a:link, a:visited {
+  color: #447e9b;
+  text-decoration: none;
+}
+
+td, th {
+  font-size: 13px;
+  line-height: 16px;
+  border-bottom: 1px solid #eee;
+  vertical-align: top;
+  padding: 8px;
+  font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
+}
+
+.results {
+    margin-right: 280px;
+    width: auto;
+}
+
+
+tr:nth-child(even) {background: #f9f9f9}
+tr:nth-child(odd) {background: #FFF}

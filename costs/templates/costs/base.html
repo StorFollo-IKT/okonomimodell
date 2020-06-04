@@ -1,0 +1,35 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    {% if not title %}
+        <title>StorFollo IKT &oslash;konomimodell</title>
+    {% else %}
+        <title>StorFollo IKT &oslash;konomimodell - {{ title }}</title>
+    {% endif %}
+    {% block head %}
+    {% endblock %}
+    <link rel="stylesheet" href="{% static 'admin/css/base.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'costs/costs.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'costs/menu.css' %}" type="text/css">
+</head>
+<body>
+<div class="menu">
+    <img src="{% static 'costs/logo.png' %}" alt="StorFollo IKT logo" style="max-height: 50px"/>
+    <ul class="top_menu">
+        <li><a href="{% url 'costs:applications' %}">Applikasjoner</a></li>
+        <li><a href="{% url 'costs:servers' %}">Servere</a></li>
+        <li><a href="{% url 'costs:customers' %}">Kunder</a></li>
+    </ul>
+</div>
+
+<div id="content" class="flex">
+    <h2>{{ title|capfirst }}</h2>
+    {% block body %}
+    {% endblock %}
+</div>
+</body>
+</html>

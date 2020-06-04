@@ -1,0 +1,16 @@
+{% extends 'costs/base.html' %}
+{% block body %}
+    <h3>{{ server.product.name }}</h3>
+    <strong>Applikasjoner:</strong>
+    <ul>
+            {% for application in server.applications.all %}
+                <li>
+                <a href="{% url 'costs:application' name=application.name customer=application.customer %}">{{ application.name }}</a>
+                </li>
+            {% endfor %}
+    </ul>
+    <p>
+        <strong>Totalkostnad for server:</strong> {{ server.product.price }}kr<br />
+        <strong>Kostnad per applikasjon:</strong> {{ server.application_cost }}kr
+    </p>
+{% endblock %}

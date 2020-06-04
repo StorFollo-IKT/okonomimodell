@@ -1,0 +1,33 @@
+{% extends 'costs/base.html' %}
+{% block body %}
+    {% for application in applications %}
+        <h3>{{ application }}</h3>
+        <table>
+        <tr>
+            <th>Avdeling</th>
+            <td>{{ application.department.name }}</td>
+        </tr>
+        <tr>
+            <th colspan="2">&nbsp;</th>
+        </tr>
+        <tr>
+            <th colspan="2">Servere</th>
+        </tr>
+        <tr>
+            <th>Navn</th>
+            <th>Type</th>
+        </tr>
+            {% for server in application.servers.all %}
+                <tr>
+                    <th><a href="{% url 'costs:server' customer=server.customer name=server.name %}">{{ server.name }}</a></th>
+                    <td>{{ server.product.name }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <p>
+            <strong>Kostnad for {{ application.servers.count }} server(e):</strong> {{ application.cost }}kr
+        </p>
+    {% endfor %}
+
+
+{% endblock %}

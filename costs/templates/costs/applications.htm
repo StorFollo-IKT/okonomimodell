@@ -1,0 +1,61 @@
+{% extends 'costs/base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'admin/css/changelists.css' %}" type="text/css">
+{% endblock %}
+{% block body %}
+    <div class="module filtered" id="changelist">
+        <div id="changelist-filter">
+            <h2>Filtrering</h2>
+            <h3>Etter kunde</h3>
+            <ul>
+                <li><a href="{% url 'costs:applications' %}">Alle</a></li>
+                {% for customer in customers.all %}
+                    <li {% if customer.name == selected_customer %} class="selected" {% endif %}
+                    ><a href="{% url 'costs:applications' customer=customer.name %}">{{ customer.name }}</a></li>
+                {% endfor %}
+            </ul>
+            {% if selected_customer %}
+            <h3>Etter sektor</h3>
+            <ul>
+                <li><a href="{% url 'costs:applications' customer=selected_customer %}">Alle</a></li>
+                {% for sector in sectors.all %}
+                    <li {% if sector.department_prefix == selected_sector %} class="selected" {% endif %}
+                    ><a href="{% url 'costs:applications' sector=sector.department_prefix customer=selected_customer %}">{{ sector.name }}</a></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="results">
+            <table>
+                <tr>
+                    <th>Kunde</th>
+                    <th>Sektor</th>
+                    <th>Ansvar</th>
+                    <th>Leverand&oslash;r</th>
+                    <th>Applikasjon</th>
+                </tr>
+                {% for application in applications %}
+                    <tr>
+                        <td>{{ application.customer }}</td>
+
+                        {% if application.department %}
+                            <td>{{ application.department.sector.name }}</td>
+                            <td>
+                                <a href="{% url 'costs:applications' customer=application.customer.name department=application.department.number %}">{{ application.department.name }}</a>
+                            </td>
+                        {% else %}
+                            <td colspan="2"></td>
+                        {% endif %}
+                        <td>
+                            <a href="{% url 'costs:applications' vendor=application.vendor %}">{{ application.vendor }}</a>
+                        </td>
+                        <td><a href="{% url 'costs:application' name=application.name customer=application.customer %}">{{ application.name }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+    </div>
+{% endblock %}
