@@ -125,6 +125,7 @@ class Application(models.Model):
         verbose_name = 'applikasjon'
         verbose_name_plural = 'applikasjoner'
         unique_together = ['customer', 'name', 'department']
+        ordering = ['customer', 'name']
 
     def cost(self):
         cost_sum = 0
