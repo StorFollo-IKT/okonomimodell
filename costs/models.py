@@ -112,9 +112,9 @@ class Application(models.Model):
     servers = models.ManyToManyField(Server, verbose_name='Servere', related_name='applications', blank=True)
     department = models.ForeignKey(Department, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Ansvar')
     integrations = models.ManyToManyField('self', verbose_name='Integrasjoner', related_name='integrated', blank=True)
-    licence_cost = models.IntegerField('Lisenskostnad', null=True, blank=True)
-    internal_hours = models.IntegerField('Applikasjonsdrift timer pr mnd', null=True, blank=True)
-    external_cost = models.IntegerField('Konsulentkostnad', null=True, blank=True)
+    licence_cost = models.IntegerField('Lisenskostnad', default=0)
+    internal_hours = models.IntegerField('Applikasjonsdrift timer pr mnd', default=0)
+    external_cost = models.IntegerField('Konsulentkostnad', default=0)
     responsible = models.ForeignKey(User, verbose_name='Systemansvarlig', on_delete=models.PROTECT, related_name='responsible', blank=True, null=True)
     super_user = models.ForeignKey(User, verbose_name='Superbruker', on_delete=models.PROTECT, related_name='super_user', blank=True, null=True)
 
