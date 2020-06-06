@@ -44,6 +44,20 @@
             {% endfor %}
         {% endif %}
         </table>
+        <h3>Integrert med</h3>
+        <table>
+        <tr>
+            <th>Applikasjon</th>
+            <th>Sektor</th>
+        </tr>
+        {% for integration in application.integrations.all %}
+        <tr>
+            <th><a href="{% url 'costs:application' name=integration.name %}">{{ integration.name }}</a></th>
+            <td>{{ integration.department.sector.name }}</td>
+        </tr>
+        {% endfor %}
+        </table>
+
         <h3>&Aring;rlige kostnader</h3>
         <table>
             <tr>
