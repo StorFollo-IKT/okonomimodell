@@ -1,18 +1,37 @@
 {% extends 'costs/base.html' %}
 {% block body %}
     {% for application in applications %}
-        <h3>{{ application }}</h3>
+        <h2>{{ application.customer }}</h2>
+        <h3>Informasjon</h3>
         <table>
-        <tr>
-            <th>Avdeling</th>
-            <td>{{ application.department.name }}</td>
-        </tr>
-        <tr>
-            <th colspan="2">&nbsp;</th>
-        </tr>
-        <tr>
-            <th colspan="2">Servere</th>
-        </tr>
+        {% if application.department %}
+            <tr>
+                <th>{{ fields.department }}</th>
+                <td>{{ application.department.name }}</td>
+            </tr>
+        {% endif %}
+        {% if application.vendor %}
+            <tr>
+                <th>{{ fields.vendor }}</th>
+                <td>{{ application.vendor }}</td>
+            </tr>
+        {% endif %}
+        {% if application.responsible %}
+            <tr>
+                <th>{{ fields.responsible }}</th>
+                <td>{{ application.responsible }}</td>
+            </tr>
+        {% endif %}
+        {% if application.super_user %}
+            <tr>
+                <th>{{ fields.super_user }}</th>
+                <td>{{ application.super_user }}</td>
+            </tr>
+        {% endif %}
+        </table>
+        {% if application.servers.count %}
+        <h3>Servere</h3>
+        <table>
         <tr>
             <th>Navn</th>
             <th>Type</th>
@@ -23,15 +42,34 @@
                     <td>{{ server.product.name }}</td>
                 </tr>
             {% endfor %}
+        {% endif %}
         </table>
-        <p>
-            {% if not application.cloud %}
-                <strong>Kostnad for {{ application.servers.count }} server(e):</strong> {{ application.cost }}kr
-            {% else %}
-                <strong>Kostnad for skytjeneste:</strong> {{ application.cost }}kr
+        <h3>&Aring;rlige kostnader</h3>
+        <table>
+            <tr>
+                <th>Lisens</th>
+                <td>{{ application.licence_cost }}kr</td>
+            </tr>
+            {% if application.external_cost %}
+            <tr>
+                <th>Konsulent</th>
+                <td>{{ application.external_cost }}</td>
+            </tr>
             {% endif %}
-        </p>
+            {% if application.servers.count %}
+            <tr>
+                <th>{{ application.servers.count }} server(e):</th>
+                <td>{{ application.server_cost }}kr</td>
+            </tr>
+            {% endif %}
+
+        </table>
+        <br />
         <a href="{% url 'costs:application_form' %}?customer={{ application.customer.id }}&amp;application={{ application.name }}">Endre {{ application.name }} hos {{application.customer }}</a>
     {% endfor %}
+
+    {% if customer %}
+        <br /><a href="{% url 'costs:application' name=application_name %}">Vis {{ application_name }} hos alle kunder</a>
+    {% endif %}
 
 {% endblock %}

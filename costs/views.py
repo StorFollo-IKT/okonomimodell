@@ -4,6 +4,8 @@ from django.shortcuts import render, redirect
 from costs.forms import ApplicationForm
 from costs.models import Application, Customer, Server, Sector
 
+from costs.utils import field_names
+
 
 def customers(request):
     return render(request, 'costs/customers.html', {'customers': Customer.objects.all()})
@@ -87,7 +89,7 @@ def applications(request, customer=None, vendor=None, department=None, sector=No
 
 def application(request, name, customer=None):
     if not customer:
-        customer = request.GET.get('customer', '')
+        customer = request.GET.get('customer')
 
     apps = Application.objects.filter(name=name)
     if customer:
@@ -98,8 +100,13 @@ def application(request, name, customer=None):
     for app in apps:
         apps_sorted[app.customer.name] = app
     apps = apps.order_by('customer')
-    return render(request, 'costs/application.html', {'applications': apps, 'title': name,
-                                                      })
+    return render(request, 'costs/application.html', {
+        'applications': apps,
+        'application_name': name,
+        'title': name,
+        'customer': customer,
+        'fields': field_names(Application._meta)
+    })
 
 
 def server_detail(request, name, customer):
