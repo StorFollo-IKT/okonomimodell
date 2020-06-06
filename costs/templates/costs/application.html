@@ -25,7 +25,11 @@
             {% endfor %}
         </table>
         <p>
-            <strong>Kostnad for {{ application.servers.count }} server(e):</strong> {{ application.cost }}kr
+            {% if not application.cloud %}
+                <strong>Kostnad for {{ application.servers.count }} server(e):</strong> {{ application.cost }}kr
+            {% else %}
+                <strong>Kostnad for skytjeneste:</strong> {{ application.cost }}kr
+            {% endif %}
         </p>
         <a href="{% url 'costs:application_form' %}?customer={{ application.customer.id }}&amp;application={{ application.name }}">Endre {{ application.name }} hos {{application.customer }}</a>
     {% endfor %}
