@@ -70,7 +70,10 @@ def applications(request, customer=None, vendor=None, department=None, sector=No
         title += ' levert av %s' % vendor
 
     if sector:
-        apps = apps.filter(department__number__gte=sector*1000, department__number__lt=(sector+1)*1000)
+        sector_obj = Sector.objects.get(customer__name=customer,
+                                        name=sector)
+        apps = sector_obj.applications()
+        title += ' i sektor %s' % sector
 
     if server:
         apps = apps.filter(servers__name=server)
@@ -128,3 +131,9 @@ def servers_all(request, customer=None):
     if application_name:
         servers.filter(applications__name=application_name)
     return render(request, 'costs/servers.html', {'customers': custs, 'servers': servers})
+
+
+def sectors(request):
+    sectors_obj = Sector.objects.all()
+    return render(request, 'costs/sectors.html',
+                  {'sectors': sectors_obj})

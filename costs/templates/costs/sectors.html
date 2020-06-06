@@ -1,0 +1,25 @@
+{% extends 'costs/base.html' %}
+{% load humanize %}
+{% block body %}
+    <table>
+        <tr>
+            <th>Sektor</th>
+            <th>Kunde</th>
+            <th>Applikasjoner</th>
+            <th>Servere</th>
+            <th>&Aring;rlig driftskostnad</th>
+        </tr>
+        {% for sector in sectors %}
+            <tr>
+                <td>{{ sector.name }}</td>
+                <td>{{ sector.customer }}</td>
+                <td><a href="{% url 'costs:applications' %}?sector={{ sector.name }}&customer={{ sector.customer }}">{{ sector.applications.count }}</a></td>
+                <td>{{ sector.servers.count }}</td>
+                <td>{{ sector.costs|intcomma }}kr</td>
+                <td></td>
+            </tr>
+
+        {% endfor %}
+
+    </table>
+{% endblock %}

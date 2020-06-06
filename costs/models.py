@@ -142,9 +142,37 @@ class Sector(models.Model):
     department_prefix = models.IntegerField('Første siffer i ansvar')
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name='Kunde', related_name='sectors')
 
+    def department_nums(self):
+        return self.department_prefix*1000, (self.department_prefix+1)*1000
+
+    def applications(self):
+        department_low, department_high = self.department_nums()
+        apps = Application.objects.filter(
+            customer=self.customer,
+            department__number__gte=department_low,
+            department__number__lt=department_high
+        )
+        return apps
+
     def departments(self):
-        return Department.objects.filter(number__gte=self.department_prefix*1000,
-                                         number__lt=(self.department_prefix+1)*1000)
+        return Department.objects.filter(
+            number__gte=self.department_prefix*1000,
+            number__lt=(self.department_prefix+1)*1000)
+
+    def servers(self):
+        department_low, department_high = self.department_nums()
+        return Server.objects.filter(
+            customer=self.customer,
+            applications__department__number__gte=department_low,
+            applications__department__number__lt=department_high)
+
+    def costs(self):
+        apps = self.applications()
+        cost = 0
+        for app in apps:
+            cost += app.cost()
+
+        return cost
 
     def __str__(self):
         return '%s %s' % (self.customer, self.name)
