@@ -127,15 +127,14 @@ class Application(models.Model):
         unique_together = ['customer', 'name', 'department']
         ordering = ['customer', 'name']
 
-    def cost(self):
-        cost_sum = 0
+    def server_cost(self):
+        server_cost = 0
         for server in self.servers.all():
-            cost_sum += server.application_cost()
-        return cost_sum
+            server_cost += server.application_cost()
+        return server_cost
 
-
-
-    # def server_cost(self):
+    def cost(self):
+        return self.server_cost() + self.external_cost + self.licence_cost
 
 
 class Sector(models.Model):
