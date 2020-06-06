@@ -1,4 +1,5 @@
 {% extends 'costs/base.html' %}
+{% load humanize %}
 {% block body %}
     {% for application in applications %}
         <h2>{{ application.customer }}</h2>
@@ -62,18 +63,18 @@
         <table>
             <tr>
                 <th>Lisens</th>
-                <td>{{ application.licence_cost }}kr</td>
+                <td>{{ application.licence_cost|intcomma }}kr</td>
             </tr>
             {% if application.external_cost %}
             <tr>
                 <th>Konsulent</th>
-                <td>{{ application.external_cost }}</td>
+                <td>{{ application.external_cost|intcomma }}</td>
             </tr>
             {% endif %}
             {% if application.servers.count %}
             <tr>
                 <th>{{ application.servers.count }} server(e):</th>
-                <td>{{ application.server_cost }}kr</td>
+                <td>{{ application.server_cost|intcomma }}kr</td>
             </tr>
             {% endif %}
 
