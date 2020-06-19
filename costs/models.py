@@ -97,7 +97,15 @@ class Department(models.Model):
         return '%s (%s)' % (self.name, self.customer)
 
     def sector(self):
-        return Sector.objects.get(department_prefix=int(self.number/1000), customer=self.customer)
+        try:
+            return self.sector_dep.get(departments__number=self.number)
+        except Sector.MultipleObjectsReturned as e:
+            print(e)
+            print('Department %s matched multiple sectors:' % self)
+            sectors = self.sector_dep.filter(departments__number=self.number)
+            for sector in sectors:
+                print(sector)
+            return sectors.first()
 
 
 class User(models.Model):
@@ -156,38 +164,51 @@ class Application(models.Model):
 
 class Sector(models.Model):
     name = models.CharField('Navn', max_length=50)
-    department_prefix = models.IntegerField('Første siffer i ansvar')
+    departments = models.ManyToManyField(Department, verbose_name='Ansvar', blank=True, related_name='sector_dep')
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name='Kunde', related_name='sectors')
 
-    def department_nums(self):
-        return self.department_prefix*1000, (self.department_prefix+1)*1000
-
     def applications(self):
-        department_low, department_high = self.department_nums()
         apps = Application.objects.filter(
-            customer=self.customer,
-            department__number__gte=department_low,
-            department__number__lt=department_high
+            department__in=self.departments.all()
         )
         return apps
 
-    def departments(self):
-        return Department.objects.filter(
-            number__gte=self.department_prefix*1000,
-            number__lt=(self.department_prefix+1)*1000)
-
     def servers(self):
-        department_low, department_high = self.department_nums()
         return Server.objects.filter(
-            customer=self.customer,
-            applications__department__number__gte=department_low,
-            applications__department__number__lt=department_high)
+            applications__department__in=self.departments.all()
+        )
 
     def costs(self):
         apps = self.applications()
         cost = 0
         for app in apps:
             cost += app.cost()
+        for delivery in self.deliveries.all():
+            cost += delivery.sum()
+
+        return cost
+
+    def external_costs(self):
+        apps = self.applications()
+        cost = 0
+        for app in apps:
+            cost += app.external_cost
+
+        return cost
+
+    def licence_costs(self):
+        apps = self.applications()
+        cost = 0
+        for app in apps:
+            cost += app.licence_cost
+
+        return cost
+
+    def server_costs(self):
+        apps = self.applications()
+        cost = 0
+        for app in apps:
+            cost += app.server_cost()
 
         return cost
 
@@ -197,7 +218,7 @@ class Sector(models.Model):
     class Meta:
         verbose_name = 'Sektor'
         verbose_name_plural = 'Sektorer'
-        unique_together = ['department_prefix', 'customer']
+        unique_together = ['name', 'customer']
         ordering = ['name']
 
 

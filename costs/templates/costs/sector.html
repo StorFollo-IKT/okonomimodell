@@ -7,6 +7,8 @@
             <th>Kunde</th>
             <th>Applikasjoner</th>
             <th>Servere</th>
+            <th>&Aring;rlig lisenskostnad</th>
+            <th>&Aring;rlig serverkostnad</th>
             <th>&Aring;rlig driftskostnad</th>
         </tr>
         {% for sector in sectors %}
@@ -15,8 +17,9 @@
                 <td>{{ sector.customer }}</td>
                 <td><a href="{% url 'costs:applications' %}?sector={{ sector.name }}&customer={{ sector.customer }}">{{ sector.applications.count }}</a></td>
                 <td>{{ sector.servers.count }}</td>
+                <td>{{ sector.licence_costs|intcomma }}kr</td>
+                <td>{{ sector.server_costs|intcomma }}kr</td>
                 <td>{{ sector.costs|intcomma }}kr</td>
-                <td></td>
             </tr>
 
         {% endfor %}

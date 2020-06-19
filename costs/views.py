@@ -134,9 +134,23 @@ def servers_all(request, customer=None):
 
 
 def sectors(request):
-    sectors_obj = Sector.objects.all()
-    return render(request, 'costs/sectors.html',
-                  {'sectors': sectors_obj})
+    sector = request.GET.get('sector')
+    if not sector:
+        sectors_obj = Sector.objects.order_by('name').values_list('name').distinct()
+        costs = {}
+        for sector_name in sectors_obj:
+            sector_name = sector_name[0]
+            costs[sector_name] = 0
+
+            for sector in Sector.objects.filter(name=sector_name):
+                costs[sector_name] += sector.costs()
+
+        return render(request, 'costs/sectors_all.html',
+                      {'sectors': costs.items()})
+    else:
+        sectors_obj = Sector.objects.filter(name=sector)
+        return render(request, 'costs/sector.html',
+                      {'sectors': sectors_obj})
 
 
 def portfolio(request):
