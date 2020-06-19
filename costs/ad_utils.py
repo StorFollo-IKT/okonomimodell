@@ -8,7 +8,7 @@
 
 def microsoft_timestamp_to_unix(ad_date):
     if not ad_date:
-        return
+        raise ValueError('Invalid date')
 
     secsAfterADEpoch = ad_date / 10000000
     AD2Unix = ((1970 - 1601) * 365 - 3 + round((1970 - 1601) / 4)) * 86400
