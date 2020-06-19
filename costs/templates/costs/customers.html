@@ -1,11 +1,12 @@
 {% extends 'costs/base.html' %}
+{% load humanize %}
 {% block body %}
     {% for customer in customers %}
         <h2>{{ customer }}</h2>
         <ul>
             <li>Servere: <a href="{% url 'costs:servers' customer=customer.name %}">{{ customer.servers.count }}</a></li>
             <li>Applikasjoner: <a href="{% url 'costs:applications' customer=customer.name %}">{{ customer.applications.count }}</a></li>
-            <li>Totale driftskostnader:</li>
+            <li>Totale driftskostnader: {{ customer.costs|intcomma }}kr</li>
         </ul>
     {% endfor %}
 {% endblock %}

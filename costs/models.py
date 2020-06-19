@@ -13,6 +13,15 @@ class Customer(models.Model):
     def __str__(self):
         return self.name
 
+    def costs(self):
+        cost = 0
+        for application in self.applications.all():
+            cost += application.cost()
+        for product in self.deliveries.all():
+            cost += product.sum()
+
+        return cost
+
 
 class ProductType(models.Model):
     type = models.CharField(max_length=50)
