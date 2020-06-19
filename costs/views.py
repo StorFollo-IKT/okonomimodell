@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 from costs.forms import ApplicationForm
-from costs.models import Application, Customer, Server, Sector, Department
+from costs.models import Application, Customer, ProductDelivery, Server, Sector, Department
 
 from costs.utils import field_names
 
@@ -155,9 +155,23 @@ def sectors(request):
 
 def portfolio(request):
     applications_obj = Application.objects.all()
+    deliveries_obj = ProductDelivery.objects.all()
+    customer = request.GET.get('customer')
+    sector = request.GET.get('sector')
+    title = ''
+    if customer:
+        applications_obj = applications_obj.filter(customer__name=customer)
+        deliveries_obj = deliveries_obj.filter(customer__name=customer)
+        title += ' hos %s' % customer
+
+    if sector:
+        applications_obj = applications_obj.filter(department__sector_dep__name=sector)
+        deliveries_obj = deliveries_obj.filter(department__sector_dep__name=sector)
+        title += ' i sektor %s' % sector
 
     return render(request, 'costs/portfolio.html',
-                  {'applications': applications_obj})
+                  {'applications': applications_obj,
+                   'deliveries': deliveries_obj})
 
 
 def departments(request):

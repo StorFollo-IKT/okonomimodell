@@ -1,11 +1,13 @@
 {% extends 'costs/base.html' %}
 {% load humanize %}
 {% block body %}
+    <h2>Applikasjoner</h2>
     <table>
     <tr>
         <th>Sektor</th>
         <th>Applikasjon</th>
         <th>Kunde</th>
+        <th>Leverandørkostnad per år</th>
         <th>&Aring;rlige driftskostnader</th>
     </tr>
     {% for application in applications %}
@@ -15,6 +17,29 @@
             <td>{{ application.customer }}</td>
             <td>{{ application.cost|intcomma }}kr</td>
         </tr>
+    {% endfor %}
+    </table>
+    <h2>Tjenester</h2>
+    <table>
+    <tr>
+        <th>Sektor</th>
+        <th>Kunde</th>
+        <th>Tjeneste</th>
+        <th>Pris per måned</th>
+        <th>Antall</th>
+        <th>Sum per måned</th>
+        <th>Sum per år</th>
+    </tr>
+    {% for delivery in deliveries %}
+    <tr>
+        <td>{{ delivery.sector.name }}</td>
+        <td>{{ delivery.customer.name }}</td>
+        <td>{{ delivery.product.name }}</td>
+        <td>{{ delivery.product.price|intcomma }}kr</td>
+        <td>{{ delivery.amount }}</td>
+        <td>{{ delivery.sum|intcomma }}kr</td>
+        <td>{{ delivery.sum_year|intcomma }}kr</td>
+    </tr>
     {% endfor %}
     </table>
 {% endblock %}

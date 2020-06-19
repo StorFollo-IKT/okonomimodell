@@ -6,6 +6,12 @@
         <ul>
             <li>Servere: <a href="{% url 'costs:servers' customer=customer.name %}">{{ customer.servers.count }}</a></li>
             <li>Applikasjoner: <a href="{% url 'costs:applications' customer=customer.name %}">{{ customer.applications.count }}</a></li>
+            <li>Tjenesteleveranser:</li>
+            <ul>
+            {% for delivery in customer.deliveries.all %}
+                <li>{{ delivery.product.name }}: {{ delivery.sum|intcomma }}kr</li>
+            {% endfor %}
+            </ul>
             <li>Totale driftskostnader: {{ customer.costs|intcomma }}kr</li>
         </ul>
     {% endfor %}

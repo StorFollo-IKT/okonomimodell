@@ -38,7 +38,7 @@ class ProductType(models.Model):
 class Product(models.Model):
     name = models.CharField('Tjeneste', max_length=50)
     type = models.ForeignKey(ProductType, on_delete=models.PROTECT)
-    price = models.IntegerField('Pris')
+    price = models.IntegerField('Pris per måned')
 
     class Meta:
         verbose_name = 'tjeneste'
@@ -238,3 +238,6 @@ class ProductDelivery(models.Model):
 
     def sum(self):
         return self.product.price * self.amount
+
+    def sum_year(self):
+        return (self.product.price * self.amount) * 12
