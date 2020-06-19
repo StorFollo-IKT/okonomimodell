@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from costs.models import Application, Customer, Department, Product, ProductType, Sector, Server, User
+from costs.models import Application, Customer, Department, Product, ProductType, Sector, Server, User, ProductDelivery
 
 admin.site.register(Customer)
 admin.site.register(ProductType)
@@ -23,3 +23,9 @@ class ServerAdmin(admin.ModelAdmin):
     readonly_fields = ['applications_string']
     list_filter = ['customer', 'last_logon']
 
+
+@admin.register(ProductDelivery)
+class ProductDeliveryAdmin(admin.ModelAdmin):
+    list_display = ['customer', 'product', 'amount', 'sum']
+    readonly_fields = ['sum']
+    list_filter = ['customer', 'product']
