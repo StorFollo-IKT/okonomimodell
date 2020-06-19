@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 from costs.forms import ApplicationForm
-from costs.models import Application, Customer, Server, Sector
+from costs.models import Application, Customer, Server, Sector, Department
 
 from costs.utils import field_names
 
@@ -143,5 +143,9 @@ def portfolio(request):
     applications_obj = Application.objects.all()
 
     return render(request, 'costs/portfolio.html',
-                  {'applications': applications_obj,
-                   'title': 'Porteføljeoversikt'})
+                  {'applications': applications_obj})
+
+
+def departments(request):
+    return render(request, 'costs/departments.html',
+                  {'departments': Department.objects.all()})
