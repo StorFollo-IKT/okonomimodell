@@ -102,6 +102,7 @@ class User(models.Model):
         unique_together = ['number', 'ad_user', 'department']
         verbose_name = 'bruker'
         verbose_name_plural = 'brukere'
+        ordering = ['name']
 
     def customer(self):
         """
@@ -188,6 +189,7 @@ class Sector(models.Model):
         verbose_name = 'Sektor'
         verbose_name_plural = 'Sektorer'
         unique_together = ['department_prefix', 'customer']
+        ordering = ['name']
 
 
 class ProductDelivery(models.Model):
