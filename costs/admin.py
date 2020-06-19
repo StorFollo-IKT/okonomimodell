@@ -6,9 +6,6 @@ from costs.models import Application, Customer, Department, Product, ProductType
 admin.site.register(Customer)
 admin.site.register(ProductType)
 admin.site.register(Product)
-admin.site.register(Department)
-admin.site.register(User)
-admin.site.register(Sector)
 
 
 @admin.register(Application)
@@ -29,3 +26,19 @@ class ProductDeliveryAdmin(admin.ModelAdmin):
     list_display = ['customer', 'product', 'amount', 'sum']
     readonly_fields = ['sum']
     list_filter = ['customer', 'product']
+
+
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ['name', 'customer', 'department']
+
+
+@admin.register(Department)
+class DepartmentAdmin(admin.ModelAdmin):
+    list_display = ['name', 'number', 'customer']
+    list_filter = ['customer']
+
+
+@admin.register(Sector)
+class SectorAdmin(admin.ModelAdmin):
+    list_display = ['name', 'customer']

@@ -103,6 +103,13 @@ class User(models.Model):
         verbose_name = 'bruker'
         verbose_name_plural = 'brukere'
 
+    def customer(self):
+        """
+        Shortcut method used in admin
+        :return: Customer
+        """
+        return self.department.customer
+
 
 class Application(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT, verbose_name='Kunde', related_name='applications')
