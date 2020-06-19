@@ -137,3 +137,11 @@ def sectors(request):
     sectors_obj = Sector.objects.all()
     return render(request, 'costs/sectors.html',
                   {'sectors': sectors_obj})
+
+
+def portfolio(request):
+    applications_obj = Application.objects.all()
+
+    return render(request, 'costs/portfolio.html',
+                  {'applications': applications_obj,
+                   'title': 'Porteføljeoversikt'})

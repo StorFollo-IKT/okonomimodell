@@ -14,6 +14,7 @@ urlpatterns = [
     path('servere', views.servers_all, name='servers'),
     path('servere/<str:customer>', views.servers_all, name='servers'),
     path('kunder', views.customers, name='customers'),
+    path('portefolje', views.portfolio, name='portfolio'),
     path('applikasjoner', views.applications, name='applications'),
     path('applikasjoner/kunde/<str:customer>', views.applications, name='applications'),
     path('applikasjoner/kunde/<str:customer>/<str:department>', views.applications, name='applications'),

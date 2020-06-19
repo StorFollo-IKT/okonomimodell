@@ -1,0 +1,20 @@
+{% extends 'costs/base.html' %}
+{% load humanize %}
+{% block body %}
+    <table>
+    <tr>
+        <th>Sektor</th>
+        <th>Applikasjon</th>
+        <th>Kunde</th>
+        <th>&Aring;rlige driftskostnader</th>
+    </tr>
+    {% for application in applications %}
+        <tr>
+            <td>{{ application.department.sector.name }}</td>
+            <td><a href="{% url 'costs:application' name=application.name %}">{{ application.name }}</a></td>
+            <td>{{ application.customer }}</td>
+            <td>{{ application.cost|intcomma }}kr</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
