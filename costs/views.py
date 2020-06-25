@@ -156,18 +156,31 @@ def sectors(request):
 def portfolio(request):
     applications_obj = Application.objects.all()
     deliveries_obj = ProductDelivery.objects.all()
-    customer = request.GET.get('customer')
-    sector = request.GET.get('sector')
+    customer = request.GET.get('customer', 'all')
+    sector = request.GET.get('sector', 'all')
+    application_name = request.GET.get('application', 'all')
     title = ''
-    if customer:
+    if customer and customer != 'all':
         applications_obj = applications_obj.filter(customer__name=customer)
         deliveries_obj = deliveries_obj.filter(customer__name=customer)
         title += ' hos %s' % customer
 
-    if sector:
+    if sector and sector != 'all':
         applications_obj = applications_obj.filter(department__sector_dep__name=sector)
-        deliveries_obj = deliveries_obj.filter(department__sector_dep__name=sector)
+        deliveries_obj = deliveries_obj.filter(sector__name=sector)
         title += ' i sektor %s' % sector
+
+    vendor = request.GET.get('vendor', 'all')
+    if vendor and vendor != 'all':
+        applications_obj = applications_obj.filter(vendor=vendor)
+
+    if application_name and application_name != 'all':
+        applications_obj = applications_obj.filter(name=application_name)
+
+    # applications_unique = Application.objects.order_by('name').values_list('name', flat=True).distinct()
+    applications_unique = applications_obj.order_by('name').values_list('name', flat=True).distinct()
+    sectors_unique = Sector.objects.order_by('name').values_list('name', flat=True).distinct()
+    vendors_unique = applications_obj.order_by('vendor').values_list('vendor', flat=True).distinct()
 
     return render(request, 'costs/portfolio.html',
                   {'applications': applications_obj,

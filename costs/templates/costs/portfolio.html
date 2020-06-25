@@ -1,6 +1,50 @@
 {% extends 'costs/base.html' %}
 {% load humanize %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'admin/css/changelists.css' %}" type="text/css">
+{% endblock %}
 {% block body %}
+    <div class="module filtered" id="changelist">
+        <div id="changelist-filter">
+            <h2>Filtrering</h2>
+            <h3>Etter kunde</h3>
+            <ul>
+                <li><a href="{% url 'costs:portfolio' %}?customer=all&amp;sector={{ selected_sector }}&amp;vendor={{ selected_vendor }}&amp;application={{ selected_application }}">Alle</a></li>
+                {% for customer in customers.all %}
+                    <li {% if customer.name == selected_customer %} class="selected" {% endif %}
+                    ><a href="{% url 'costs:portfolio' %}?customer={{ customer.name }}&amp;sector={{ selected_sector }}&amp;vendor={{ selected_vendor }}&amp;application={{ selected_application }}">{{ customer.name }}</a></li>
+                {% endfor %}
+            </ul>
+
+            <h3>Etter sektor</h3>
+            <ul>
+                <li><a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector=all&amp;vendor={{ selected_vendor }}&amp;application={{ selected_application }}">Alle</a></li>
+                {% for sector in sectors.all %}
+                    <li {% if sector == selected_sector %} class="selected" {% endif %}
+                    ><a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector={{ sector }}&amp;vendor={{ selected_vendor }}&amp;application={{ selected_application }}">{{ sector }}</a></li>
+                {% endfor %}
+            </ul>
+
+            <h3>Etter leverand&oslash;r</h3>
+            <ul>
+                <li><a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector={{ selected_sector }}&amp;vendor=all&amp;application={{ selected_application }}">Alle</a></li>
+                {% for vendor in vendors %}
+                    <li {% if vendor == selected_vendor %} class="selected" {% endif %}
+                    ><a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector={{ selected_sector }}&amp;vendor={{ vendor }}&amp;application={{ selected_application }}">{{ vendor }}</a></li>
+                {% endfor %}
+            </ul>
+
+            <h3>Etter applikasjon</h3>
+            <ul>
+                <li><a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector={{ selected_sector }}&amp;vendor={{ selected_vendor }}&amp;application=all">Alle</a></li>
+                {% for application in applications_unique %}
+                    <li {% if application == selected_application %} class="selected" {% endif %}
+                    ><a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector={{ selected_sector }}&amp;vendor={{ selected_vendor }}&amp;application={{ application }}">{{ application }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
     <h2>Applikasjoner</h2>
     <table>
     <tr>
@@ -19,6 +63,7 @@
         </tr>
     {% endfor %}
     </table>
+    {% if selected_vendor == 'all' and selected_application == 'all' %}
     <h2>Tjenester</h2>
     <table>
     <tr>
@@ -42,4 +87,5 @@
     </tr>
     {% endfor %}
     </table>
+    {% endif %}
 {% endblock %}
