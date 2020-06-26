@@ -51,15 +51,24 @@
         <th>Sektor</th>
         <th>Applikasjon</th>
         <th>Kunde</th>
-        <th>Leverandørkostnad per år</th>
-        <th>&Aring;rlige driftskostnader</th>
+        <th title="Lisens og konsulentkostnader">Leverandørkostnad per &aring;r</th>
+        <th title="Kostnad for drift av n&oslash;dvendige servere">M&aring;nedlige serverkostnader</th>
+        <th title="Kostnad for drift av n&oslash;dvendige servere">&Aring;rlige serverkostnader</th>
+        <th>Totalt per &aring;r</th>
     </tr>
     {% for application in applications %}
         <tr>
             <td>{{ application.department.sector.name }}</td>
             <td><a href="{% url 'costs:application' name=application.name %}">{{ application.name }}</a></td>
             <td>{{ application.customer }}</td>
-            <td>{{ application.cost|intcomma }}kr</td>
+            <td>{{ application.external_cost_total|intcomma }}kr</td>
+            {% if not application.cloud %}
+            <td>{{ application.server_cost|intcomma }}kr</td>
+            <td>{{ application.server_cost_year|intcomma }}kr</td>
+            {% else %}
+            <td colspan="2">Skytjeneste</td>
+            {% endif %}
+            <td>{{ application.total_year|intcomma }}kr</td>
         </tr>
     {% endfor %}
     </table>

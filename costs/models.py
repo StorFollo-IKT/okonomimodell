@@ -158,8 +158,17 @@ class Application(models.Model):
             server_cost += server.application_cost()
         return server_cost
 
+    def server_cost_year(self):
+        return self.server_cost()*12
+
+    def external_cost_total(self):
+        return self.external_cost + self.licence_cost
+
     def cost(self):
         return self.server_cost() + self.external_cost + self.licence_cost
+
+    def total_year(self):
+        return self.server_cost_year() + self.external_cost_total()
 
 
 class Sector(models.Model):
