@@ -37,6 +37,9 @@ h3 {
   margin-top: 2em;
 }
 
+.currency {
+  text-align: right;
+}
 
 tr:nth-child(even) {background: #f9f9f9}
 tr:nth-child(odd) {background: #FFF}

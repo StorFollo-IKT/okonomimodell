@@ -62,12 +62,20 @@
             <td>{{ application.department.sector.name }}</td>
             <td><a href="{% url 'costs:application' name=application.name %}">{{ application.name }}</a></td>
             <td>{{ application.customer }}</td>
-            <td>{{ application.external_cost_total|intcomma }}kr</td>
-            {% if not application.cloud %}
-            <td>{{ application.server_cost|intcomma }}kr</td>
-            <td>{{ application.server_cost_year|intcomma }}kr</td>
+
+            {% if application.external_cost %}
+            <td class="currency">{{ application.external_cost_total|intcomma }}&nbsp;kr</td>
             {% else %}
-            <td colspan="2">Skytjeneste</td>
+            <td>&nbsp;</td>
+            {% endif %}
+
+            {% if not application.cloud and application.server_cost %}
+            <td class="currency">{{ application.server_cost|intcomma }}&nbsp;kr</td>
+            <td class="currency">{{ application.server_cost_year|intcomma }}&nbsp;kr</td>
+            {% elif not application.server_cost %}
+            <td colspan="2">&nbsp;</td>
+            {% else %}
+            <td colspan="2" style="text-align: center">Skytjeneste</td>
             {% endif %}
 
             {% if application.internal_hours %}
@@ -96,10 +104,10 @@
         <td>{{ delivery.sector.name }}</td>
         <td>{{ delivery.customer.name }}</td>
         <td>{{ delivery.product.name }}</td>
-        <td>{{ delivery.product.price|intcomma }}kr</td>
-        <td>{{ delivery.amount }}</td>
-        <td>{{ delivery.sum|intcomma }}kr</td>
-        <td>{{ delivery.sum_year|intcomma }}kr</td>
+        <td class="currency">{{ delivery.product.price|intcomma }}&nbsp;kr</td>
+        <td class="currency">{{ delivery.amount }}</td>
+        <td class="currency">{{ delivery.sum|intcomma }}&nbsp;kr</td>
+        <td class="currency">{{ delivery.sum_year|intcomma }}&nbsp;kr</td>
     </tr>
     {% endfor %}
     </table>
