@@ -152,6 +152,13 @@ class Application(models.Model):
         unique_together = ['customer', 'name', 'department']
         ordering = ['customer', 'name']
 
+    def internal_hour_cost(self):
+        product = Product.objects.get(name='Drift av applikasjon per time')
+        return self.internal_hours * product.price
+
+    def internal_hour_cost_year(self):
+        return self.internal_hour_cost() * 12
+
     def server_cost(self):
         server_cost = 0
         for server in self.servers.all():
@@ -168,7 +175,7 @@ class Application(models.Model):
         return self.server_cost() + self.external_cost + self.licence_cost
 
     def total_year(self):
-        return self.server_cost_year() + self.external_cost_total()
+        return self.server_cost_year() + self.external_cost_total() + self.internal_hour_cost_year()
 
 
 class Sector(models.Model):

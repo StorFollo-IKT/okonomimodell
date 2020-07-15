@@ -54,6 +54,7 @@
         <th title="Lisens og konsulentkostnader">Leverandørkostnad per &aring;r</th>
         <th title="Kostnad for drift av n&oslash;dvendige servere">M&aring;nedlige serverkostnader</th>
         <th title="Kostnad for drift av n&oslash;dvendige servere">&Aring;rlige serverkostnader</th>
+        <th>Årlig drift SFIKT</th>
         <th>Totalt per &aring;r</th>
     </tr>
     {% for application in applications %}
@@ -68,7 +69,13 @@
             {% else %}
             <td colspan="2">Skytjeneste</td>
             {% endif %}
-            <td>{{ application.total_year|intcomma }}kr</td>
+
+            {% if application.internal_hours %}
+            <td class="currency">{{ application.internal_hour_cost_year|intcomma }}&nbsp;kr</td>
+            {% else %}
+            <td>&nbsp;</td>
+            {% endif %}
+            <td class="currency">{{ application.total_year|intcomma }}&nbsp;kr</td>
         </tr>
     {% endfor %}
     </table>

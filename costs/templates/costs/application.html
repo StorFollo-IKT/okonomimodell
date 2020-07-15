@@ -68,7 +68,13 @@
             {% if application.external_cost %}
             <tr>
                 <th>Konsulent</th>
-                <td>{{ application.external_cost|intcomma }}</td>
+                <td>{{ application.external_cost|intcomma }}kr</td>
+            </tr>
+            {% endif %}
+            {% if application.internal_hours %}
+            <tr>
+                <th>StorFollo IKT drift</th>
+                <td>{{ application.internal_hour_cost_year|intcomma }}kr</td>
             </tr>
             {% endif %}
             {% if application.servers.count %}
