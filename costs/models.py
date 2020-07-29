@@ -24,8 +24,8 @@ class Customer(models.Model):
 
 
 class ProductType(models.Model):
-    type = models.CharField(max_length=50)
-    description = models.TextField(null=True, blank=True)
+    type = models.CharField('Tjenestetype', max_length=50)
+    description = models.TextField('Beskrivelse', null=True, blank=True)
 
     class Meta:
         verbose_name = 'tjenestetype'
@@ -37,7 +37,7 @@ class ProductType(models.Model):
 
 class Product(models.Model):
     name = models.CharField('Tjeneste', max_length=50)
-    type = models.ForeignKey(ProductType, on_delete=models.PROTECT)
+    type = models.ForeignKey(ProductType, on_delete=models.PROTECT, verbose_name='Tjenestetype')
     price = models.IntegerField('Pris per måned')
 
     class Meta:
@@ -168,13 +168,17 @@ class Application(models.Model):
         return self.internal_hour_cost() * 12
 
     def server_cost(self):
+        """
+        Server cost per month
+        :return:
+        """
         server_cost = 0
         for server in self.servers.all():
             server_cost += server.application_cost()
         return server_cost
 
     def server_cost_year(self):
-        return self.server_cost()*12
+        return self.server_cost() * 12
 
     def external_cost_total(self):
         return self.external_cost + self.licence_cost
