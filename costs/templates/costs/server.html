@@ -13,4 +13,8 @@
         <strong>Totalkostnad for server:</strong> {{ server.product.price }}kr<br />
         <strong>Kostnad per applikasjon:</strong> {{ server.application_cost }}kr
     </p>
+    {% if user.is_authenticated and perms.costs.change_server %}
+        <a href="{% url 'costs:server_form' %}?customer={{ server.customer.id }}&server={{ server.name }}">Endre
+            server</a>
+    {% endif %}
 {% endblock %}

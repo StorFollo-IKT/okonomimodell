@@ -26,6 +26,14 @@
         <li><a href="{% url 'costs:sectors' %}">Sektorer</a></li>
         <li><a href="{% url 'costs:portfolio' %}">Porteføljeoversikt</a></li>
         <li><a href="{% url 'costs:application_form' %}">Ny applikasjon</a></li>
+        {% if not user.is_authenticated %}
+            <li><a href="{% url 'account_login' %}">Logg inn</a></li>
+        {% else %}
+            {% if perms.costs.add_server %}
+                <li><a href="{% url 'costs:server_form' %}">Ny server</a></li>
+            {% endif %}
+            <li><a href="{% url 'account_logout' %}">Logg ut</a></li>
+        {% endif %}
     </ul>
 </div>
 

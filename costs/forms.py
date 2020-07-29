@@ -1,6 +1,6 @@
 from django import forms
 
-from costs.models import Application
+from costs.models import Application, Server
 
 
 class ApplicationForm(forms.ModelForm):
@@ -9,3 +9,9 @@ class ApplicationForm(forms.ModelForm):
         # TODO: Rewrite user selection with AJAX autocomplete
         # <select> elements makes the load too slow
         exclude = ['responsible', 'super_user']
+
+
+class ServerForm(forms.ModelForm):
+    class Meta:
+        model = Server
+        exclude = ['last_logon', 'imported']

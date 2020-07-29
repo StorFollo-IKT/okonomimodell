@@ -10,6 +10,7 @@ urlpatterns = [
 
     path('applikasjon/<str:customer>/<str:name>', views.application, name='application'),
     path('applikasjon/<str:name>', views.application, name='application'),
+    path('server/form', views.server_form, name='server_form'),
     path('server/<str:customer>/<str:name>', views.server_detail, name='server'),
     path('servere', views.servers_all, name='servers'),
     path('servere/<str:customer>', views.servers_all, name='servers'),

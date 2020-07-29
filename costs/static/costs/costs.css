@@ -41,5 +41,28 @@ h3 {
   text-align: right;
 }
 
+
+input[required] {
+
+    background-image: url('data:image/svg+xml,\
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="-10 -6 16 16"> \
+  <line id="line" y1="-3" y2="3" stroke="%23df0000" stroke-linecap="butt" transform="rotate(15)"></line> \
+  <line id="line" y1="-3" y2="3" stroke="%23df0000" stroke-linecap="butt" transform="rotate(75)"></line> \
+  <line id="line" y1="-3" y2="3" stroke="%23df0000" stroke-linecap="butt" transform="rotate(-45)"></line> \
+</svg>');
+    background-position-x: right;
+    background-repeat: no-repeat;
+    background-size: contain;
+
+}
+
+input[required]:valid {
+    background-image: url('data:image/svg+xml,\
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="100" viewBox="-2 -2 16 16"> \
+            <path fill="green" stroke-linejoin="round" d="M2 6L1 7l3 4 7-10h-1L4 8z"/> \
+</svg>');
+}
+
+
 tr:nth-child(even) {background: #f9f9f9}
 tr:nth-child(odd) {background: #FFF}

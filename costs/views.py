@@ -1,9 +1,9 @@
+from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from costs.forms import ApplicationForm
+from costs.forms import ApplicationForm, ServerForm
 from costs.models import Application, Customer, ProductDelivery, Server, Sector, Department
-
 from costs.utils import field_names
 
 
@@ -40,6 +40,23 @@ def application_form(request):
                }
 
     return render(request, 'costs/application_form.htm', context)
+
+
+@permission_required('costs.change_server')
+def server_form(request):
+    customer = request.GET.get('customer')
+    server_name = request.GET.get('server')
+    if customer and server_name:
+        server_obj = Server.objects.get(name=server_name, customer__id=customer)
+    else:
+        server_obj = None
+
+    form = ServerForm(request.POST or None, instance=server_obj)
+    if request.method == 'POST' and form.is_valid():
+        server_obj = form.save()
+        return redirect('costs:server', customer=server_obj.customer.name, name=server_obj.name)
+
+    return render(request, 'costs/server_form.html', {'form': form})
 
 
 def applications(request, customer=None, vendor=None, department=None, sector=None):
