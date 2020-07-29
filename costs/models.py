@@ -79,9 +79,14 @@ class Server(models.Model):
         return apps_string
 
     def application_cost(self):
-        if not self.product or not self.product.price:
+        """
+        Application cost per month
+        :return:
+        """
+
+        if not self.product or not self.product.price or self.applications.count() == 0:
             return 0
-        return round(self.product.price/self.applications.count())
+        return round(self.product.price / self.applications.count())
 
 
 class Department(models.Model):
