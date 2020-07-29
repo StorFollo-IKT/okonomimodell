@@ -1,0 +1,19 @@
+{% extends 'costs/base.html' %}
+{% load i18n %}
+{% load account socialaccount %}
+{% block body %}
+    <h1>Logg inn</h1>
+    <h2><a href="{% url 'azure_login' %}">Trykk her for &aring; logge inn med Azure</a></h2>
+
+    <h3>Logg inn med lokal bruker</h3>
+
+    <form class="login" method="POST" action="{% url 'account_login' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+        {% endif %}
+
+        <button class="primaryAction" type="submit">Logg inn</button>
+    </form>
+{% endblock %}
