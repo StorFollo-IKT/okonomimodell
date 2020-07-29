@@ -64,6 +64,7 @@ class Server(models.Model):
         unique_together = ['name', 'customer']
         verbose_name = 'server'
         verbose_name_plural = 'servere'
+        ordering = ['customer', 'name']
 
     def __str__(self):
         value = '%s: %s' % (self.customer, self.name)
