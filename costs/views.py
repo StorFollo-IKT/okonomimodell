@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render, redirect
 
@@ -6,6 +8,19 @@ from costs.forms import ApplicationForm, ServerForm
 from costs.models import Application, Customer, ProductDelivery, Server, Sector, Department
 from costs.utils import field_names
 
+
+def build_title(word, vendor=None, sector=None, server=None, customer=None, application=None):
+    title = word
+    if vendor:
+        title += ' levert av %s' % vendor
+    if sector:
+        title += ' i sektor %s' % sector
+    if server:
+        title += ' på server %s' % server
+    if customer:
+        title += ' hos %s' % customer
+
+    return title
 
 def customers(request):
     return render(request, 'costs/customers.html', {'customers': Customer.objects.all()})
@@ -139,15 +154,32 @@ def servers_all(request, customer=None):
     if not customer:
         customer = request.GET.get('customer', '')
     application_name = request.GET.get('application')
+    product = request.GET.get('product')
+    active = request.GET.get('active')
 
-    custs = Customer.objects.all()
     servers = Server.objects.all()
     if customer:
-        custs = custs.filter(name=customer)
         servers = servers.filter(customer__name=customer)
+
+    title = build_title('Servere', customer=customer)
+
     if application_name:
-        servers.filter(applications__name=application_name)
-    return render(request, 'costs/servers.html', {'customers': custs, 'servers': servers})
+        servers = servers.filter(applications__name=application_name)
+        title += ' for applikasjon %s' % application_name
+    if active:
+        days = int(active)
+        limit_date = datetime.datetime.today() - datetime.timedelta(days=days)
+        servers = servers.filter(last_logon__gte=limit_date)
+        title += ' aktive siste %d dager' % days
+
+    if product:
+        servers = servers.filter(product__name=product)
+
+    return render(request, 'costs/servers.html', {'customers': Customer.objects.all(),
+                                                  'servers': servers,
+                                                  'title': title,
+                                                  'selected_customer': customer,
+                                                  'selected_product': product})
 
 
 def sectors(request):

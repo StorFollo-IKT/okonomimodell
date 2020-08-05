@@ -1,5 +1,32 @@
 {% extends 'costs/base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'admin/css/changelists.css' %}" type="text/css">
+{% endblock %}
 {% block body %}
+    <div class="module filtered" id="changelist">
+        <div id="changelist-filter">
+            <h2>Filtrering</h2>
+            <h3>Etter kunde</h3>
+            <ul>
+                <li><a href="{% url 'costs:servers' %}">Alle</a></li>
+                {% for customer in customers.all %}
+                    <li {% if customer.name == selected_customer %} class="selected" {% endif %}>
+                        <a href="{% url 'costs:servers' %}?customer={{ customer.name }}">{{ customer.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        <form method="get">
+            <h3><label for="active_input">Aktiv siste dager</label></h3>
+            {% if selected_customer %}
+            <input type="hidden" name="customer" value="{{ selected_customer }}">
+            {% endif %}
+            <input type="text" name="active" id="active_input" size="2" value="90"/>
+            <input type="submit" value="Vis">
+        </form>
+        </div>
+    </div>
+
     <table>
     <tr>
         <th>Kunde</th>

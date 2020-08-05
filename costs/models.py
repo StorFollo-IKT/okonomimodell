@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 
 
@@ -21,6 +23,9 @@ class Customer(models.Model):
             cost += product.sum()
 
         return cost
+
+    def servers_active(self, days=90):
+        return self.servers.filter(last_logon__gte=datetime.datetime.today() - datetime.timedelta(days=days))
 
 
 class ProductType(models.Model):
