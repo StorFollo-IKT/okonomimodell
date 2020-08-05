@@ -52,7 +52,6 @@
         <th>Applikasjon</th>
         <th>Kunde</th>
         <th title="Lisens og konsulentkostnader">Leverandørkostnad per &aring;r</th>
-        <th title="Kostnad for drift av n&oslash;dvendige servere">M&aring;nedlige serverkostnader</th>
         <th title="Kostnad for drift av n&oslash;dvendige servere">&Aring;rlige serverkostnader</th>
         <th>Årlig drift SFIKT</th>
         <th>Totalt per &aring;r</th>
@@ -63,19 +62,18 @@
             <td><a href="{% url 'costs:application' name=application.name %}">{{ application.name }}</a></td>
             <td>{{ application.customer }}</td>
 
-            {% if application.external_cost %}
+            {% if application.external_cost_total %}
             <td class="currency">{{ application.external_cost_total|intcomma }}&nbsp;kr</td>
             {% else %}
             <td>&nbsp;</td>
             {% endif %}
 
             {% if not application.cloud and application.server_cost %}
-            <td class="currency">{{ application.server_cost|intcomma }}&nbsp;kr</td>
             <td class="currency">{{ application.server_cost_year|intcomma }}&nbsp;kr</td>
-            {% elif not application.server_cost %}
-            <td colspan="2">&nbsp;</td>
+            {% elif not application.cloud %}
+            <td>&nbsp;</td>
             {% else %}
-            <td colspan="2" style="text-align: center">Skytjeneste</td>
+            <td style="text-align: right">Skytjeneste</td>
             {% endif %}
 
             {% if application.internal_hours %}
