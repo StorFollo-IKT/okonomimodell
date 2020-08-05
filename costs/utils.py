@@ -6,6 +6,10 @@ def field_names(model_meta):
     fields = {}
 
     for field in model_meta.get_fields():
-        fields[field.name] = model_meta.get_field(field.name).verbose_name
+        try:
+            fields[field.name] = model_meta.get_field(field.name).verbose_name
+        except AttributeError:
+            # print('%s has no verbose_name' % field.name)
+            fields[field.name] = field.name
 
     return fields
