@@ -10,104 +10,138 @@
             <h2>Filtrering</h2>
             <h3>Etter kunde</h3>
             <ul>
-                <li><a href="{% url 'costs:portfolio' %}?customer=all&amp;sector={{ selected_sector }}&amp;vendor={{ selected_vendor }}&amp;application={{ selected_application }}">Alle</a></li>
+                <li>
+                    <a href="{% url 'costs:portfolio' %}?customer=all&amp;sector={{ selected_sector }}&amp;vendor={{ selected_vendor }}&amp;application={{ selected_application }}">Alle</a>
+                </li>
                 {% for customer in customers.all %}
                     <li {% if customer.name == selected_customer %} class="selected" {% endif %}
-                    ><a href="{% url 'costs:portfolio' %}?customer={{ customer.name }}&amp;sector={{ selected_sector }}&amp;vendor={{ selected_vendor }}&amp;application={{ selected_application }}">{{ customer.name }}</a></li>
+                    >
+                        <a href="{% url 'costs:portfolio' %}?customer={{ customer.name }}&amp;sector={{ selected_sector }}&amp;vendor={{ selected_vendor }}&amp;application={{ selected_application }}">{{ customer.name }}</a>
+                    </li>
                 {% endfor %}
             </ul>
 
             <h3>Etter sektor</h3>
             <ul>
-                <li><a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector=all&amp;vendor={{ selected_vendor }}&amp;application={{ selected_application }}">Alle</a></li>
+                <li>
+                    <a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector=all&amp;vendor={{ selected_vendor }}&amp;application={{ selected_application }}">Alle</a>
+                </li>
                 {% for sector in sectors.all %}
                     <li {% if sector == selected_sector %} class="selected" {% endif %}
-                    ><a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector={{ sector }}&amp;vendor={{ selected_vendor }}&amp;application={{ selected_application }}">{{ sector }}</a></li>
+                    >
+                        <a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector={{ sector }}&amp;vendor={{ selected_vendor }}&amp;application={{ selected_application }}">{{ sector }}</a>
+                    </li>
                 {% endfor %}
             </ul>
 
             <h3>Etter leverand&oslash;r</h3>
             <ul>
-                <li><a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector={{ selected_sector }}&amp;vendor=all&amp;application={{ selected_application }}">Alle</a></li>
+                <li>
+                    <a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector={{ selected_sector }}&amp;vendor=all&amp;application={{ selected_application }}">Alle</a>
+                </li>
                 {% for vendor in vendors %}
                     <li {% if vendor == selected_vendor %} class="selected" {% endif %}
-                    ><a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector={{ selected_sector }}&amp;vendor={{ vendor }}&amp;application={{ selected_application }}">{{ vendor }}</a></li>
+                    >
+                        <a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector={{ selected_sector }}&amp;vendor={{ vendor }}&amp;application={{ selected_application }}">{{ vendor }}</a>
+                    </li>
                 {% endfor %}
             </ul>
 
             <h3>Etter applikasjon</h3>
             <ul>
-                <li><a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector={{ selected_sector }}&amp;vendor={{ selected_vendor }}&amp;application=all">Alle</a></li>
+                <li>
+                    <a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector={{ selected_sector }}&amp;vendor={{ selected_vendor }}&amp;application=all">Alle</a>
+                </li>
                 {% for application in applications_unique %}
                     <li {% if application == selected_application %} class="selected" {% endif %}
-                    ><a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector={{ selected_sector }}&amp;vendor={{ selected_vendor }}&amp;application={{ application }}">{{ application }}</a></li>
+                    >
+                        <a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector={{ selected_sector }}&amp;vendor={{ selected_vendor }}&amp;application={{ application }}">{{ application }}</a>
+                    </li>
                 {% endfor %}
             </ul>
         </div>
     </div>
     <h2>Applikasjoner</h2>
-    <table>
-    <tr>
-        <th>Sektor</th>
-        <th>Applikasjon</th>
-        <th>Kunde</th>
-        <th title="Lisens og konsulentkostnader">Leverandørkostnad per &aring;r</th>
-        <th title="Kostnad for drift av n&oslash;dvendige servere">&Aring;rlige serverkostnader</th>
-        <th>Årlig drift SFIKT</th>
-        <th>Totalt per &aring;r</th>
-    </tr>
-    {% for application in applications %}
-        <tr>
-            <td>{{ application.department.sector.name }}</td>
-            <td><a href="{% url 'costs:application' name=application.name %}">{{ application.name }}</a></td>
-            <td>{{ application.customer }}</td>
+    <div class="results">
+        <table id="apps" class="display">
+            <thead>
+            <tr>
+                <th>Sektor</th>
+                <th>Applikasjon</th>
+                <th>Kunde</th>
+                <th title="Lisens og konsulentkostnader">Leverandørkostnad per &aring;r</th>
+                <th title="Kostnad for drift av n&oslash;dvendige servere">&Aring;rlige serverkostnader</th>
+                <th>Årlig drift SFIKT</th>
+                <th>Totalt per &aring;r</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for application in applications %}
+                <tr>
+                    <td>{{ application.department.sector.name }}</td>
+                    <td><a href="{% url 'costs:application' name=application.name %}">{{ application.name }}</a></td>
+                    <td>{{ application.customer }}</td>
 
-            {% if application.external_cost_total %}
-            <td class="currency">{{ application.external_cost_total|intcomma }}&nbsp;kr</td>
-            {% else %}
-            <td>&nbsp;</td>
-            {% endif %}
+                    {% if application.external_cost_total %}
+                        <td class="currency">{{ application.external_cost_total|intcomma }}&nbsp;kr</td>
+                    {% else %}
+                        <td>&nbsp;</td>
+                    {% endif %}
 
-            {% if not application.cloud and application.server_cost %}
-            <td class="currency">{{ application.server_cost_year|intcomma }}&nbsp;kr</td>
-            {% elif not application.cloud %}
-            <td>&nbsp;</td>
-            {% else %}
-            <td style="text-align: right">Skytjeneste</td>
-            {% endif %}
+                    {% if not application.cloud and application.server_cost %}
+                        <td class="currency">{{ application.server_cost_year|intcomma }}&nbsp;kr</td>
+                    {% elif not application.cloud %}
+                        <td>&nbsp;</td>
+                    {% else %}
+                        <td style="text-align: right">Skytjeneste</td>
+                    {% endif %}
 
-            {% if application.internal_hours %}
-            <td class="currency">{{ application.internal_hour_cost_year|intcomma }}&nbsp;kr</td>
-            {% else %}
-            <td>&nbsp;</td>
-            {% endif %}
-            <td class="currency">{{ application.total_year|intcomma }}&nbsp;kr</td>
-        </tr>
-    {% endfor %}
-    </table>
-    {% if selected_vendor == 'all' and selected_application == 'all' %}
-    <h2>Tjenester</h2>
-    <table>
-    <tr>
-        <th>Sektor</th>
-        <th>Kunde</th>
-        <th>Tjeneste</th>
-        <th>Pris per måned</th>
-        <th>Antall</th>
-        <th>Sum per måned</th>
-        <th>Sum per år</th>
-    </tr>
-    {% for delivery in deliveries %}
-    <tr>
-        <td>{{ delivery.sector.name }}</td>
-        <td>{{ delivery.customer.name }}</td>
-        <td>{{ delivery.product.name }}</td>
-        <td class="currency">{{ delivery.product.price|intcomma }}&nbsp;kr</td>
-        <td class="currency">{{ delivery.amount }}</td>
-        <td class="currency">{{ delivery.sum|intcomma }}&nbsp;kr</td>
-        <td class="currency">{{ delivery.sum_year|intcomma }}&nbsp;kr</td>
-    </tr>
-    {% endfor %}
-    </table>
-    {% endif %}
+                    {% if application.internal_hours %}
+                        <td class="currency">{{ application.internal_hour_cost_year|intcomma }}&nbsp;kr</td>
+                    {% else %}
+                        <td>&nbsp;</td>
+                    {% endif %}
+                    <td class="currency">{{ application.total_year|intcomma }}&nbsp;kr</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% if selected_vendor == 'all' and selected_application == 'all' %}
+            <h2>Tjenester</h2>
+            <table id="svcs" class="display">
+                <thead>
+                <tr>
+                    <th>Sektor</th>
+                    <th>Kunde</th>
+                    <th>Tjeneste</th>
+                    <th>Pris per måned</th>
+                    <th>Antall</th>
+                    <th>Sum per måned</th>
+                    <th>Sum per år</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for delivery in deliveries %}
+                    <tr>
+                        <td>{{ delivery.sector.name }}</td>
+                        <td>{{ delivery.customer.name }}</td>
+                        <td>{{ delivery.product.name }}</td>
+                        <td class="currency">{{ delivery.product.price|intcomma }}&nbsp;kr</td>
+                        <td class="currency">{{ delivery.amount }}</td>
+                        <td class="currency">{{ delivery.sum|intcomma }}&nbsp;kr</td>
+                        <td class="currency">{{ delivery.sum_year|intcomma }}&nbsp;kr</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+        </tbody>
+    </div>
+    <script>$(document).ready(function () {
+        $('#apps').DataTable({
+            "order": [[1, "asc"]]
+        });
+        $('#svcs').DataTable({
+            "order": [[2, "asc"]]
+        });
+    });</script>
 {% endblock %}

@@ -16,33 +16,47 @@
                     </li>
                 {% endfor %}
             </ul>
-        <form method="get">
-            <h3><label for="active_input">Aktiv siste dager</label></h3>
-            {% if selected_customer %}
-            <input type="hidden" name="customer" value="{{ selected_customer }}">
-            {% endif %}
-            <input type="text" name="active" id="active_input" size="2" value="90"/>
-            <input type="submit" value="Vis">
-        </form>
+            <form method="get">
+                <h3><label for="active_input">Aktiv siste dager</label></h3>
+                {% if selected_customer %}
+                    <input type="hidden" name="customer" value="{{ selected_customer }}">
+                {% endif %}
+                <input type="text" name="active" id="active_input" size="2" value="90"/>
+                <input type="submit" value="Vis">
+            </form>
         </div>
     </div>
-
-    <table>
-    <tr>
-        <th>Kunde</th>
-        <th>Server</th>
-        <th>Tjeneste</th>
-        <th>Applikasjoner</th>
-        <th>Sist aktiv</th>
-    </tr>
-    {% for server in servers %}
-        <tr>
-        <td><a href="?customer={{ server.customer }}">{{ server.customer }}</a></td>
-            <td><a href="{% url 'costs:server' customer=server.customer name=server.name %}">{{ server.name }}</a></td>
-        <td>{{ server.product }}</td>
-        <td><a href="{% url 'costs:applications' %}?customer={{ server.customer }}&server={{ server.name }}">{{ server.applications.count }}</a></td>
-        <td>{{ server.last_logon }}</td>
-        </tr>
-    {% endfor %}
-    </table>
+    <div class="results">
+        <table class="display">
+            <thead>
+            <tr>
+                <th>Kunde</th>
+                <th>Server</th>
+                <th>Tjeneste</th>
+                <th>Applikasjoner</th>
+                <th>Sist aktiv</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for server in servers %}
+                <tr>
+                    <td><a href="?customer={{ server.customer }}">{{ server.customer }}</a></td>
+                    <td>
+                        <a href="{% url 'costs:server' customer=server.customer name=server.name %}">{{ server.name }}</a>
+                    </td>
+                    <td>{{ server.product }}</td>
+                    <td>
+                        <a href="{% url 'costs:applications' %}?customer={{ server.customer }}&server={{ server.name }}">{{ server.applications.count }}</a>
+                    </td>
+                    <td>{{ server.last_logon }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>$(document).ready(function () {
+        $('table.display').DataTable({
+            "order": [[0, "asc"]]
+        });
+    });</script>
 {% endblock %}
