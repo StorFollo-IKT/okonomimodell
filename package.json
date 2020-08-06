@@ -1,0 +1,24 @@
+{
+  "name": "storfollo_costs",
+  "version": "1.0.0",
+  "description": "Økonomimodell for StorFollo IKT",
+  "main": "/",
+  "scripts": {
+    "copy": "robocopy /E node_modules costs\\static\\costs\\node_modules"
+  },
+
+  "dependencies": {
+    "datatables.net-dt": "^1.10.21"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StorFollo-IKT/okonomimodell.git"
+  },
+  "author": "",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/StorFollo-IKT/okonomimodell/issues"
+  },
+  "homepage": "https://github.com/StorFollo-IKT/okonomimodell#readme"
+}
