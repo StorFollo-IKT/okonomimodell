@@ -1,0 +1,89 @@
+/* FILTER COLUMN */
+
+#filter {
+    position: absolute;
+    top: auto;
+    right: 0;
+    z-index: 1000;
+    width: 240px;
+    background: #f8f8f8;
+    border-left: none;
+    margin: 0;
+}
+
+#filter h2 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 5px 15px;
+    margin-bottom: 12px;
+    border-bottom: none;
+}
+
+#filter h3 {
+    font-weight: 400;
+    font-size: 14px;
+    padding: 0 15px;
+    margin-bottom: 10px;
+}
+
+#filter ul {
+    margin: 5px 0;
+    padding: 0 15px 15px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+#filter ul:last-child {
+    border-bottom: none;
+    padding-bottom: none;
+}
+
+#filter li {
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0;
+    display: block;
+    color: #999;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+}
+
+#filter li.selected {
+    border-left: 5px solid #eaeaea;
+    padding-left: 10px;
+    margin-left: -15px;
+    color: #5b80b2;
+}
+
+
+#filter li:focus,
+#filter li:hover {
+    color: #036;
+    cursor: pointer;
+}
+
+/* DATE DRILLDOWN */
+
+.change-list ul.toplinks {
+    display: block;
+    float: left;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.change-list ul.toplinks li {
+    padding: 3px 6px;
+    font-weight: bold;
+    list-style-type: none;
+    display: inline-block;
+}
+
+.change-list ul.toplinks .date-back a {
+    color: #999;
+}
+
+.change-list ul.toplinks .date-back a:focus,
+.change-list ul.toplinks .date-back a:hover {
+    color: #036;
+}

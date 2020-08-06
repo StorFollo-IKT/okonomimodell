@@ -2,20 +2,13 @@
 {% load static %}
 {% block head %}
     <link rel="stylesheet" href="{% static 'admin/css/changelists.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'costs/filter.css' %}" type="text/css">
+    <script type="application/javascript" src="{% static 'costs/filter.js' %}"></script>
 {% endblock %}
 {% block body %}
     <div class="module filtered" id="changelist">
-        <div id="changelist-filter">
+        <div id="filter">
             <h2>Filtrering</h2>
-            <h3>Etter kunde</h3>
-            <ul>
-                <li><a href="{% url 'costs:servers' %}">Alle</a></li>
-                {% for customer in customers.all %}
-                    <li {% if customer.name == selected_customer %} class="selected" {% endif %}>
-                        <a href="{% url 'costs:servers' %}?customer={{ customer.name }}">{{ customer.name }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
             <form method="get">
                 <h3><label for="active_input">Aktiv siste dager</label></h3>
                 {% if selected_customer %}
@@ -59,4 +52,12 @@
             "order": [[0, "asc"]]
         });
     });</script>
+
+    {{ customers|json_script:'customer-data' }}
+    {{ products|json_script:'product-data' }}
+    <script type="application/javascript">
+      const filter_group = new filterGroup('filter')
+      filter_group.addFilterJson('customer', 'Etter kunde')
+      filter_group.addFilterJson('product', 'Etter tjeneste')
+    </script>
 {% endblock %}

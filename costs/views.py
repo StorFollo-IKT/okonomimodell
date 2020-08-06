@@ -3,10 +3,9 @@ import datetime
 from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render, redirect
 
-# Create your views here.
 from costs.forms import ApplicationForm, ServerForm
-from costs.models import Application, Customer, ProductDelivery, Server, Sector, Department
-from costs.utils import field_names
+from costs.models import Application, Customer, Department, Product, ProductDelivery, Sector, Server
+from costs.utils import field_names, filter_list
 
 
 def build_title(word, vendor=None, sector=None, server=None, customer=None, application=None):
@@ -175,11 +174,14 @@ def servers_all(request, customer=None):
     if product:
         servers = servers.filter(product__name=product)
 
-    return render(request, 'costs/servers.html', {'customers': Customer.objects.all(),
-                                                  'servers': servers,
-                                                  'title': title,
-                                                  'selected_customer': customer,
-                                                  'selected_product': product})
+    products = Product.objects.filter(type__type='Server')
+    return render(request, 'costs/servers.html',
+                  {'customers': filter_list('name', model=Customer),
+                   'products': filter_list('name', queryset=products),
+                   'servers': servers,
+                   'title': title,
+                   'selected_customer': customer,
+                   'selected_product': product})
 
 
 def sectors(request):
