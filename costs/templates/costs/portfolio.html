@@ -85,21 +85,21 @@
                     {% if application.external_cost_total %}
                         <td data-sort="{{ application.external_cost_total }}" class="currency">{{ application.external_cost_total|intcomma }}&nbsp;kr</td>
                     {% else %}
-                        <td>&nbsp;</td>
+                        <td data-sort="0">&nbsp;</td>
                     {% endif %}
 
                     {% if not application.cloud and application.server_cost %}
                         <td data-sort="{{ application.server_cost_year }}" class="currency">{{ application.server_cost_year|intcomma }}&nbsp;kr</td>
                     {% elif not application.cloud %}
-                        <td>&nbsp;</td>
+                        <td data-sort="0">&nbsp;</td>
                     {% else %}
-                        <td style="text-align: right">Skytjeneste</td>
+                        <td style="text-align: right" data-sort="0">Skytjeneste</td>
                     {% endif %}
 
                     {% if application.internal_hours %}
                         <td data-sort="{{ application.internal_hour_cost_year }}" class="currency">{{ application.internal_hour_cost_year|intcomma }}&nbsp;kr</td>
                     {% else %}
-                        <td>&nbsp;</td>
+                        <td data-sort="0">&nbsp;</td>
                     {% endif %}
                     <td data-sort="{{ application.total_year }}" class="currency">{{ application.total_year|intcomma }}&nbsp;kr</td>
                 </tr>
@@ -129,12 +129,12 @@
                         <td data-sort="{{ delivery.product.price }}" class="currency">{{ delivery.product.price|intcomma }}&nbsp;kr</td>
                         <td class="currency">{{ delivery.amount }}</td>
                         <td data-sort="{{ delivery.sum }}" class="currency">{{ delivery.sum|intcomma }}&nbsp;kr</td>
-                        <td data.order="{{ delivery.sum_year }}" class="currency">{{ delivery.sum_year|intcomma }}&nbsp;kr</td>
+                        <td data-sort="{{ delivery.sum_year }}" class="currency">{{ delivery.sum_year|intcomma }}&nbsp;kr</td>
                     </tr>
                 {% endfor %}
+                </tbody>
             </table>
         {% endif %}
-        </tbody>
     </div>
     <script>$(document).ready(function () {
         $('#apps').DataTable({
