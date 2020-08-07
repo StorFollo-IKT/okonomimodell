@@ -12,7 +12,7 @@
         {% for sector, costs in sectors %}
             <tr>
                 <td><a href="{% url 'costs:sectors' %}?sector={{ sector }}">{{ sector }}</a></td>
-                <td>{{ costs|intcomma }}kr</td>
+                <td data-sort="{{ costs }}">{{ costs|intcomma }}kr</td>
             </tr>
 
         {% endfor %}

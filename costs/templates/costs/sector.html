@@ -22,9 +22,9 @@
                     <a href="{% url 'costs:applications' %}?sector={{ sector.name }}&customer={{ sector.customer }}">{{ sector.applications.count }}</a>
                 </td>
                 <td>{{ sector.servers.count }}</td>
-                <td>{{ sector.licence_costs|intcomma }}kr</td>
-                <td>{{ sector.server_costs|intcomma }}kr</td>
-                <td>{{ sector.costs|intcomma }}kr</td>
+                <td data-sort="{{ sector.licence_costs }}">{{ sector.licence_costs|intcomma }}kr</td>
+                <td data-sort="{{ sector.server_costs }}">{{ sector.server_costs|intcomma }}kr</td>
+                <td data-sort="{{ sector.costs }}">{{ sector.costs|intcomma }}kr</td>
             </tr>
 
         {% endfor %}

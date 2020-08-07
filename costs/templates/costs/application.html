@@ -63,24 +63,24 @@
         <table>
             <tr>
                 <th>Lisens</th>
-                <td>{{ application.licence_cost|intcomma }}kr</td>
+                <td data-sort="{{ application.licence_cost }}">{{ application.licence_cost|intcomma }}kr</td>
             </tr>
             {% if application.external_cost %}
             <tr>
                 <th>Konsulent</th>
-                <td>{{ application.external_cost|intcomma }}kr</td>
+                <td data-sort="{{ application.external_cost }}">{{ application.external_cost|intcomma }}kr</td>
             </tr>
             {% endif %}
             {% if application.internal_hours %}
             <tr>
                 <th>StorFollo IKT drift</th>
-                <td>{{ application.internal_hour_cost_year|intcomma }}kr</td>
+                <td data-sort="{{ application.internal_hour_cost_year }}">{{ application.internal_hour_cost_year|intcomma }}kr</td>
             </tr>
             {% endif %}
             {% if application.servers.count %}
             <tr>
                 <th>{{ application.servers.count }} server(e):</th>
-                <td>{{ application.server_cost|intcomma }}kr</td>
+                <td data-sort="{{ application.server_cost }}">{{ application.server_cost|intcomma }}kr</td>
             </tr>
             {% endif %}
 
