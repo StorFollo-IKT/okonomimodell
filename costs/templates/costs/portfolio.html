@@ -66,9 +66,9 @@
         <table id="apps" class="display">
             <thead>
             <tr>
-                <th>Sektor</th>
                 <th>Applikasjon</th>
                 <th>Kunde</th>
+                <th>Sektor</th>
                 <th title="Lisens og konsulentkostnader">Leverandørkostnad per &aring;r</th>
                 <th title="Kostnad for drift av n&oslash;dvendige servere">&Aring;rlige serverkostnader</th>
                 <th>Årlig drift SFIKT</th>
@@ -78,9 +78,9 @@
             <tbody>
             {% for application in applications %}
                 <tr>
-                    <td>{{ application.department.sector.name }}</td>
                     <td><a href="{% url 'costs:application' %}?name={{ application.name|urlencode }}">{{ application.name }}</a></td>
                     <td>{{ application.customer }}</td>
+                    <td>{{ application.department.sector.name }}</td>
 
                     {% if application.external_cost_total %}
                         <td data-sort="{{ application.external_cost_total }}" class="currency">{{ application.external_cost_total|intcomma }}&nbsp;kr</td>
@@ -105,6 +105,12 @@
                 </tr>
             {% endfor %}
             </tbody>
+            <tfoot>
+						<tr>
+							<th colspan="6" style="text-align:right">Total:</th>
+							<th></th>
+						</tr>
+					</tfoot>
         </table>
         {% if selected_vendor == 'all' and selected_application == 'all' %}
             <h2>Tjenester</h2>
@@ -141,13 +147,15 @@
             "order": [[1, "asc"]],
             columnDefs: [
                 {targets: [3,4,5,6], orderSequence: ["desc", "asc"]}
-            ]
+            ],
+            fixedHeader: true
         });
         $('#svcs').DataTable({
             "order": [[2, "asc"]],
             columnDefs: [
                 {targets: [3,5,6], orderSequence: ["desc", "asc"]}
-            ]
+            ],
+            fixedHeader: true
         });
     });</script>
 {% endblock %}
