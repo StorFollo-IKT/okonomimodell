@@ -138,10 +138,16 @@
     </div>
     <script>$(document).ready(function () {
         $('#apps').DataTable({
-            "order": [[1, "asc"]]
+            "order": [[1, "asc"]],
+            columnDefs: [
+                {targets: [3,4,5,6], orderSequence: ["desc", "asc"]}
+            ]
         });
         $('#svcs').DataTable({
-            "order": [[2, "asc"]]
+            "order": [[2, "asc"]],
+            columnDefs: [
+                {targets: [3,5,6], orderSequence: ["desc", "asc"]}
+            ]
         });
     });</script>
 {% endblock %}
