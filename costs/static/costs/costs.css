@@ -45,6 +45,9 @@ h3 {
   text-align: right;
 }
 
+tfoot th {
+  text-align: right;
+}
 
 input[required] {
 

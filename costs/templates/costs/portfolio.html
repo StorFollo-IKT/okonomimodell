@@ -3,6 +3,7 @@
 {% load static %}
 {% block head %}
     <link rel="stylesheet" href="{% static 'admin/css/changelists.css' %}" type="text/css">
+    <script type="text/javascript" charset="utf8" src="{% static 'costs/table.js' %}"></script>
 {% endblock %}
 {% block body %}
     <div class="module filtered" id="changelist">
@@ -69,12 +70,23 @@
                 <th>Applikasjon</th>
                 <th>Kunde</th>
                 <th>Sektor</th>
-                <th title="Lisens og konsulentkostnader">Leverandørkostnad per &aring;r</th>
-                <th title="Kostnad for drift av n&oslash;dvendige servere">&Aring;rlige serverkostnader</th>
-                <th>Årlig drift SFIKT</th>
-                <th>Totalt per &aring;r</th>
+                <th class="sum" title="Lisens og konsulentkostnader">Leverandørkostnad per &aring;r</th>
+                <th class="sum" title="Kostnad for drift av n&oslash;dvendige servere">&Aring;rlige serverkostnader</th>
+                <th class="sum">Årlig drift SFIKT</th>
+                <th class="sum">Totalt per &aring;r</th>
             </tr>
             </thead>
+        <tfoot>
+          <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </tfoot>
             <tbody>
             {% for application in applications %}
                 <tr>
@@ -105,7 +117,6 @@
                 </tr>
             {% endfor %}
             </tbody>
-        </table>
         {% if selected_vendor == 'all' and selected_application == 'all' %}
             <h2>Tjenester</h2>
             <table id="svcs" class="display">
@@ -114,12 +125,23 @@
                     <th>Sektor</th>
                     <th>Kunde</th>
                     <th>Tjeneste</th>
-                    <th>Pris per måned</th>
-                    <th>Antall</th>
-                    <th>Sum per måned</th>
-                    <th>Sum per år</th>
+                    <th class="sum">Pris per måned</th>
+                    <th class="sum">Antall</th>
+                    <th class="sum">Sum per måned</th>
+                    <th class="sum">Sum per år</th>
                 </tr>
                 </thead>
+            <tfoot>
+            <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
                 <tbody>
                 {% for delivery in deliveries %}
                     <tr>
@@ -142,14 +164,16 @@
             columnDefs: [
                 {targets: [3,4,5,6], orderSequence: ["desc", "asc"]}
             ],
-            fixedHeader: true
+            fixedHeader: true,
+            footerCallback
         });
         $('#svcs').DataTable({
             "order": [[2, "asc"]],
             columnDefs: [
                 {targets: [3,5,6], orderSequence: ["desc", "asc"]}
             ],
-            fixedHeader: true
+            fixedHeader: true,
+            footerCallback
         });
     });</script>
 {% endblock %}
