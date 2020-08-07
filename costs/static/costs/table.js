@@ -15,6 +15,6 @@
                         return intVal(a) + intVal(b);
                     }, 0 );
 
-                  this.footer().innerHTML = sum.toLocaleString().replace(',',' ') + ' kr';
+                  this.footer().innerHTML = sum.toLocaleString().replace(/,/g,' ') + ' kr';
                 } );
             }
