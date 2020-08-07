@@ -127,6 +127,7 @@ class User(models.Model):
     name = models.CharField('Navn', max_length=100)
     department = models.ForeignKey(Department, on_delete=models.PROTECT)
     email = models.EmailField('Epostadresse')
+    dn = models.CharField('DN', max_length=300, blank=True, null=True)
 
     class Meta:
         unique_together = ['number', 'ad_user', 'department']
