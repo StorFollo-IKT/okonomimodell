@@ -13,3 +13,16 @@ def field_names(model_meta):
             fields[field.name] = field.name
 
     return fields
+
+
+def filter_list(field, model=None, queryset=None):
+    """
+    Generate a list with field values to be used with filter lists
+    :param field: Field name
+    :param model: Model object
+    :param queryset: Queryset object
+    :return: list with values
+    """
+    if model:
+        queryset = model.objects.all()
+    return list(queryset.values_list(field, flat=True))
