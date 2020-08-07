@@ -91,7 +91,7 @@
                     {% if not application.cloud and application.server_cost %}
                         <td data-sort="{{ application.server_cost_year }}" class="currency">{{ application.server_cost_year|intcomma }}&nbsp;kr</td>
                     {% elif not application.cloud %}
-                        <td data-sort="0">&nbsp;</td>
+                        <td data-sort="-1">&nbsp;</td>
                     {% else %}
                         <td style="text-align: right" data-sort="0">Skytjeneste</td>
                     {% endif %}
