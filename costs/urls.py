@@ -8,7 +8,7 @@ urlpatterns = [
     path('', views.applications, name='applications'),
     path('applikasjon_form', views.application_form, name='application_form'),
 
-    path('applikasjon/<str:customer>/<str:name>', views.application, name='application'),
+    path('applikasjon', views.application, name='application'),
     path('applikasjon/<str:name>', views.application, name='application'),
     path('server/form', views.server_form, name='server_form'),
     path('server/<str:customer>/<str:name>', views.server_detail, name='server'),

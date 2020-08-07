@@ -79,7 +79,7 @@
             {% for application in applications %}
                 <tr>
                     <td>{{ application.department.sector.name }}</td>
-                    <td><a href="{% url 'costs:application' name=application.name %}">{{ application.name }}</a></td>
+                    <td><a href="{% url 'costs:application' %}?name={{ application.name|urlencode }}">{{ application.name }}</a></td>
                     <td>{{ application.customer }}</td>
 
                     {% if application.external_cost_total %}

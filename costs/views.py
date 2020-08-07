@@ -1,7 +1,9 @@
 import datetime
 
 from django.contrib.auth.decorators import permission_required
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.urls import reverse
 
 from costs.forms import ApplicationForm, ServerForm
 from costs.models import Application, Customer, Department, Product, ProductDelivery, Sector, Server
@@ -27,7 +29,7 @@ def customers(request):
 
 def application_form(request):
     customer = request.GET.get('customer')
-    application_name = request.GET.get('application')
+    application_name = request.GET.get('name')
 
     if customer and application_name:
         application_obj = Application.objects.get(name=application_name, customer__id=customer)
@@ -45,7 +47,8 @@ def application_form(request):
             if server == '':
                 continue
             application_obj.servers.add(Server.objects.get(name=server))
-        return redirect('costs:application', name=application_obj.name)
+        url = reverse('costs:application') + '?' + request.META['QUERY_STRING']
+        return HttpResponseRedirect(url)
 
     context = {'form': form,
                'customers': Customer.objects.all(),
@@ -121,13 +124,15 @@ def applications(request, customer=None, vendor=None, department=None, sector=No
                                                       'selected_sector': sector})
 
 
-def application(request, name, customer=None):
+def application(request, name=None, customer=None):
+    if not name:
+        name = request.GET.get('name')
     if not customer:
         customer = request.GET.get('customer')
 
     apps = Application.objects.filter(name=name)
     if customer:
-        apps = apps.filter(customer__name=customer)
+        apps = apps.filter(customer__id=customer)
 
     apps_sorted = {}
 

@@ -5,7 +5,7 @@
     <ul>
             {% for application in server.applications.all %}
                 <li>
-                <a href="{% url 'costs:application' name=application.name customer=application.customer %}">{{ application.name }}</a>
+                <a href="{% url 'costs:application' %}?name={{ application.name|urlencode }}&amp;customer={{ application.customer.id|urlencode }}">{{ application.name }}</a>
                 </li>
             {% endfor %}
     </ul>

@@ -58,7 +58,7 @@
                         <a href="{% url 'costs:applications' vendor=application.vendor %}">{{ application.vendor }}</a>
                     </td>
                     <td>
-                        <a href="{% url 'costs:application' name=application.name customer=application.customer %}">{{ application.name }}</a>
+                        <a href="{% url 'costs:application' %}?name={{ application.name|urlencode }}&amp;customer={{ application.customer.id|urlencode }}">{{ application.name }}</a>
                     </td>
                 </tr>
             {% endfor %}

@@ -53,7 +53,7 @@
         </tr>
         {% for integration in application.integrations.all %}
         <tr>
-            <th><a href="{% url 'costs:application' name=integration.name %}">{{ integration.name }}</a></th>
+            <th><a href="{% url 'costs:application' %}?name={{ integration.name|urlencode }}&amp;customer={{ integration.customer.id|urlencode }}">{{ integration.name }}</a></th>
             <td>{{ integration.department.sector.name }}</td>
         </tr>
         {% endfor %}
@@ -86,11 +86,11 @@
 
         </table>
         <br />
-        <a href="{% url 'costs:application_form' %}?customer={{ application.customer.id }}&amp;application={{ application.name }}">Endre {{ application.name }} hos {{application.customer }}</a>
+        <a href="{% url 'costs:application_form' %}?customer={{ application.customer.id }}&amp;name={{ application.name|urlencode }}">Endre {{ application.name }} hos {{application.customer }}</a>
     {% endfor %}
 
     {% if customer %}
-        <br /><a href="{% url 'costs:application' name=application_name %}">Vis {{ application_name }} hos alle kunder</a>
+        <br /><a href="{% url 'costs:application' %}?name={{ application_name|urlencode }}">Vis {{ application_name }} hos alle kunder</a>
     {% endif %}
 
 {% endblock %}
