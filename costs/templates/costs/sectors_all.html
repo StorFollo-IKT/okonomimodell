@@ -21,7 +21,9 @@
     <script>$(document).ready(function () {
         $('table.display').DataTable({
             "order": [[0, "asc"]],
-            fixedHeader: true
+            fixedHeader: {
+                headerOffset: $('.myNav').outerHeight()
+            }
         });
     });</script>
 {% endblock %}

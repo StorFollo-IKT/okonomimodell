@@ -44,3 +44,11 @@ ul.top_menu li {
 ul.top_menu li:last-child {
   border-right: none;
 }
+
+.sticky{
+  position: fixed;
+	top: 0;
+	z-index: 9999;
+	width: 100%;
+	margin-top: 0px;
+}

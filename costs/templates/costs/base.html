@@ -20,6 +20,7 @@
     <script type="text/javascript" charset="utf8" src="{% static 'costs/node_modules/jquery/dist/jquery.min.js' %}"></script>
     <script type="text/javascript" charset="utf8" src="{% static 'costs/node_modules/datatables.net/js/jquery.dataTables.min.js' %}"></script>
     <script type="text/javascript" charset="utf8" src="{% static 'costs/node_modules/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>
+    <script type="text/javascript" charset="utf8" src="{% static 'costs/menu.js' %}"></script>
     <script>$.extend(true, $.fn.dataTable.defaults, {
         "paging": false,
         "language":{"url":"{% static 'costs/Norwegian-Bokmal.json' %}"}
@@ -28,6 +29,7 @@
 <body>
 <div class="menu">
     <img src="{% static 'costs/logo.png' %}" alt="StorFollo IKT logo" style="max-height: 50px"/>
+    <div class="myNav">
     <ul class="top_menu">
         <li><a href="{% url 'costs:applications' %}">Applikasjoner</a></li>
         <li><a href="{% url 'costs:servers' %}">Servere</a></li>
@@ -44,6 +46,7 @@
             <li><a href="{% url 'account_logout' %}">Logg ut</a></li>
         {% endif %}
     </ul>
+    </div>
 </div>
 
 <div id="content" class="flex">

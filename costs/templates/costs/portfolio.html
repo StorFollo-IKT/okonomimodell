@@ -117,6 +117,7 @@
                 </tr>
             {% endfor %}
             </tbody>
+        </table>
         {% if selected_vendor == 'all' and selected_application == 'all' %}
             <h2>Tjenester</h2>
             <table id="svcs" class="display">
@@ -164,7 +165,9 @@
             columnDefs: [
                 {targets: [3,4,5,6], orderSequence: ["desc", "asc"]}
             ],
-            fixedHeader: true,
+            fixedHeader: {
+                headerOffset: $('.myNav').outerHeight()
+            },
             footerCallback
         });
         $('#svcs').DataTable({
@@ -172,7 +175,9 @@
             columnDefs: [
                 {targets: [3,5,6], orderSequence: ["desc", "asc"]}
             ],
-            fixedHeader: true,
+            fixedHeader: {
+                headerOffset: $('.myNav').outerHeight()
+            },
             footerCallback
         });
     });</script>
