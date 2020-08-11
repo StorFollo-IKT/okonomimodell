@@ -38,6 +38,7 @@
                 <th>Ansvar</th>
                 <th>Leverand&oslash;r</th>
                 <th>Applikasjon</th>
+                <th>Skytjeneste</th>
             </tr>
             </thead>
             <tbody>
@@ -59,6 +60,11 @@
                     </td>
                     <td>
                         <a href="{% url 'costs:application' %}?name={{ application.name|urlencode }}&amp;customer={{ application.customer.id|urlencode }}">{{ application.name }}</a>
+                    </td>
+                    <td>
+                        {% if application.cloud %}
+                        <img src="{% static 'costs/check.svg' %}" style="max-height: 15px" alt="Ja" />
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}
