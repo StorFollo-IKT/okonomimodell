@@ -5,7 +5,12 @@ from costs.models import Application, Customer, Department, Product, ProductType
 
 admin.site.register(Customer)
 admin.site.register(ProductType)
-admin.site.register(Product)
+
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ['name', 'type', 'price']
+    list_filter = ['type']
 
 
 @admin.register(Application)
@@ -16,9 +21,9 @@ class ApplicationAdmin(admin.ModelAdmin):
 
 @admin.register(Server)
 class ServerAdmin(admin.ModelAdmin):
-    list_display = ['name', 'product', 'customer', 'last_logon']
-    readonly_fields = ['applications_string']
-    list_filter = ['customer', 'last_logon']
+    list_display = ['name', 'product', 'customer', 'last_logon', 'last_update']
+    readonly_fields = ['applications_string', 'last_update']
+    list_filter = ['customer', 'last_logon', 'imported']
 
 
 @admin.register(ProductDelivery)
@@ -31,6 +36,7 @@ class ProductDeliveryAdmin(admin.ModelAdmin):
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ['name', 'customer', 'department']
+    list_filter = ['department__customer', 'department__sector_dep', 'department']
 
 
 @admin.register(Department)
