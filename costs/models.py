@@ -154,8 +154,10 @@ class Application(models.Model):
     licence_cost = models.IntegerField('Lisenskostnad', default=0)
     internal_hours = models.IntegerField('Applikasjonsdrift timer pr mnd', default=0)
     external_cost = models.IntegerField('Konsulentkostnad', default=0)
-    responsible = models.ForeignKey(User, verbose_name='Systemansvarlig', on_delete=models.PROTECT, related_name='responsible', blank=True, null=True)
-    super_user = models.ForeignKey(User, verbose_name='Superbruker', on_delete=models.PROTECT, related_name='super_user', blank=True, null=True)
+    responsible = models.ForeignKey(User, verbose_name='Systemansvarlig', on_delete=models.PROTECT,
+                                    related_name='responsible', blank=True, null=True)
+    super_user = models.ForeignKey(User, verbose_name='Superbruker', on_delete=models.PROTECT,
+                                   related_name='super_user', blank=True, null=True)
 
     def __str__(self):
         return '%s: %s' % (self.customer, self.name)
@@ -260,7 +262,8 @@ class ProductDelivery(models.Model):
     customer = models.ForeignKey(Customer, verbose_name='Kunde', on_delete=models.PROTECT, related_name='deliveries')
     product = models.ForeignKey(Product, verbose_name='Tjeneste', on_delete=models.PROTECT, related_name='deliveries')
     amount = models.IntegerField(verbose_name='Antall')
-    sector = models.ForeignKey(Sector, verbose_name='Sektor', on_delete=models.PROTECT, related_name='deliveries', blank=True, null=True)
+    sector = models.ForeignKey(Sector, verbose_name='Sektor', on_delete=models.PROTECT, related_name='deliveries',
+                               blank=True, null=True)
 
     class Meta:
         verbose_name = 'tjenesteleveranse'
