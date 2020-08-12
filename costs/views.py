@@ -255,3 +255,41 @@ def portfolio(request):
 def departments(request):
     return render(request, 'costs/departments.html',
                   {'departments': Department.objects.all()})
+
+
+def report(request):
+    common_apps = Application.objects.filter(department=None)
+    department_apps = Application.objects.all()
+    department_apps = department_apps.exclude(department=None)
+    deliveries = ProductDelivery.objects.all()
+
+    customer = request.GET.get('customer')
+
+    if customer:
+        common_apps = common_apps.filter(customer__name=customer)
+        department_apps = department_apps.filter(customer__name=customer)
+        deliveries = deliveries.filter(customer__name=customer)
+
+    # common_apps_cost_sum = common_apps.aggregate(Sum('licence_cost'))
+    # common_apps_cost_sum += common_apps.aggregate(Sum('external_cost'))
+
+    sector = request.GET.get('sector')
+    if sector:
+        department_apps = department_apps.filter(department__sector_dep__name=sector)
+
+    department = request.GET.get('department')
+    if department:
+        department_apps = department_apps.filter(department__name=department)
+
+    sector_names = Sector.objects.all().distinct()
+
+    return render(request, 'costs/cost_report.html',
+                  {'common_apps': common_apps,
+                   'department_apps': department_apps,
+                   'customers': filter_list('name', model=Customer),
+                   'sectors': filter_list('name', queryset=sector_names),
+                   'deliveries': deliveries,
+                   'customer': customer,
+                   'sector': sector,
+                   }
+                  )

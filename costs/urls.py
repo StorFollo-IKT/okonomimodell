@@ -23,5 +23,6 @@ urlpatterns = [
     path('applikasjoner/leverandor/<str:vendor>', views.applications, name='applications'),
     path('sectors', views.sectors, name='sectors'),
     path('ansvar', views.departments, name='departments'),
-    path('accounts/profile/', views.applications)
+    path('accounts/profile/', views.applications),
+    path('rapport', views.report, name='report')
 ]

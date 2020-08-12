@@ -1,0 +1,56 @@
+{% extends 'costs/base.html' %}
+{% load humanize %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'costs/filter.css' %}" type="text/css">
+    <script type="application/javascript" src="{% static 'costs/filter.js' %}"></script>
+{% endblock %}
+{% block body %}
+    <div id="filter">
+        <h2>Filtrering</h2>
+    </div>
+    <div class="results">
+        <h2>Fellesapplikasjoner</h2>
+        {% include 'costs/application_table.html' with applications=common_apps sector=True department=True %}
+
+        <h2>Applikasjoner</h2>
+        {% include 'costs/application_table.html' with applications=department_apps %}
+        {{ customers|json_script:'customer-data' }}
+        {{ sectors|json_script:'sector-data' }}
+        {{ departments|json_script:'department-data' }}
+
+        <h2>Driftstjenester StorFollo IKT</h2>
+        <table id="svcs" class="display">
+            <thead>
+            <tr>
+                <th>Sektor</th>
+                <th>Kunde</th>
+                <th>Tjeneste</th>
+                <th class="sum">Pris per måned</th>
+                <th class="sum">Antall</th>
+                <th class="sum">Sum per måned</th>
+                <th class="sum">Sum per år</th>
+            </tr>
+            </thead>
+            {% for delivery in deliveries %}
+                <tr>
+                    <td>{{ delivery.sector.name }}</td>
+                    <td>{{ delivery.customer.name }}</td>
+                    <td>{{ delivery.product.name }}</td>
+                    <td data-sort="{{ delivery.product.price }}" class="currency">{{ delivery.product.price|intcomma }}&nbsp;kr</td>
+                    <td class="currency">{{ delivery.amount }}</td>
+                    <td data-sort="{{ delivery.sum }}" class="currency">{{ delivery.sum|intcomma }}&nbsp;kr</td>
+                    <td data-sort="{{ delivery.sum_year }}" class="currency">{{ delivery.sum_year|intcomma }}&nbsp;kr
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+
+    <script type="application/javascript">
+        const filter_group = new filterGroup('filter')
+        filter_group.addFilterJson('customer', 'Etter kunde')
+        filter_group.addFilterJson('sector', 'Etter sektor')
+    </script>
+{% endblock %}
