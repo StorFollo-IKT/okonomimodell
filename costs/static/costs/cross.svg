@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="-10 -6 16 16">
+    <line id="line" y1="-3" y2="3" stroke="#df0000" stroke-linecap="butt" transform="rotate(15)" />
+    <line id="line" y1="-3" y2="3" stroke="#df0000" stroke-linecap="butt" transform="rotate(75)" />
+    <line id="line" y1="-3" y2="3" stroke="#df0000" stroke-linecap="butt" transform="rotate(-45)" />
+</svg>
