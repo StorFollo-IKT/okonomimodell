@@ -27,6 +27,9 @@ class Customer(models.Model):
     def servers_active(self, days=90):
         return self.servers.filter(last_logon__gte=datetime.datetime.today() - datetime.timedelta(days=days))
 
+    def workstations_active(self, days=90):
+        return self.workstations.filter(last_logon__gte=datetime.datetime.today() - datetime.timedelta(days=days))
+
 
 class ProductType(models.Model):
     type = models.CharField('Tjenestetype', max_length=50)

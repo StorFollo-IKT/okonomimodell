@@ -8,6 +8,10 @@
             <li>Servere: <a href="{% url 'costs:servers' customer=customer.name %}">{{ customer.servers.count }}</a></li>
             <li>Servere aktive siste 90 dager: <a href="{% url 'costs:servers' %}?customer={{ customer.name|urlencode }}&amp;active=90">{{ customer.servers_active.count }}</a></li>
             {% endif %}
+            {% if customer.workstations.count > 0 %}
+                <li>Arbeidsstasjoner: {{ customer.workstations.count }}</li>
+                <li>Arbeidsstasjoner aktive siste 90 dager: {{ customer.workstations_active.count }}</li>
+             {% endif %}
             <li>Applikasjoner: <a href="{% url 'costs:applications' customer=customer.name %}">{{ customer.applications.count }}</a></li>
             <li>Tjenesteleveranser:</li>
             <ul>
