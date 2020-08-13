@@ -35,7 +35,7 @@ class ProductDeliveryAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['name', 'customer', 'department']
+    list_display = ['name', 'customer', 'department', 'ad_user', 'number']
     list_filter = ['department__customer', 'department__sector_dep', 'department']
 
 
