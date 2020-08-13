@@ -104,7 +104,7 @@ class Server(models.Model):
 class Department(models.Model):
     number = models.IntegerField('Ansvar')
     name = models.CharField('Navn', max_length=100)
-    customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
+    customer = models.ForeignKey(Customer, on_delete=models.PROTECT, related_name='departments')
 
     class Meta:
         unique_together = ['number', 'customer']
