@@ -1,5 +1,5 @@
 {% load humanize %}
-<table>
+<table class="display">
     <thead>
     <tr>
         {% if not customer %}
@@ -12,11 +12,28 @@
             <th>Enhet</th>
         {% endif %}
         <th>Applikasjon</th>
-        <th title="Kostnad fra leverandør per år">Leverand&oslash;rkostnad</th>
-        <th title="Tilrettelegging, drift og support Storfollo IKT">Drift StorFollo IKT</th>
-        <th>Totalt per &aring;r</th>
+        <th class="sum" title="Kostnad fra leverandør per år">Leverand&oslash;rkostnad</th>
+        <th class="sum" title="Tilrettelegging, drift og support Storfollo IKT">Drift StorFollo IKT</th>
+        <th class="sum">Totalt per &aring;r</th>
     </tr>
     </thead>
+    <tfoot>
+    <tr>
+        {% if not customer %}
+            <th></th>
+        {% endif %}
+        {% if not sector %}
+            <th></th>
+        {% endif %}
+        {% if not department %}
+            <th></th>
+        {% endif %}
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+    </tfoot>
     <tbody>
     {% for application in applications %}
         <tr>
@@ -30,9 +47,9 @@
                 <td>{{ application.department.name }}</td>
             {% endif %}
             <td>{{ application.name }}</td>
-            <td data-sort="{{ application.external_cost_total }}">{{ application.external_cost_total|intcomma }}&nbsp;kr</td>
-            <td data-sort="{{ application.internal_hour_cost_year }}">{{ application.internal_hour_cost_year|intcomma }}&nbsp;kr</td>
-            <td data-sort="{{ application.total_year }}">{{ application.total_year|intcomma }}&nbsp;kr</td>
+            <td class="currency" data-sort="{{ application.external_cost_total }}">{{ application.external_cost_total|intcomma }}&nbsp;kr</td>
+            <td class="currency" data-sort="{{ application.internal_hour_cost_year }}">{{ application.internal_hour_cost_year|intcomma }}&nbsp;kr</td>
+            <td class="currency" data-sort="{{ application.total_year }}">{{ application.total_year|intcomma }}&nbsp;kr</td>
         </tr>
     {% endfor %}
     </tbody>

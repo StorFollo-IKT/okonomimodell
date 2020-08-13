@@ -4,6 +4,7 @@
 {% block head %}
     <link rel="stylesheet" href="{% static 'costs/filter.css' %}" type="text/css">
     <script type="application/javascript" src="{% static 'costs/filter.js' %}"></script>
+    <script type="text/javascript" charset="utf8" src="{% static 'costs/table.js' %}"></script>
 {% endblock %}
 {% block body %}
     <div id="filter">
@@ -27,11 +28,23 @@
                 <th>Kunde</th>
                 <th>Tjeneste</th>
                 <th class="sum">Pris per måned</th>
-                <th class="sum">Antall</th>
+                <th>Antall</th>
                 <th class="sum">Sum per måned</th>
                 <th class="sum">Sum per år</th>
             </tr>
             </thead>
+        <tfoot>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        </tfoot>
+            <tbody>
             {% for delivery in deliveries %}
                 <tr>
                     <td>{{ delivery.sector.name }}</td>
@@ -44,6 +57,7 @@
                     </td>
                 </tr>
             {% endfor %}
+            </tbody>
         </table>
 
     </div>
@@ -52,5 +66,16 @@
         const filter_group = new filterGroup('filter')
         filter_group.addFilterJson('customer', 'Etter kunde')
         filter_group.addFilterJson('sector', 'Etter sektor')
+        $(document).ready(function () {
+            $('table.display').DataTable({
+                fixedHeader: {
+                    headerOffset: $('.myNav').outerHeight()
+                },
+                columnDefs: [
+                    {targets: ["sum"], orderSequence: ["desc", "asc"]}
+                ],
+                footerCallback,
+            });
+        });
     </script>
 {% endblock %}
