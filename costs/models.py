@@ -289,3 +289,13 @@ class ProductDelivery(models.Model):
 
     def sum_year(self):
         return (self.product.price * self.amount) * 12
+
+
+class ProductGroup(models.Model):
+    name = models.CharField(max_length=100)
+    products = models.ManyToManyField(Product, verbose_name='Tjenester', related_name='product_groups')
+
+    class Meta:
+        verbose_name = 'Tjenestegruppe'
+        verbose_name_plural = 'Tjenestegrupper'
+        ordering = ['name']
