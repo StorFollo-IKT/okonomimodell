@@ -131,11 +131,11 @@ class User(models.Model):
     number = models.IntegerField('Ressursnummer')
     ad_user = models.CharField('Brukernavn AD', max_length=50)
     name = models.CharField('Navn', max_length=100)
-    department = models.ForeignKey(Department, on_delete=models.PROTECT, related_name='users')
+    department = models.ForeignKey(Department, on_delete=models.PROTECT, related_name='users', verbose_name='ansvar')
     email = models.EmailField('Epostadresse')
     dn = models.CharField('DN', max_length=300, blank=True, null=True)
-    last_logon = models.DateTimeField('Sist aktiv', null=True, blank=True)
-    last_update = models.DateTimeField('Sist oppdatert', auto_now=True)
+    last_logon = models.DateTimeField('siste pålogging', null=True, blank=True)
+    last_update = models.DateTimeField('sist oppdatert', auto_now=True)
 
     class Meta:
         unique_together = ['number', 'ad_user', 'department']
