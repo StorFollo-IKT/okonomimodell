@@ -30,6 +30,9 @@ class Customer(models.Model):
     def workstations_active(self, days=90):
         return self.workstations.filter(last_logon__gte=datetime.datetime.today() - datetime.timedelta(days=days))
 
+    def users(self):
+        return User.objects.filter(department__customer=self)
+
 
 class ProductType(models.Model):
     type = models.CharField('Tjenestetype', max_length=50)
@@ -128,9 +131,11 @@ class User(models.Model):
     number = models.IntegerField('Ressursnummer')
     ad_user = models.CharField('Brukernavn AD', max_length=50)
     name = models.CharField('Navn', max_length=100)
-    department = models.ForeignKey(Department, on_delete=models.PROTECT)
+    department = models.ForeignKey(Department, on_delete=models.PROTECT, related_name='users')
     email = models.EmailField('Epostadresse')
     dn = models.CharField('DN', max_length=300, blank=True, null=True)
+    last_logon = models.DateTimeField('Sist aktiv', null=True, blank=True)
+    last_update = models.DateTimeField('Sist oppdatert', auto_now=True)
 
     class Meta:
         unique_together = ['number', 'ad_user', 'department']
@@ -144,6 +149,9 @@ class User(models.Model):
         :return: Customer
         """
         return self.department.customer
+
+    def __str__(self):
+        return '%s (%s)' % (self.name, self.department)
 
 
 class Application(models.Model):
