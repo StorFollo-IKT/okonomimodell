@@ -50,6 +50,21 @@ tfoot th {
     padding: 8px !important;
 }
 
+#total {
+    float:right;
+    padding-right: 20%;
+    font-weight: bold;
+}
+
+#totalLabel{
+    float:left;
+    padding-right: 10px;
+}
+
+#totalSum{
+    float:right;
+}
+
 input[required] {
 
     background-image: url('data:image/svg+xml,\

@@ -10,8 +10,10 @@
     <div id="filter">
         <h2>Filtrering</h2>
     </div>
+    <div id="total"><div id="totalLabel">TOTALT PER ÅR: </div><div id="totalSum"></div></div>
     <div class="results">
         <h2>Fellesapplikasjoner</h2>
+
         {% include 'costs/application_table.html' with applications=common_apps sector=True department=True %}
 
         <h2>Applikasjoner</h2>
@@ -33,17 +35,17 @@
                 <th class="sum">Sum per år</th>
             </tr>
             </thead>
-        <tfoot>
-        <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-        </tr>
-        </tfoot>
+            <tfoot>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th class="yearlyTotal"></th>
+            </tr>
+            </tfoot>
             <tbody>
             {% for delivery in deliveries %}
                 <tr>
@@ -63,6 +65,7 @@
     </div>
 
     <script type="application/javascript">
+        var sum;
         const filter_group = new filterGroup('filter')
         filter_group.addFilterJson('customer', 'Etter kunde')
         filter_group.addFilterJson('sector', 'Etter sektor')
@@ -75,7 +78,14 @@
                     {targets: ["sum"], orderSequence: ["desc", "asc"]}
                 ],
                 footerCallback,
+                fixedHeader: {
+                    headerOffset: $('.myNav').outerHeight()
+                },
+                drawCallback: function (settings) {
+                    calculateYearlyTotal()
+                }
             });
+
         });
     </script>
 {% endblock %}

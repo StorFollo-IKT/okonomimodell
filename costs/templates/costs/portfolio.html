@@ -62,6 +62,7 @@
             </ul>
         </div>
     </div>
+    <div id="total"><div id="totalLabel">TOTALT PER ÅR: </div><div id="totalSum"></div></div>
     <h2>Applikasjoner</h2>
     <div class="results">
         <table id="apps" class="display">
@@ -84,7 +85,7 @@
                 <th></th>
                 <th></th>
                 <th></th>
-                <th></th>
+                <th class="yearlyTotal"></th>
             </tr>
         </tfoot>
             <tbody>
@@ -127,7 +128,7 @@
                     <th>Kunde</th>
                     <th>Tjeneste</th>
                     <th class="sum">Pris per måned</th>
-                    <th class="sum">Antall</th>
+                    <th>Antall</th>
                     <th class="sum">Sum per måned</th>
                     <th class="sum">Sum per år</th>
                 </tr>
@@ -140,7 +141,7 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th></th>
+                    <th class="yearlyTotal"></th>
                 </tr>
             </tfoot>
                 <tbody>
@@ -163,22 +164,28 @@
         $('#apps').DataTable({
             "order": [[1, "asc"]],
             columnDefs: [
-                {targets: [3,4,5,6], orderSequence: ["desc", "asc"]}
+                {targets: [3, 4, 5, 6], orderSequence: ["desc", "asc"]}
             ],
             fixedHeader: {
                 headerOffset: $('.myNav').outerHeight()
             },
-            footerCallback
+            footerCallback,
+            drawCallback: function (settings) {
+                calculateYearlyTotal()
+            }
         });
         $('#svcs').DataTable({
             "order": [[2, "asc"]],
             columnDefs: [
-                {targets: [3,5,6], orderSequence: ["desc", "asc"]}
+                {targets: [3, 5, 6], orderSequence: ["desc", "asc"]}
             ],
             fixedHeader: {
                 headerOffset: $('.myNav').outerHeight()
             },
-            footerCallback
+            footerCallback,
+            drawCallback: function (settings) {
+                calculateYearlyTotal()
+            }
         });
     });</script>
 {% endblock %}
