@@ -14,10 +14,10 @@
     <div class="results">
         <h2>Fellesapplikasjoner</h2>
 
-        {% include 'costs/application_table.html' with applications=common_apps sector=True department=True %}
+        {% include 'costs/application_table.html' with applications=common_apps sector=True department=True tableId='CommonApps' %}
 
         <h2>Applikasjoner</h2>
-        {% include 'costs/application_table.html' with applications=department_apps %}
+        {% include 'costs/application_table.html' with applications=department_apps tableId='Applications'%}
         {{ customers|json_script:'customer-data' }}
         {{ sectors|json_script:'sector-data' }}
         {{ departments|json_script:'department-data' }}
@@ -70,7 +70,7 @@
         filter_group.addFilterJson('customer', 'Etter kunde')
         filter_group.addFilterJson('sector', 'Etter sektor')
         $(document).ready(function () {
-            $('table.display').DataTable({
+            $('#CommonApps').DataTable({
                 fixedHeader: {
                     headerOffset: $('.myNav').outerHeight()
                 },
@@ -78,14 +78,52 @@
                     {targets: ["sum"], orderSequence: ["desc", "asc"]}
                 ],
                 footerCallback,
-                fixedHeader: {
-                    headerOffset: $('.myNav').outerHeight()
-                },
                 drawCallback: function (settings) {
                     calculateYearlyTotal()
                 }
             });
-
+            $('#Applications').DataTable({
+                fixedHeader: {
+                    headerOffset: $('.myNav').outerHeight()
+                },
+                columnDefs: [
+                    {targets: ["sum"], orderSequence: ["desc", "asc"]}
+                ],
+                footerCallback,
+                drawCallback: function (settings) {
+                    calculateYearlyTotal()
+                },
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excel',
+                        text: 'Eksporter til Excel',
+                        title: null,
+                        filename: 'Applikasjoner'
+                    }
+                ]
+            });
+            $('#svcs').DataTable({
+                fixedHeader: {
+                    headerOffset: $('.myNav').outerHeight()
+                },
+                columnDefs: [
+                    {targets: ["sum"], orderSequence: ["desc", "asc"]}
+                ],
+                footerCallback,
+                drawCallback: function (settings) {
+                    calculateYearlyTotal()
+                },
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excel',
+                        text: 'Eksporter til Excel',
+                        title: null,
+                        filename: 'Driftstjenester'
+                    }
+                ]
+            });
         });
     </script>
 {% endblock %}

@@ -7,8 +7,10 @@
     "copy": "robocopy /E node_modules costs\\static\\costs\\node_modules"
   },
   "dependencies": {
+    "datatables.net-buttons-dt": "^1.6.3",
     "datatables.net-dt": "^1.10.21",
-    "datatables.net-fixedheader-dt": "^3.1.7"
+    "datatables.net-fixedheader-dt": "^3.1.7",
+    "jszip": "^3.5.0"
   },
   "devDependencies": {},
   "repository": {
