@@ -71,6 +71,7 @@
         filter_group.addFilterJson('sector', 'Etter sektor')
         $(document).ready(function () {
             $('#CommonApps').DataTable({
+                order: [[1, "asc"]],
                 fixedHeader: {
                     headerOffset: $('.myNav').outerHeight()
                 },
@@ -104,6 +105,7 @@
                 ]
             });
             $('#svcs').DataTable({
+                order: [[2, "asc"]],
                 fixedHeader: {
                     headerOffset: $('.myNav').outerHeight()
                 },
