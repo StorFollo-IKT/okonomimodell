@@ -110,7 +110,7 @@ def applications(request, customer=None, vendor=None, department=None, sector=No
         title += ' i sektor %s' % sector
 
     if server:
-        apps = apps.filter(servers__name=server)
+        apps = Application.objects.filter(servers__name=server, servers__customer__name=customer)
         title += ' på server %s' % server
 
     apps = apps.order_by('name')
