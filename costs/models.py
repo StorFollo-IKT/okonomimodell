@@ -205,6 +205,9 @@ class Application(models.Model):
     def cost(self):
         return self.server_cost() + self.external_cost + self.licence_cost
 
+    def internal_cost_total_year(self):
+        return self.internal_hour_cost_year() + self.server_cost_year()
+
     def total_year(self):
         return self.server_cost_year() + self.external_cost_total() + self.internal_hour_cost_year()
 

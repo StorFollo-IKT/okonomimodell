@@ -48,7 +48,7 @@
             {% endif %}
             <td>{{ application.name }}</td>
             <td class="currency" data-sort="{{ application.external_cost_total }}">{{ application.external_cost_total|intcomma }}&nbsp;kr</td>
-            <td class="currency" data-sort="{{ application.internal_hour_cost_year }}">{{ application.internal_hour_cost_year|intcomma }}&nbsp;kr</td>
+            <td class="currency" data-sort="{{ application.internal_cost_total_year }}">{{ application.internal_cost_total_year|intcomma }}&nbsp;kr</td>
             <td class="currency" data-sort="{{ application.total_year }}">{{ application.total_year|intcomma }}&nbsp;kr</td>
         </tr>
     {% endfor %}
