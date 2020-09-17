@@ -36,7 +36,8 @@ class ProductDeliveryAdmin(admin.ModelAdmin):
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ['name', 'customer', 'department', 'ad_user', 'number', 'last_update', 'last_logon']
-    list_filter = ['department__customer', 'department__sector_dep', 'last_logon', 'last_update']
+    list_filter = ['last_logon', 'last_update']
+    readonly_fields = ['employee', 'last_update']
 
 
 @admin.register(Department)
