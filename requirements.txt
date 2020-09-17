@@ -1,4 +1,4 @@
 django
 django-allauth
-django-stamdata3
+django-stamdata3>=0.2
 python-ldap
