@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
-from costs.models import Application, Customer, Department, Product, ProductType, Sector, Server, User, ProductDelivery
+from costs.models import Application, Customer, Department, Product, ProductType, Sector, Server, User, ProductDelivery, \
+    ProductGroup
 
 admin.site.register(Customer)
 admin.site.register(ProductType)
@@ -11,6 +12,12 @@ admin.site.register(ProductType)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['name', 'type', 'price']
     list_filter = ['type']
+
+
+@admin.register(ProductGroup)
+class ProductGroupAdmin(admin.ModelAdmin):
+    list_display = ['name']
+    readonly_fields = ['sum_year']
 
 
 @admin.register(Application)
