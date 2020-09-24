@@ -40,11 +40,42 @@ class ProductDeliveryAdmin(admin.ModelAdmin):
     list_filter = ['customer', 'product']
 
 
+
+class HasAdFilter(admin.SimpleListFilter):
+    title = 'har bruker'
+    parameter_name = 'has_ad'
+
+    def lookups(self, request, model_admin):
+        return [('true', 'Ja'), ('false', 'Nei')]
+
+    def queryset(self, request, queryset):
+        if self.value() == 'false':
+            return queryset.filter(ad_object=None)
+        if self.value() == 'true':
+            return queryset.exclude(ad_object=None)
+
+
+class IsEmployeeFilter(admin.SimpleListFilter):
+    title = 'er ansatt'
+    parameter_name = 'is_employee'
+
+    def lookups(self, request, model_admin):
+        return [('true', 'Ja'), ('false', 'Nei')]
+
+    def queryset(self, request, queryset):
+        if self.value() == 'false':
+            return queryset.filter(employee=None)
+        if self.value() == 'true':
+            return queryset.exclude(employee=None)
+
+
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['name', 'customer', 'department', 'ad_user', 'number', 'last_update', 'last_logon']
-    list_filter = ['last_logon', 'last_update']
-    readonly_fields = ['employee', 'last_update']
+    list_select_related = ['ad_object']
+    list_display = ['name', 'customer', 'department', 'employee', 'ad_user', 'number', 'last_update', 'last_logon']
+    list_filter = ['ad_object__directory', 'customer', 'ad_object__lastLogon', 'ad_object__last_update', HasAdFilter,
+                   IsEmployeeFilter]
+    readonly_fields = ['company', 'employee', 'display_name']
 
 
 @admin.register(Department)

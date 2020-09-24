@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'django.contrib.sites',
     'costs.apps.CostsConfig',
-    'adimport.apps.AdimportConfig',
+    'ad_import.apps.AdImportConfig',
     'employee_info.apps.EmployeeInfoConfig',
     'allauth',
     'allauth.account',

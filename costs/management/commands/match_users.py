@@ -13,10 +13,12 @@ now = datetime.datetime.now()
 class Command(BaseCommand):
     def handle(self, *args, **options):
         for user in User.objects.all():
-            company = user.customer().id
+            company = user.customer.id
+            if not user.ad_object.employeeID:
+                continue
             try:
                 employee = Resource.objects.get(company__companyCode=company,
-                                                resourceId=user.number)
+                                                resourceId=user.ad_object.employeeID)
                 user.employee = employee
                 user.save()
             except Resource.DoesNotExist:

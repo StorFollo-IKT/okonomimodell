@@ -14,4 +14,4 @@ class ApplicationForm(forms.ModelForm):
 class ServerForm(forms.ModelForm):
     class Meta:
         model = Server
-        exclude = ['last_logon', 'imported']
+        exclude = ['ad_object', 'imported']

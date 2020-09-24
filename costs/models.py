@@ -1,13 +1,19 @@
 import datetime
 
 from django.db import models
-from employee_info.models import Resource, CostCenter
+from employee_info.models import Resource, CostCenter, Company
+
+from ad_import.models import Directory
+from ad_import.models import Server as ADServer
+from ad_import.models import User as ADUser
+from ad_import.models import Workstation as ADWorkstation
 
 
 class Customer(models.Model):
     id = models.CharField(primary_key=True, max_length=5)
     name = models.CharField('Navn', max_length=50)
     served_by = models.ForeignKey('self', blank=True, null=True, on_delete=models.PROTECT, verbose_name='Driftes av')
+    ad_directories = models.ManyToManyField(Directory)
 
     class Meta:
         verbose_name = 'kunde'
@@ -71,6 +77,7 @@ class Server(models.Model):
                                 null=True)
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT, verbose_name='Kunde', related_name='servers')
     imported = models.BooleanField(default=False)
+    ad_object = models.OneToOneField(ADServer, on_delete=models.SET_NULL, null=True, default=None,  verbose_name='AD')
 
     class Meta:
         unique_together = ['name', 'customer']
@@ -129,35 +136,44 @@ class Department(models.Model):
 
 
 class User(models.Model):
-    number = models.IntegerField('Ressursnummer')
+    number = models.IntegerField('Ressursnummer', null=True)
     ad_user = models.CharField('Brukernavn AD', max_length=50)
-    name = models.CharField('Navn', max_length=100)
+    ad_object = models.OneToOneField(ADUser, on_delete=models.SET_NULL, null=True, default=None, verbose_name='AD', related_name='users')
+    name = models.CharField('Navn', max_length=100, null=True)
     employee = models.ForeignKey(Resource, on_delete=models.CASCADE, verbose_name='ansatt', null=True, default=None)
-    email = models.EmailField('Epostadresse')
+    email = models.EmailField('Epostadresse', null=True)
     dn = models.CharField('DN', max_length=300, blank=True, null=True)
-    last_logon = models.DateTimeField('siste pålogging', null=True, blank=True)
-    last_update = models.DateTimeField('sist oppdatert', auto_now=True)
+    customer = models.ForeignKey(Customer, on_delete=models.PROTECT, verbose_name='Kunde', null=True, default=None)
 
     class Meta:
         verbose_name = 'bruker'
         verbose_name_plural = 'brukere'
         ordering = ['name']
 
-    def customer(self):
-        """
-        Shortcut method used in admin
-        :return: Customer
-        """
-        return Customer.objects.get(id=self.department())
+    def company(self):
+        if self.employee:
+            return self.employee.company
 
     def department(self) -> CostCenter:
-        if not self.employee:
-            return None
-        else:
+        if self.employee:
             return self.employee.main_position().costCenter
 
+    def last_logon(self):
+        if self.ad_object:
+            return self.ad_object.lastLogon
+
+    def last_update(self):
+        if self.ad_object:
+            return self.ad_object.last_update
+
+    def has_ad(self):
+        return self.ad_object is not None
+
+    def display_name(self):
+        return self.ad_object.displayName
+
     def __str__(self):
-        return self.name
+        return '%s (%s)' % (self.name, self.customer)
 
 
 class Application(models.Model):
