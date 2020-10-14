@@ -1,6 +1,7 @@
 import datetime
 
 from django.core.management.base import BaseCommand
+from django.db import IntegrityError
 
 from ad_import.load_data import LoadUsers
 from costs.models import Customer, User
@@ -9,9 +10,6 @@ now = datetime.datetime.now()
 
 
 class Command(BaseCommand):
-    def add_arguments(self, parser):
-        parser.add_argument('customer', nargs='+', type=str)
-
     def handle(self, *args, **options):
         load = LoadUsers()
         for customer in Customer.objects.all():
@@ -24,9 +22,22 @@ class Command(BaseCommand):
                         ad_user = load.load_user(user_data)
                         if not ad_user:
                             continue
-                        user, created = User.objects.get_or_create(dn=ad_user.distinguishedName)
+                        try:
+                            user = User.objects.get(ad_object=ad_user)
+                        except User.DoesNotExist:
+                            # print('No user for AD object %s' % ad_user)
+                            user = User(ad_object=ad_user)
+
+                        user.number = ad_user.employeeID
                         user.name = ad_user.displayName
                         user.email = ad_user.mail
                         user.ad_object = ad_user
+                        user.dn = ad_user.distinguishedName
                         user.customer = customer
-                        user.save()
+                        try:
+                            user.save()
+                        except IntegrityError as e:
+                            raise e
+
+                inactive = load.get_inactive()
+                inactive.delete()
