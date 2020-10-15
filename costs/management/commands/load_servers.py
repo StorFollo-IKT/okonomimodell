@@ -22,9 +22,12 @@ class Command(BaseCommand):
                         ad_object = load.load_object(server_data)
                         if not ad_object:
                             continue
-                        # print(ad_object)
+
                         try:
                             server = Server.objects.get(ad_object=ad_object)
+                            if ad_object.disabled():
+                                server.delete()
+                                continue
                         except Server.DoesNotExist:
                             try:
                                 server = Server.objects.get(name=ad_object.name)

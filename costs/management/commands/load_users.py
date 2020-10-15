@@ -24,6 +24,9 @@ class Command(BaseCommand):
                             continue
                         try:
                             user = User.objects.get(ad_object=ad_user)
+                            if ad_user.disabled():
+                                user.delete()
+                                continue
                         except User.DoesNotExist:
                             # print('No user for AD object %s' % ad_user)
                             user = User(ad_object=ad_user)
