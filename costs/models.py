@@ -173,6 +173,9 @@ class User(models.Model):
     def display_name(self):
         return self.ad_object.displayName
 
+    def username(self):
+        return self.ad_object.sAMAccountName
+
     def __str__(self):
         return '%s (%s)' % (self.name, self.customer)
 

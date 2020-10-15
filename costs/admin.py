@@ -44,7 +44,7 @@ class ApplicationAdmin(admin.ModelAdmin):
 class ServerAdmin(admin.ModelAdmin):
     list_display = ['name', 'product', 'customer', 'last_logon', 'last_update']
     readonly_fields = ['applications_string', 'last_update']
-    list_filter = ['customer', 'last_logon', 'imported', HasAdFilter]
+    list_filter = ['customer', 'ad_object__directory', 'ad_object__lastLogon', 'imported', HasAdFilter]
 
 
 @admin.register(ProductDelivery)
@@ -71,7 +71,7 @@ class IsEmployeeFilter(admin.SimpleListFilter):
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_select_related = ['ad_object']
-    list_display = ['name', 'customer', 'department', 'employee', 'ad_user', 'number', 'last_update', 'last_logon']
+    list_display = ['name', 'customer', 'department', 'employee', 'username', 'number', 'last_update', 'last_logon']
     list_filter = ['ad_object__directory', 'customer', 'ad_object__lastLogon', 'ad_object__last_update', HasAdFilter,
                    IsEmployeeFilter]
     readonly_fields = ['company', 'employee', 'display_name']
