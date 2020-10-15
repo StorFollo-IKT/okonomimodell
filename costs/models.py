@@ -1,7 +1,8 @@
 import datetime
 
 from django.db import models
-from employee_info.models import Resource, CostCenter, Company
+from django.db.models import Sum
+from employee_info.models import Function, Resource, CostCenter, Company
 
 from ad_import.models import Directory
 from ad_import.models import Server as ADServer
@@ -236,6 +237,29 @@ class Application(models.Model):
 
     def total_year(self):
         return self.server_cost_year() + self.external_cost_total() + self.internal_hour_cost_year()
+
+
+class CostDistribution(models.Model):
+    application = models.ForeignKey(Application, on_delete=models.CASCADE, verbose_name='applikasjon',
+                                    related_name='distributions')
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, verbose_name='firma')
+    percentage = models.IntegerField(verbose_name='prosent')
+
+    account = models.CharField('konto', max_length=6)
+    cost_center = models.ForeignKey(CostCenter, on_delete=models.PROTECT, blank=True, null=True,
+                                    verbose_name='ansvar')
+    function = models.ForeignKey(Function, on_delete=models.PROTECT, verbose_name='funksjon')
+
+    class Meta:
+        unique_together = ['application', 'company', 'account', 'cost_center', 'function']
+
+    def is_valid(self):
+        lines = self.objects.filter(application=self.application)
+        percent_sum = lines.aggregate(Sum('percentage'))['percentage__sum']
+        return percent_sum == 100
+
+    def customer(self):
+        return self.application.customer
 
 
 class Sector(models.Model):
