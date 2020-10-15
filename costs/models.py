@@ -158,7 +158,9 @@ class User(models.Model):
 
     def department(self) -> CostCenter:
         if self.employee:
-            return self.employee.main_position().costCenter
+            main_position = self.employee.main_position()
+            if main_position:
+                return main_position.costCenter
 
     def last_logon(self):
         if self.ad_object:
