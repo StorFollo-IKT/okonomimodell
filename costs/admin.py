@@ -8,6 +8,20 @@ admin.site.register(Customer)
 admin.site.register(ProductType)
 
 
+class HasAdFilter(admin.SimpleListFilter):
+    title = 'har objekt i AD'
+    parameter_name = 'has_ad'
+
+    def lookups(self, request, model_admin):
+        return [('true', 'Ja'), ('false', 'Nei')]
+
+    def queryset(self, request, queryset):
+        if self.value() == 'false':
+            return queryset.filter(ad_object=None)
+        if self.value() == 'true':
+            return queryset.exclude(ad_object=None)
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['name', 'type', 'price']
@@ -30,7 +44,7 @@ class ApplicationAdmin(admin.ModelAdmin):
 class ServerAdmin(admin.ModelAdmin):
     list_display = ['name', 'product', 'customer', 'last_logon', 'last_update']
     readonly_fields = ['applications_string', 'last_update']
-    list_filter = ['customer', 'last_logon', 'imported']
+    list_filter = ['customer', 'last_logon', 'imported', HasAdFilter]
 
 
 @admin.register(ProductDelivery)
@@ -38,21 +52,6 @@ class ProductDeliveryAdmin(admin.ModelAdmin):
     list_display = ['customer', 'product', 'amount', 'sum']
     readonly_fields = ['sum']
     list_filter = ['customer', 'product']
-
-
-
-class HasAdFilter(admin.SimpleListFilter):
-    title = 'har bruker'
-    parameter_name = 'has_ad'
-
-    def lookups(self, request, model_admin):
-        return [('true', 'Ja'), ('false', 'Nei')]
-
-    def queryset(self, request, queryset):
-        if self.value() == 'false':
-            return queryset.filter(ad_object=None)
-        if self.value() == 'true':
-            return queryset.exclude(ad_object=None)
 
 
 class IsEmployeeFilter(admin.SimpleListFilter):
