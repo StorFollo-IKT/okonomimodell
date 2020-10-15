@@ -78,7 +78,7 @@ class Server(models.Model):
                                 null=True)
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT, verbose_name='Kunde', related_name='servers')
     imported = models.BooleanField(default=False)
-    ad_object = models.OneToOneField(ADServer, on_delete=models.SET_NULL, null=True, default=None, verbose_name='AD')
+    ad_object = models.OneToOneField(ADServer, on_delete=models.CASCADE, null=True, default=None, verbose_name='AD')
 
     class Meta:
         unique_together = ['name', 'customer']
@@ -139,7 +139,7 @@ class Department(models.Model):
 class User(models.Model):
     number = models.IntegerField('Ressursnummer', null=True)
     ad_user = models.CharField('Brukernavn AD', max_length=50)
-    ad_object = models.OneToOneField(ADUser, on_delete=models.SET_NULL, null=True, default=None, verbose_name='AD',
+    ad_object = models.OneToOneField(ADUser, on_delete=models.CASCADE, null=True, default=None, verbose_name='AD',
                                      related_name='users')
     name = models.CharField('Navn', max_length=100, null=True)
     employee = models.ForeignKey(Resource, on_delete=models.CASCADE, verbose_name='ansatt', null=True, default=None)
