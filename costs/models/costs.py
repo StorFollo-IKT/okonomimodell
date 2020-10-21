@@ -2,54 +2,8 @@ from django.db import models
 from django.db.models import Sum
 from employee_info.models import Company, CostCenter, Function
 
-from ad_import.models import Server as ADServer
-from . import Customer, User
+from . import Customer, User, Server, Product
 
-
-class ProductType(models.Model):
-    type = models.CharField('Tjenestetype', max_length=50)
-    description = models.TextField('Beskrivelse', null=True, blank=True)
-
-    class Meta:
-        verbose_name = 'tjenestetype'
-        verbose_name_plural = 'tjenestetyper'
-
-    def __str__(self):
-        return self.type
-
-
-class Product(models.Model):
-    name = models.CharField('Tjeneste', max_length=50)
-    type = models.ForeignKey(ProductType, on_delete=models.PROTECT, verbose_name='Tjenestetype')
-    price = models.IntegerField('Pris per måned')
-
-    class Meta:
-        verbose_name = 'tjeneste'
-        verbose_name_plural = 'tjenester'
-
-    def __str__(self):
-        return '%s: %s' % (self.type, self.name)
-
-
-class Server(models.Model):
-    name = models.CharField('Navn', max_length=50)
-    dns_name = models.CharField('DNS-navn', max_length=100, null=True, blank=True)
-    dn = models.CharField('DN', max_length=200, null=True, blank=True)
-    ip = models.GenericIPAddressField(null=True, blank=True, default=None)
-    description = models.CharField('Beskrivelse', max_length=100, null=True, blank=True)
-    last_logon = models.DateTimeField('Sist aktiv', null=True, blank=True)
-    last_update = models.DateTimeField('Sist oppdatert', auto_now=True)
-    product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name='servers', verbose_name='Tjeneste',
-                                null=True)
-    customer = models.ForeignKey(Customer, on_delete=models.PROTECT, verbose_name='Kunde', related_name='servers')
-    imported = models.BooleanField(default=False)
-    ad_object = models.OneToOneField(ADServer, on_delete=models.CASCADE, null=True, blank=True, default=None, verbose_name='AD')
-
-    class Meta:
-        unique_together = ['name', 'customer']
-        verbose_name = 'server'
-        verbose_name_plural = 'servere'
-        ordering = ['customer', 'name']
 
     def __str__(self):
         value = '%s: %s' % (self.customer, self.name)
