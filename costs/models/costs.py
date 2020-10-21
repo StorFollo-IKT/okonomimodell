@@ -1,45 +1,9 @@
-import datetime
-
 from django.db import models
 from django.db.models import Sum
-from employee_info.models import Function, Resource, CostCenter, Company
+from employee_info.models import Company, CostCenter, Function
 
-from ad_import.models import Directory
 from ad_import.models import Server as ADServer
-from ad_import.models import User as ADUser
-from ad_import.models import Workstation as ADWorkstation
-
-
-class Customer(models.Model):
-    id = models.CharField(primary_key=True, max_length=5)
-    name = models.CharField('Navn', max_length=50)
-    served_by = models.ForeignKey('self', blank=True, null=True, on_delete=models.PROTECT, verbose_name='Driftes av')
-    ad_directories = models.ManyToManyField(Directory)
-
-    class Meta:
-        verbose_name = 'kunde'
-        verbose_name_plural = 'kunder'
-
-    def __str__(self):
-        return self.name
-
-    def costs(self):
-        cost = 0
-        for application in self.applications.all():
-            cost += application.cost()
-        for product in self.deliveries.all():
-            cost += product.sum()
-
-        return cost
-
-    def servers_active(self, days=90):
-        return self.servers.filter(last_logon__gte=datetime.datetime.today() - datetime.timedelta(days=days))
-
-    def workstations_active(self, days=90):
-        return self.workstations.filter(last_logon__gte=datetime.datetime.today() - datetime.timedelta(days=days))
-
-    def users(self):
-        return User.objects.filter(department__customer=self)
+from . import Customer, User
 
 
 class ProductType(models.Model):
@@ -135,53 +99,6 @@ class Department(models.Model):
             for sector in sectors:
                 print(sector)
             return sectors.first()
-
-
-class User(models.Model):
-    number = models.IntegerField('Ressursnummer', null=True)
-    ad_user = models.CharField('Brukernavn AD', max_length=50)
-    ad_object = models.OneToOneField(ADUser, on_delete=models.CASCADE, null=True, default=None, verbose_name='AD',
-                                     related_name='users')
-    name = models.CharField('Navn', max_length=100, null=True)
-    employee = models.ForeignKey(Resource, on_delete=models.CASCADE, verbose_name='ansatt', null=True, default=None)
-    email = models.EmailField('Epostadresse', null=True)
-    dn = models.CharField('DN', max_length=300, blank=True, null=True)
-    customer = models.ForeignKey(Customer, on_delete=models.PROTECT, verbose_name='Kunde', null=True, default=None)
-
-    class Meta:
-        verbose_name = 'bruker'
-        verbose_name_plural = 'brukere'
-        ordering = ['name']
-
-    def company(self):
-        if self.employee:
-            return self.employee.company
-
-    def department(self) -> CostCenter:
-        if self.employee:
-            main_position = self.employee.main_position()
-            if main_position:
-                return main_position.costCenter
-
-    def last_logon(self):
-        if self.ad_object:
-            return self.ad_object.lastLogon
-
-    def last_update(self):
-        if self.ad_object:
-            return self.ad_object.last_update
-
-    def has_ad(self):
-        return self.ad_object is not None
-
-    def display_name(self):
-        return self.ad_object.displayName
-
-    def username(self):
-        return self.ad_object.sAMAccountName
-
-    def __str__(self):
-        return '%s (%s)' % (self.name, self.customer)
 
 
 class Application(models.Model):
