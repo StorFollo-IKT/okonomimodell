@@ -1,6 +1,6 @@
 from django.db import models
 
-from . import Application, Customer, Department, Server
+from . import Customer, Department, Server
 
 
 class Sector(models.Model):
@@ -8,15 +8,9 @@ class Sector(models.Model):
     departments = models.ManyToManyField(Department, verbose_name='Ansvar', blank=True, related_name='sector_dep')
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name='Kunde', related_name='sectors')
 
-    def applications(self):
-        apps = Application.objects.filter(
-            department__in=self.departments.all()
-        )
-        return apps
-
     def servers(self):
         return Server.objects.filter(
-            applications__department__in=self.departments.all()
+            applications__in=self.applications.all()
         )
 
     def costs(self):

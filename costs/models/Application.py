@@ -1,6 +1,6 @@
 from django.db import models
 
-from . import Customer, Department, Product, Server, User
+from . import Customer, Department, Product, Sector, Server, User
 
 
 class Application(models.Model):
@@ -10,6 +10,8 @@ class Application(models.Model):
     cloud = models.BooleanField('Skytjeneste')
     servers = models.ManyToManyField(Server, verbose_name='Servere', related_name='applications', blank=True)
     department = models.ForeignKey(Department, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Ansvar')
+    sector = models.ForeignKey(Sector, verbose_name='Sektor', on_delete=models.PROTECT,
+                               related_name='applications', blank=True, null=True)
     integrations = models.ManyToManyField('self', verbose_name='Integrasjoner', related_name='integrated', blank=True)
     licence_cost = models.IntegerField('Lisenskostnad', default=0)
     internal_hours = models.IntegerField('Applikasjonsdrift timer pr mnd', default=0)
