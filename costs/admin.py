@@ -2,10 +2,11 @@ from django.contrib import admin
 
 # Register your models here.
 from costs.models import Application, CostDistribution, Customer, Department, Product, ProductDelivery, ProductGroup, \
-    ProductType, Sector, Server, User
+    ProductType, Sector, Server, User, ServerType
 
 admin.site.register(Customer)
 admin.site.register(ProductType)
+admin.site.register(ServerType)
 
 
 class HasAdFilter(admin.SimpleListFilter):

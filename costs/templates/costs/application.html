@@ -34,17 +34,24 @@
         <h3>Servere</h3>
         <table>
         <tr>
+            {% if perms.costs.view_server %}
             <th>Navn</th>
+            {% endif %}
             <th>Type</th>
+            <th>Tjeneste</th>
         </tr>
             {% for server in application.servers.all %}
                 <tr>
+                {% if perms.costs.view_server %}
                     <th><a href="{% url 'costs:server' customer=server.customer name=server.name %}">{{ server.name }}</a></th>
+                {% endif %}
+                <td>{{ server.type|default:"" }}</td>
                     <td>{{ server.product.name }}</td>
                 </tr>
             {% endfor %}
         {% endif %}
         </table>
+        {% if application.integrations.count %}
         <h3>Integrert med</h3>
         <table>
         <tr>
@@ -58,6 +65,7 @@
         </tr>
         {% endfor %}
         </table>
+        {% endif %}
 
         <h3>&Aring;rlige kostnader</h3>
         <table>
@@ -86,7 +94,9 @@
 
         </table>
         <br />
+        {% if perms.costs.change_server %}
         <a href="{% url 'costs:application_form' %}?customer={{ application.customer.id }}&amp;name={{ application.name|urlencode }}">Endre {{ application.name }} hos {{application.customer }}</a>
+        {% endif %}
     {% endfor %}
 
     {% if customer %}

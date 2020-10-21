@@ -4,6 +4,18 @@ from ad_import.models import Server as ADServer
 from . import Customer, Product
 
 
+class ServerType(models.Model):
+    type = models.CharField('Type', max_length=50, unique=True)
+    description = models.TextField('Beskrivelse', null=True, blank=True)
+
+    def __str__(self):
+        return self.type
+
+    class Meta:
+        verbose_name = 'servertype'
+        verbose_name_plural = 'servertyper'
+
+
 class Server(models.Model):
     name = models.CharField('Navn', max_length=50)
     dns_name = models.CharField('DNS-navn', max_length=100, null=True, blank=True)
@@ -12,6 +24,7 @@ class Server(models.Model):
     description = models.CharField('Beskrivelse', max_length=100, null=True, blank=True)
     last_logon = models.DateTimeField('Sist aktiv', null=True, blank=True)
     last_update = models.DateTimeField('Sist oppdatert', auto_now=True)
+    type = models.ForeignKey(ServerType, on_delete=models.SET_NULL, related_name='servertype', null=True, blank=True)
     product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name='servers', verbose_name='Tjeneste',
                                 null=True)
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT, verbose_name='Kunde', related_name='servers')
