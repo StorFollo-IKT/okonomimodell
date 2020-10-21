@@ -5,30 +5,6 @@ from employee_info.models import Company, CostCenter, Function
 from . import Customer, User, Server, Product
 
 
-    def __str__(self):
-        value = '%s: %s' % (self.customer, self.name)
-        if self.product:
-            value += ' (%s)' % self.product
-        return value
-
-    def applications_string(self):
-        apps_string = ''
-        for app in self.applications.all():
-            apps_string += str(app) + "\n"
-
-        return apps_string
-
-    def application_cost(self):
-        """
-        Application cost per month
-        :return:
-        """
-
-        if not self.product or not self.product.price or self.applications.count() == 0:
-            return 0
-        return round(self.product.price / self.applications.count())
-
-
 class Department(models.Model):
     number = models.IntegerField('Ansvar')
     name = models.CharField('Navn', max_length=100)
