@@ -43,9 +43,9 @@ class ApplicationAdmin(admin.ModelAdmin):
 
 @admin.register(Server)
 class ServerAdmin(admin.ModelAdmin):
-    list_display = ['name', 'product', 'customer', 'last_logon', 'last_update']
+    list_display = ['name', 'type', 'product', 'customer', 'last_logon', 'last_update']
     readonly_fields = ['applications_string', 'last_update']
-    list_filter = ['customer', 'ad_object__directory', 'ad_object__lastLogon', 'imported', HasAdFilter]
+    list_filter = ['customer', 'ad_object__directory', 'type', 'ad_object__lastLogon', 'imported', HasAdFilter]
 
 
 @admin.register(ProductDelivery)
