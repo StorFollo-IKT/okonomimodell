@@ -23,6 +23,11 @@ def build_title(word, vendor=None, sector=None, server=None, customer=None, appl
 
     return title
 
+
+def index(request):
+    return render(request, 'costs/index.html')
+
+
 def customers(request):
     return render(request, 'costs/customers.html', {'customers': Customer.objects.all()})
 

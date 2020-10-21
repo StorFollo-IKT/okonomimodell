@@ -5,7 +5,7 @@ from . import views
 app_name = 'costs'
 
 urlpatterns = [
-    path('', views.applications, name='applications'),
+    path('', views.index, name='index'),
     path('applikasjon_form', views.application_form, name='application_form'),
 
     path('applikasjon', views.application, name='application'),
