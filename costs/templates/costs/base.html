@@ -10,8 +10,7 @@
     {% else %}
         <title>StorFollo IKT &oslash;konomimodell - {{ title }}</title>
     {% endif %}
-    {% block head %}
-    {% endblock %}
+
     <link rel="stylesheet" href="{% static 'admin/css/base.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'costs/costs.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'costs/menu.css' %}" type="text/css">
@@ -28,6 +27,8 @@
         "paging": false,
         "language":{"url":"{% static 'costs/Norwegian-Bokmal.json' %}"}
     });</script>
+    {% block head %}
+    {% endblock %}
 </head>
 <body>
 <div class="menu">
