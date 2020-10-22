@@ -2,15 +2,17 @@ import datetime
 
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
+from employee_info.models import Resource
+from urllib.parse import urlencode
 
 from costs.forms import ApplicationForm, ServerForm
 from costs.models import Application, Customer, Department, Product, ProductDelivery, Sector, Server, ServerType
 from costs.utils import field_names, filter_list
 
 
-def build_title(word, vendor=None, sector=None, server=None, customer=None, application=None):
+def build_title(word, vendor=None, sector=None, server=None, customer=None):
     title = word
     if vendor:
         title += ' levert av %s' % vendor
