@@ -17,7 +17,6 @@ class Command(BaseCommand):
                 print('%s has no customer' % user)
                 continue
 
-            company = user.customer.id
             if not user.ad_object:
                 print('%s has no AD object' % user)
                 continue
@@ -32,9 +31,9 @@ class Command(BaseCommand):
                 continue
 
             try:
-                employee = Resource.objects.get(company__companyCode=company,
+                employee = Resource.objects.get(company=user.customer.company,
                                                 resourceId=resource_id)
                 user.employee = employee
                 user.save()
             except Resource.DoesNotExist:
-                print('No resource in company %s with resourceId %s' % (company, resource_id))
+                print('No resource in company %s with resourceId %s' % (user.customer.company, resource_id))
