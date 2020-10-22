@@ -1,6 +1,6 @@
 from django.db import models
 
-from . import Customer, Department, Server
+from . import Customer, Department
 
 
 class Sector(models.Model):
@@ -9,14 +9,14 @@ class Sector(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name='Kunde', related_name='sectors')
 
     def servers(self):
+        from . import Server
         return Server.objects.filter(
             applications__in=self.applications.all()
         )
 
     def costs(self):
-        apps = self.applications()
         cost = 0
-        for app in apps:
+        for app in self.applications.all():
             cost += app.cost()
         for delivery in self.deliveries.all():
             cost += delivery.sum()
@@ -24,25 +24,22 @@ class Sector(models.Model):
         return cost
 
     def external_costs(self):
-        apps = self.applications()
         cost = 0
-        for app in apps:
+        for app in self.applications.all():
             cost += app.external_cost
 
         return cost
 
     def licence_costs(self):
-        apps = self.applications()
         cost = 0
-        for app in apps:
+        for app in self.applications.all():
             cost += app.licence_cost
 
         return cost
 
     def server_costs(self):
-        apps = self.applications()
         cost = 0
-        for app in apps:
+        for app in self.applications.all():
             cost += app.server_cost()
 
         return cost
