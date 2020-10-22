@@ -33,23 +33,37 @@
 <div class="menu">
     <img src="{% static 'costs/logo.png' %}" alt="StorFollo IKT logo" style="max-height: 50px"/>
     <div class="myNav">
-    <ul class="top_menu">
-        <li><a href="{% url 'costs:applications' %}">Applikasjoner</a></li>
-        <li><a href="{% url 'costs:servers' %}">Servere</a></li>
-        <li><a href="{% url 'costs:customers' %}">Kunder</a></li>
-        <li><a href="{% url 'costs:sectors' %}">Sektorer</a></li>
-        <li><a href="{% url 'costs:portfolio' %}">Porteføljeoversikt</a></li>
-        <li><a href="{% url 'costs:report' %}">Rapport</a></li>
-        <li><a href="{% url 'costs:application_form' %}">Ny applikasjon</a></li>
-        {% if not user.is_authenticated %}
-            <li><a href="{% url 'account_login' %}">Logg inn</a></li>
-        {% else %}
-            {% if perms.costs.add_server %}
-                <li><a href="{% url 'costs:server_form' %}">Ny server</a></li>
+        <ul class="top_menu">
+            {% if perms.costs.view_application %}
+                <li><a href="{% url 'costs:applications' %}">Applikasjoner</a></li>
             {% endif %}
-            <li><a href="{% url 'account_logout' %}">Logg ut</a></li>
-        {% endif %}
-    </ul>
+            {% if perms.costs.view_server %}
+                <li><a href="{% url 'costs:servers' %}">Servere</a></li>
+            {% endif %}
+            {% if perms.costs.view_customer %}
+                <li><a href="{% url 'costs:customers' %}">Kunder</a></li>
+            {% endif %}
+            {% if perms.costs.view_sector %}
+                <li><a href="{% url 'costs:sectors' %}">Sektorer</a></li>
+            {% endif %}
+            {% if perms.costs.view_application %}
+                <li><a href="{% url 'costs:portfolio' %}">Porteføljeoversikt</a></li>
+            {% endif %}
+            {% if perms.costs.view_appplication %}
+                <li><a href="{% url 'costs:report' %}">Rapport</a></li>
+            {% endif %}
+            {% if perms.costs.add_application %}
+                <li><a href="{% url 'costs:application_form' %}">Ny applikasjon</a></li>
+            {% endif %}
+            {% if not user.is_authenticated %}
+                <li><a href="{% url 'account_login' %}">Logg inn</a></li>
+            {% else %}
+                {% if perms.costs.add_server %}
+                    <li><a href="{% url 'costs:server_form' %}">Ny server</a></li>
+                {% endif %}
+                <li><a href="{% url 'account_logout' %}">Logg ut</a></li>
+            {% endif %}
+        </ul>
     </div>
 </div>
 

@@ -28,10 +28,12 @@ def index(request):
     return render(request, 'costs/index.html')
 
 
+@permission_required('costs.view_customer')
 def customers(request):
     return render(request, 'costs/customers.html', {'customers': Customer.objects.all()})
 
 
+@permission_required('costs.add_application')
 def application_form(request):
     customer = request.GET.get('customer')
     application_name = request.GET.get('name')
@@ -81,6 +83,7 @@ def server_form(request):
     return render(request, 'costs/server_form.html', {'form': form})
 
 
+@permission_required('costs.view_application')
 def applications(request, customer=None, vendor=None, department=None, sector=None):
     apps = Application.objects.all()
     title = Application._meta.verbose_name_plural
@@ -129,6 +132,7 @@ def applications(request, customer=None, vendor=None, department=None, sector=No
                                                       'selected_sector': sector})
 
 
+@permission_required('costs.view_application')
 def application(request, name=None, customer=None):
     if not name:
         name = request.GET.get('name')
@@ -153,12 +157,14 @@ def application(request, name=None, customer=None):
     })
 
 
+@permission_required('costs.view_server')
 def server_detail(request, name, customer):
     server = Server.objects.get(name=name, customer__name=customer)
     return render(request, 'costs/server.html', {'server': server,
                                                  'title': '%s: %s' % (server.customer, server.name)})
 
 
+@permission_required('costs.view_server')
 def servers_all(request, customer=None):
     if not customer:
         customer = request.GET.get('customer', '')
@@ -194,6 +200,7 @@ def servers_all(request, customer=None):
                    'selected_product': product})
 
 
+@permission_required('costs.view_sector')
 def sectors(request):
     sector = request.GET.get('sector')
     if not sector:
@@ -214,6 +221,7 @@ def sectors(request):
                       {'sectors': sectors_obj})
 
 
+@permission_required('costs.view_application')
 def portfolio(request):
     applications_obj = Application.objects.all()
     deliveries_obj = ProductDelivery.objects.all()
@@ -257,11 +265,13 @@ def portfolio(request):
                    })
 
 
+@permission_required('costs.view_department')
 def departments(request):
     return render(request, 'costs/departments.html',
                   {'departments': Department.objects.all()})
 
 
+@permission_required('costs.view_application')
 def report(request):
     common_apps = Application.objects.filter(department=None)
     department_apps = Application.objects.all()
