@@ -25,6 +25,7 @@
             <tr>
                 <th>Kunde</th>
                 <th>Server</th>
+                <th>Type</th>
                 <th>Tjeneste</th>
                 <th>Applikasjoner</th>
                 <th>Sist aktiv</th>
@@ -37,11 +38,12 @@
                     <td>
                         <a href="{% url 'costs:server' customer=server.customer name=server.name %}">{{ server.name }}</a>
                     </td>
+                    <td>{{ server.type|default:"" }}</td>
                     <td>{{ server.product }}</td>
                     <td>
                         <a href="{% url 'costs:applications' %}?customer={{ server.customer }}&server={{ server.name }}">{{ server.applications.count }}</a>
                     </td>
-                    <td>{{ server.last_logon }}</td>
+                    <td>{{ server.last_logon|default:"" }}</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -57,10 +59,12 @@
     });</script>
 
     {{ customers|json_script:'customer-data' }}
+    {{ types|json_script:'type-data' }}
     {{ products|json_script:'product-data' }}
     <script type="application/javascript">
       const filter_group = new filterGroup('filter')
       filter_group.addFilterJson('customer', 'Etter kunde')
+      filter_group.addFilterJson('type', 'Etter type')
       filter_group.addFilterJson('product', 'Etter tjeneste')
     </script>
 {% endblock %}

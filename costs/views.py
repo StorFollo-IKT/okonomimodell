@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from costs.forms import ApplicationForm, ServerForm
-from costs.models import Application, Customer, Department, Product, ProductDelivery, Sector, Server
+from costs.models import Application, Customer, Department, Product, ProductDelivery, Sector, Server, ServerType
 from costs.utils import field_names, filter_list
 
 
@@ -174,6 +174,7 @@ def servers_all(request, customer=None):
     if not customer:
         customer = request.GET.get('customer', '')
     application_name = request.GET.get('application')
+    server_type = request.GET.get('type')
     product = request.GET.get('product')
     active = request.GET.get('active')
 
@@ -192,12 +193,16 @@ def servers_all(request, customer=None):
         servers = servers.filter(last_logon__gte=limit_date)
         title += ' aktive siste %d dager' % days
 
+    if server_type:
+        servers = servers.filter(type__type=server_type)
+
     if product:
         servers = servers.filter(product__name=product)
 
     products = Product.objects.filter(type__type='Server')
     return render(request, 'costs/servers.html',
                   {'customers': filter_list('name', model=Customer),
+                   'types': filter_list('type', model=ServerType),
                    'products': filter_list('name', queryset=products),
                    'servers': servers,
                    'title': title,
