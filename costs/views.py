@@ -54,7 +54,12 @@ def application_form(request):
             if server == '':
                 continue
             application_obj.servers.add(Server.objects.get(name=server))
-        url = reverse('costs:application') + '?' + request.META['QUERY_STRING']
+
+        query = {'name': application_obj.name}
+        if application_obj.customer:
+            query['customer'] = application_obj.customer
+        query = urlencode(query)
+        url = reverse('costs:application') + '?' + query
         return HttpResponseRedirect(url)
 
     context = {'form': form,
