@@ -1,5 +1,6 @@
 import datetime
 from django.db import models
+from employee_info.models import Company
 
 from ad_import.models import Directory
 
@@ -8,7 +9,8 @@ class Customer(models.Model):
     id = models.CharField(primary_key=True, max_length=5)
     name = models.CharField('Navn', max_length=50)
     served_by = models.ForeignKey('self', blank=True, null=True, on_delete=models.PROTECT, verbose_name='Driftes av')
-    ad_directories = models.ManyToManyField(Directory)
+    ad_directories = models.ManyToManyField(Directory, blank=True)
+    company = models.ForeignKey(Company, verbose_name='Firma', blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name = 'kunde'
