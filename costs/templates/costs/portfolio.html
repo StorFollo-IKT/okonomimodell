@@ -93,7 +93,7 @@
                 <tr>
                     <td><a href="{% url 'costs:application' %}?name={{ application.name|urlencode }}">{{ application.name }}</a></td>
                     <td>{{ application.customer }}</td>
-                    <td>{{ application.department.sector.name }}</td>
+                    <td>{{ application.sector.name }}</td>
 
                     {% if application.external_cost_total %}
                         <td data-sort="{{ application.external_cost_total }}" class="currency">{{ application.external_cost_total|intcomma }}&nbsp;kr</td>

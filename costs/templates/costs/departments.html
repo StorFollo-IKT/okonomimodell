@@ -3,14 +3,12 @@
 {% block body %}
     <table>
     <tr>
-        <th>Sektor</th>
         <th>Kunde</th>
         <th>Nummer</th>
         <th>Navn</th>
     </tr>
     {% for department in departments %}
         <tr>
-            <td>{{ department.sector.name }}</td>
             <td>{{ department.customer }}</td>
             <td>{{ department.number}}
             <td>{{ department.name }}</td>

@@ -47,7 +47,7 @@
                     <td>{{ application.customer }}</td>
 
                     {% if application.department %}
-                        <td>{{ application.department.sector.name }}</td>
+                        <td>{{ application.sector.name }}</td>
                         <td>
                             <a href="{% url 'costs:applications' customer=application.customer.name department=application.department.number %}">{{ application.department.name }}</a>
                         </td>
