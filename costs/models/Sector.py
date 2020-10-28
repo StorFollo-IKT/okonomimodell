@@ -15,15 +15,21 @@ class Sector(models.Model):
         )
 
     def costs(self):
+        """
+        Costs per year
+        """
         cost = 0
         for app in self.applications.all():
             cost += app.cost()
         for delivery in self.deliveries.all():
-            cost += delivery.sum()
+            cost += delivery.sum_year()
 
         return cost
 
     def external_costs(self):
+        """
+        External cost per year
+        """
         cost = 0
         for app in self.applications.all():
             cost += app.external_cost
@@ -31,6 +37,9 @@ class Sector(models.Model):
         return cost
 
     def licence_costs(self):
+        """
+        Licence cost per year
+        """
         cost = 0
         for app in self.applications.all():
             cost += app.licence_cost
@@ -38,9 +47,12 @@ class Sector(models.Model):
         return cost
 
     def server_costs(self):
+        """
+        Server cost per year
+        """
         cost = 0
         for app in self.applications.all():
-            cost += app.server_cost()
+            cost += app.server_cost_year()
 
         return cost
 

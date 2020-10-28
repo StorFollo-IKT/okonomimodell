@@ -18,6 +18,8 @@ class CostDistribution(models.Model):
 
     class Meta:
         unique_together = ['application', 'company', 'account', 'cost_center', 'function']
+        verbose_name = 'kostnadsfordeling'
+        verbose_name_plural = 'kostnadsfordelinger'
 
     def is_valid(self):
         lines = self.objects.filter(application=self.application)

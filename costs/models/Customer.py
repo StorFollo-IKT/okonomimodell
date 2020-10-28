@@ -20,11 +20,14 @@ class Customer(models.Model):
         return self.name
 
     def costs(self):
+        """
+        Total cost per year
+        """
         cost = 0
         for application in self.applications.all():
             cost += application.cost()
         for product in self.deliveries.all():
-            cost += product.sum()
+            cost += product.sum_year()
 
         return cost
 

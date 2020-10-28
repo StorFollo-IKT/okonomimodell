@@ -19,7 +19,15 @@ class ProductDelivery(models.Model):
         return '%s %s' % (self.customer, self.product)
 
     def sum(self):
+        """
+        Cost per month
+        :return:
+        """
         return self.product.price * self.amount
 
     def sum_year(self):
-        return (self.product.price * self.amount) * 12
+        """
+        Cost per year
+        :return:
+        """
+        return self.sum() * 12

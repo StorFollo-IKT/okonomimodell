@@ -13,9 +13,9 @@ class Application(models.Model):
     sector = models.ForeignKey(Sector, verbose_name='Sektor', on_delete=models.PROTECT,
                                related_name='applications', blank=True, null=True)
     integrations = models.ManyToManyField('self', verbose_name='Integrasjoner', related_name='integrated', blank=True)
-    licence_cost = models.IntegerField('Lisenskostnad', default=0)
+    licence_cost = models.IntegerField('Lisenskostnad per år', default=0)
     internal_hours = models.IntegerField('Applikasjonsdrift timer pr mnd', default=0)
-    external_cost = models.IntegerField('Konsulentkostnad', default=0)
+    external_cost = models.IntegerField('Konsulentkostnad per år', default=0)
     responsible = models.ForeignKey(User, verbose_name='Systemansvarlig', on_delete=models.PROTECT,
                                     related_name='responsible', blank=True, null=True)
     super_user = models.ForeignKey(User, verbose_name='Superbruker', on_delete=models.PROTECT,
@@ -51,10 +51,16 @@ class Application(models.Model):
         return self.server_cost() * 12
 
     def external_cost_total(self):
+        """
+        Licence and external cost per year
+        """
         return self.external_cost + self.licence_cost
 
     def cost(self):
-        return self.server_cost() + self.external_cost + self.licence_cost
+        """
+        Total cost per year
+        """
+        return self.server_cost_year() + self.external_cost + self.licence_cost
 
     def internal_cost_total_year(self):
         return self.internal_hour_cost_year() + self.server_cost_year()
