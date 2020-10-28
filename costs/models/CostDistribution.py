@@ -8,7 +8,6 @@ from . import Application
 class CostDistribution(models.Model):
     application = models.ForeignKey(Application, on_delete=models.CASCADE, verbose_name='applikasjon',
                                     related_name='distributions')
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, verbose_name='firma')
     percentage = models.IntegerField(verbose_name='prosent')
 
     account = models.CharField('konto', max_length=6)
@@ -17,7 +16,7 @@ class CostDistribution(models.Model):
     function = models.ForeignKey(Function, on_delete=models.PROTECT, verbose_name='funksjon')
 
     class Meta:
-        unique_together = ['application', 'company', 'account', 'cost_center', 'function']
+        unique_together = ['application', 'account', 'cost_center', 'function']
         verbose_name = 'kostnadsfordeling'
         verbose_name_plural = 'kostnadsfordelinger'
 

@@ -1,0 +1,45 @@
+{% extends 'costs/base.html' %}
+{% load humanize %}
+{% load static %}
+{% block body %}
+    <!--suppress HtmlFormInputWithoutLabel -->
+    <form method="post">
+        {% csrf_token %}
+        <p>Bel&oslash;p til fordeling: {{ application.cost|intcomma }}kr</p>
+        <table>
+            <tr>
+                <th>Konto</th>
+                <th>Ansvar</th>
+                <th>Funksjon</th>
+                <th>Fordeling %</th>
+                <th>Sum</th>
+            </tr>
+            {% for distribution in distributions %}
+                <tr>
+                    <td><input type="text" name="distribution{{ distribution.id }}" value="{{ distribution.account }}"
+                               required>
+                    </td>
+                    <td><input type="text" name="distribution{{ distribution.id }}"
+                               value="{{ distribution.cost_center.value }}" required></td>
+                    <td><input type="text" name="distribution{{ distribution.id }}"
+                               value="{{ distribution.function.value }}" required></td>
+                    <td><input type="text" name="distribution{{ distribution.id }}"
+                               value="{{ distribution.percentage }}" maxlength="3" size="3" required>
+                        <input type="hidden" name="distribution{{ distribution.id }}" value="{{ distribution.id }}">
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+
+            {% endfor %}
+            <tr id="blank">
+                <td><input type="text" name="distribution_blank"></td>
+                <td><input type="text" name="distribution_blank"></td>
+                <td><input type="text" name="distribution_blank"></td>
+                <td><input type="text" name="distribution_blank" maxlength="3" size="3"></td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+        <p>{{ errors }}</p>
+        <input type="submit" value="Lagre">
+    </form>
+{% endblock %}

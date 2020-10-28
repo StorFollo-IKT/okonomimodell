@@ -1,14 +1,17 @@
 import datetime
 
 from django.contrib.auth.decorators import permission_required
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from employee_info.models import Resource
+from employee_info.models import CostCenter, Function, Resource
 from urllib.parse import urlencode
 
-from costs.forms import ApplicationForm, ServerForm
-from costs.models import Application, Customer, Department, Product, ProductDelivery, Sector, Server, ServerType
+from costs.forms import ApplicationForm, CostDistributionForm, ServerForm
+from costs.models import Application, CostDistribution, Customer, Department, Product, ProductDelivery, Sector, Server, \
+    ServerType
 from costs.utils import field_names, filter_list
 
 
@@ -320,3 +323,46 @@ def report(request):
                    'sector': sector,
                    }
                   )
+
+
+@permission_required('costs.change_costdistribution')
+def cost_distribution(request):
+    application_id = request.GET.get('application')
+    app = Application.objects.get(id=application_id)
+    distributions = CostDistribution.objects.filter(application=app)
+    errors = ''
+    if request.method == 'POST':
+        for field in request.POST.keys():
+            if 'distribution' not in field:
+                continue
+
+            row = request.POST.getlist(field)
+            try:
+                if len(row) == 5:
+                    distribution_obj = CostDistribution.objects.get(id=row[4], application=app)
+                else:
+                    distribution_obj = CostDistribution(application=app)
+
+                cost_center = CostCenter.objects.get(company=app.customer.company, value=row[1])
+                function = Function.objects.get(company=app.customer.company, value=row[2])
+            except ObjectDoesNotExist:
+                continue
+
+            form = CostDistributionForm({'account': row[0],
+                                         'cost_center': cost_center,
+                                         'function': function,
+                                         'percentage': row[3]}, instance=distribution_obj)
+            if form.is_valid():
+                try:
+                    form.save()
+                except IntegrityError as e:
+                    errors = str(e)
+            else:
+                errors = form.errors
+
+    title = 'Fordel kostnader for %s hos %s' % (app.name, app.customer)
+
+    return render(request, 'costs/cost_distribution.html', {'title': title,
+                                                            'distributions': distributions,
+                                                            'application': app,
+                                                            'errors': errors})
