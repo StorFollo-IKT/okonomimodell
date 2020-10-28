@@ -124,7 +124,7 @@ def applications(request, customer=None, vendor=None, department=None, sector=No
     if sector:
         sector_obj = Sector.objects.get(customer__name=customer,
                                         name=sector)
-        apps = sector_obj.applications()
+        apps = sector_obj.applications
         title += ' i sektor %s' % sector
 
     if server:
