@@ -37,8 +37,8 @@ class ProductGroupAdmin(admin.ModelAdmin):
 
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ['name', 'vendor', 'customer', 'department']
-    list_filter = ['name', 'vendor', 'customer', 'department']
+    list_display = ['name', 'vendor', 'customer', 'sector']
+    list_filter = ['name', 'vendor', 'customer', 'sector']
 
 
 @admin.register(Server)
