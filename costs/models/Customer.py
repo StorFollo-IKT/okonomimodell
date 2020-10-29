@@ -1,6 +1,6 @@
 import datetime
 from django.db import models
-from employee_info.models import Company
+from employee_info.models import Company, Resource
 
 from ad_import.models import Directory
 
@@ -39,4 +39,7 @@ class Customer(models.Model):
 
     def users(self):
         from . import User
-        return User.objects.filter(department__customer=self)
+        return User.objects.filter(customer=self)
+
+    def employees(self):
+        return Resource.objects.filter(company=self.company)
