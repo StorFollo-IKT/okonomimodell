@@ -366,3 +366,11 @@ def cost_distribution(request):
                                                             'distributions': distributions,
                                                             'application': app,
                                                             'errors': errors})
+
+
+@permission_required('costs.delete_costdistribution')
+def cost_distribution_delete(request):
+    distribution_id = request.GET.get('id')
+    distribution = CostDistribution.objects.get(id=distribution_id)
+    distribution.delete()
+    return HttpResponseRedirect(reverse('costs:cost_distribution') + '?application=%s' % distribution.application_id)
