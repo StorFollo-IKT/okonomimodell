@@ -16,13 +16,13 @@
     <link rel="stylesheet" href="{% static 'costs/menu.css' %}" type="text/css">
     <link rel="stylesheet" type="text/css" href="{% static 'costs/node_modules/datatables.net-dt/css/jquery.dataTables.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'costs/node_modules/datatables.net-fixedheader-dt/css/fixedHeader.dataTables.min.css' %}">
-    <script type="text/javascript" charset="utf8" src="{% static 'costs/node_modules/jquery/dist/jquery.min.js' %}"></script>
-    <script type="text/javascript" charset="utf8" src="{% static 'costs/node_modules/datatables.net/js/jquery.dataTables.min.js' %}"></script>
-    <script type="text/javascript" charset="utf8" src="{% static 'costs/node_modules/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>
-    <script type="text/javascript" charset="utf8" src="{% static 'costs/node_modules/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
-    <script type="text/javascript" charset="utf8" src="{% static 'costs/node_modules/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
-    <script type="text/javascript" charset="utf8" src="{% static 'costs/node_modules/jszip/dist/jszip.min.js' %}"></script>
-    <script type="text/javascript" charset="utf8" src="{% static 'costs/menu.js' %}"></script>
+    <script src="{% static 'costs/node_modules/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'costs/node_modules/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'costs/node_modules/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>
+    <script src="{% static 'costs/node_modules/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'costs/node_modules/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'costs/node_modules/jszip/dist/jszip.min.js' %}"></script>
+    <script src="{% static 'costs/menu.js' %}"></script>
     <script>$.extend(true, $.fn.dataTable.defaults, {
         "paging": false,
         "language":{"url":"{% static 'costs/Norwegian-Bokmal.json' %}"}
