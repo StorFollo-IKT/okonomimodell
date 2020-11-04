@@ -97,6 +97,11 @@
         {% if perms.costs.change_server %}
         <a href="{% url 'costs:application_form' %}?customer={{ application.customer.id }}&amp;name={{ application.name|urlencode }}">Endre {{ application.name }} hos {{application.customer }}</a>
         {% endif %}
+        <br />
+        {% if perms.costs.change_costdistribution %}
+        <a href="{% url 'costs:cost_distribution' %}?application={{ application.id }}">Fordel kostander for {{ application.name }} hos {{application.customer }}</a>
+        {% endif %}
+
     {% endfor %}
 
     {% if customer %}
