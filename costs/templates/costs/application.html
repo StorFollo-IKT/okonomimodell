@@ -5,10 +5,10 @@
         <h2>{{ application.customer }}</h2>
         <h3>Informasjon</h3>
         <table>
-        {% if application.department %}
+        {% if application.sector %}
             <tr>
-                <th>{{ fields.department }}</th>
-                <td>{{ application.department.name }}</td>
+                <th>{{ fields.sector }}</th>
+                <td>{{ application.sector.name }}</td>
             </tr>
         {% endif %}
         {% if application.vendor %}
