@@ -1,12 +1,18 @@
 {% extends 'costs/base.html' %}
 {% load humanize %}
 {% load static %}
+{% block head %}
+    <script src="{% static 'costs/node_modules/jquery-ui-dist/jquery-ui.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'costs/node_modules/jquery-ui-dist/jquery-ui.css' %}" type="text/css">
+{% endblock %}
+
 {% block body %}
     <!--suppress HtmlFormInputWithoutLabel -->
     <form method="post">
         {% csrf_token %}
         <p>Bel&oslash;p til fordeling: {{ application.cost|intcomma }}kr</p>
-        <table>
+        <table id="costDistributionTable">
+            <thead>
             <tr>
                 <th>Konto</th>
                 <th>Ansvar</th>
@@ -14,32 +20,99 @@
                 <th>Fordeling %</th>
                 <th>Sum</th>
             </tr>
+            </thead>
+            <tbody>
             {% for distribution in distributions %}
                 <tr>
                     <td><input type="text" name="distribution{{ distribution.id }}" value="{{ distribution.account }}"
                                required>
                     </td>
-                    <td><input type="text" name="distribution{{ distribution.id }}"
+                    <td><input id="cost_center{{ distribution.id }}" type="text"
+                               name="distribution{{ distribution.id }}"
                                value="{{ distribution.cost_center.value }}" required></td>
-                    <td><input type="text" name="distribution{{ distribution.id }}"
+                    <td><input id="function{{ distribution.id }}" type="text" name="distribution{{ distribution.id }}"
                                value="{{ distribution.function.value }}" required></td>
-                    <td><input type="text" name="distribution{{ distribution.id }}"
-                               value="{{ distribution.percentage }}" maxlength="3" size="3" required>
+                    <td><input class="percent" id="distributionPercentage{{ distribution.id }}" type="text"
+                               name="distribution{{ distribution.id }}"
+                               value="{{ distribution.percentage }}"
+                               maxlength="3"
+                               size="3"
+                               autocomplete="off">
                         <input type="hidden" name="distribution{{ distribution.id }}" value="{{ distribution.id }}">
                     </td>
-                    <td>&nbsp;</td>
+                    <td><input class="sum" disabled id="distributionSum{{ distribution.id }}" value="0">&nbsp;</td>
+                    <td><a href="{% url 'costs:cost_distribution_delete' %}?id={{ distribution.id }}">Slett rad</a></td>
                 </tr>
 
             {% endfor %}
-            <tr id="blank">
+            <tr id="blank" hidden="hidden">
                 <td><input type="text" name="distribution_blank"></td>
-                <td><input type="text" name="distribution_blank"></td>
-                <td><input type="text" name="distribution_blank"></td>
-                <td><input type="text" name="distribution_blank" maxlength="3" size="3"></td>
-                <td>&nbsp;</td>
+                <td><input id="cost_center_blank" type="text" name="distribution_blank"></td>
+                <td><input id="function_blank" type="text" name="distribution_blank"></td>
+                <td><input id="distributionPercentage{{ distributions.last.id|add:"1" }}"
+                           type="text"
+                           name="distribution_blank"
+                           maxlength="3" size="3" value="0"
+                           class="percent_blank"
+                           autocomplete="off">
+                </td>
+                <td><input disabled id="distributionSum{{ distributions.last.id|add:"1" }}" value="0 kr"></td>
             </tr>
+            </tbody>
         </table>
         <p>{{ errors }}</p>
-        <input type="submit" value="Lagre">
+        <input type="submit" id="save" value="Lagre" disabled="disabled">
+        <input type="button" id="addRow" value="Legg til">
     </form>
+    <script>
+        {% for distribution in distributions %}
+            $("#cost_center{{ distribution.id }}").autocomplete({
+                source: "{% url 'employee_info_autocomplete:autocomplete_cost_center' %}?company={{ application.customer.company }}"
+            });
+            $("#function{{ distribution.id }}").autocomplete({
+                source: "{% url 'employee_info_autocomplete:autocomplete_function' %}?company={{ application.customer.company }}"
+            });
+            $('#distributionPercentage{{ distribution.id }}').each(function () {
+                sum({{ distribution.id }}, this.value)
+            });
+        {% endfor %}
+        $("#cost_center_blank").autocomplete({
+            source: "{% url 'employee_info_autocomplete:autocomplete_cost_center' %}?company={{ application.customer.company }}"
+        });
+        $("#function_blank").autocomplete({
+            source: "{% url 'employee_info_autocomplete:autocomplete_function' %}?company={{ application.customer.company }}"
+        });
+
+        function validatePercent() {
+            var total = 0;
+            var elems = document.getElementsByTagName('*'), i;
+            for (i in elems)
+                if (elems[i].className == "percent")
+                    total += parseFloat(elems[i].value);
+            if (total == 100) {
+                $('#save').removeAttr('disabled');
+                $('.percent').css("background-color", "");
+            } else {
+                $('#save').attr('disabled', 'disabled');
+                $('.percent').css("background-color", "#ff7272");
+            }
+        }
+
+        function sum(id, percent) {
+            var sumField = '#distributionSum' + id
+            var sum = (parseInt(percent) / 100 * {{ application.cost }}).toFixed(0)
+            $(sumField).val(sum.toLocaleString() + ' kr');
+        };
+
+        $('table tr').on('keyup', '.percent', function () {
+            validatePercent();
+            sum(this.id.match("\\d+"), this.value);
+        })
+
+        $("#addRow").click(function () {
+            $('#blank').removeAttr('hidden');
+            $('.percent_blank').removeClass().addClass('percent');
+            $('#addRow').attr('disabled', 'disabled');
+        });
+    </script>
 {% endblock %}
