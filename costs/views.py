@@ -10,8 +10,8 @@ from employee_info.models import CostCenter, Function, Resource
 from urllib.parse import urlencode
 
 from costs.forms import ApplicationForm, CostDistributionForm, ServerForm
-from costs.models import Application, CostDistribution, Customer, Department, Product, ProductDelivery, Sector, Server, \
-    ServerType
+from costs.models import Application, CostDistribution, Customer, Department, \
+    Product, ProductDelivery, Sector, Server, ServerType, Workstation
 from costs.utils import field_names, filter_list
 
 
@@ -30,7 +30,12 @@ def build_title(word, vendor=None, sector=None, server=None, customer=None):
 
 
 def index(request):
-    return render(request, 'costs/index.html')
+    if request.user.is_authenticated:
+        workstations = Workstation.objects.filter(user__email=request.user.email)
+    else:
+        workstations = None
+
+    return render(request, 'costs/index.html', {'workstations': workstations})
 
 
 @permission_required('costs.view_customer')

@@ -1,0 +1,15 @@
+<table>
+    <tr>
+        <th>Navn</th>
+        <th>Merke</th>
+        <th>Modell</th>
+    </tr>
+    {% for workstation in workstations %}
+        <tr>
+            <td>{{ workstation.name }}</td>
+            <td>{{ workstation.manufacturer }}</td>
+            <td>{{ workstation.model }}</td>
+        </tr>
+
+    {% endfor %}
+</table>
