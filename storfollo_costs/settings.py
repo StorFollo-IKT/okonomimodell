@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'costs.apps.CostsConfig',
     'ad_import.apps.AdImportConfig',
     'employee_info.apps.EmployeeInfoConfig',
+    'invoice.apps.InvoiceConfig',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
