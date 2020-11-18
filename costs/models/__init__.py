@@ -5,6 +5,7 @@ from .Sector import Sector
 
 from .Server import Server, ServerType
 from .User import User
+from .Workstation import Workstation
 
 from .Application import Application
 

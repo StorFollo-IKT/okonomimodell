@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from costs.models import Application, CostDistribution, Customer, Department, Product, ProductDelivery, ProductGroup, \
-    ProductType, Sector, Server, User, ServerType
+    ProductType, Sector, Server, User, ServerType, Workstation
 
 admin.site.register(Customer)
 admin.site.register(ProductType)
@@ -76,6 +76,14 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = ['ad_object__directory', 'customer', 'ad_object__lastLogon', 'ad_object__last_update', HasAdFilter,
                    IsEmployeeFilter]
     readonly_fields = ['company', 'employee', 'display_name']
+
+
+@admin.register(Workstation)
+class WorkstationAdmin(admin.ModelAdmin):
+    list_select_related = ['ad_object']
+    list_display = ['name', 'manufacturer', 'model', 'user_display_name']
+    list_filter = ['ad_object__directory', 'ad_object__lastLogon', 'customer', 'manufacturer', 'model']
+    readonly_fields = ['ad_object', 'user']
 
 
 @admin.register(Department)

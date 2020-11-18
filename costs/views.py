@@ -241,6 +241,13 @@ def sectors(request):
                       {'sectors': sectors_obj})
 
 
+@permission_required('costs.view_workstation')
+def workstations(request):
+    workstations_obj = Workstation.objects.all()
+    return render(request, 'costs/workstations_page.html',
+                  {'workstations': workstations_obj})
+
+
 @permission_required('costs.view_application')
 def portfolio(request):
     applications_obj = Application.objects.all()
