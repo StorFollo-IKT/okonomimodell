@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Sum
 
 from . import Customer, Department, Product, Sector, Server, User
 
@@ -67,3 +68,9 @@ class Application(models.Model):
 
     def total_year(self):
         return self.server_cost_year() + self.external_cost_total() + self.internal_hour_cost_year()
+
+    def distribution_valid(self):
+        from costs.models import CostDistribution
+        lines = CostDistribution.objects.filter(application=self)
+        percent_sum = lines.aggregate(Sum('percentage'))['percentage__sum']
+        return percent_sum == 100

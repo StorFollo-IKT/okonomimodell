@@ -1,6 +1,5 @@
 from django.db import models
-from django.db.models import Sum
-from employee_info.models import Company, CostCenter, Function
+from employee_info.models import CostCenter, Function
 
 from . import Application
 
@@ -19,11 +18,6 @@ class CostDistribution(models.Model):
         unique_together = ['application', 'account', 'cost_center', 'function']
         verbose_name = 'kostnadsfordeling'
         verbose_name_plural = 'kostnadsfordelinger'
-
-    def is_valid(self):
-        lines = self.objects.filter(application=self.application)
-        percent_sum = lines.aggregate(Sum('percentage'))['percentage__sum']
-        return percent_sum == 100
 
     def customer(self):
         return self.application.customer
