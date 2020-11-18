@@ -2,7 +2,7 @@ from django.db import models
 from employee_info.models import CostCenter, Resource
 
 from ad_import.models import User as ADUser
-from . import Customer
+from . import Customer, Product
 
 
 class User(models.Model):
@@ -14,7 +14,8 @@ class User(models.Model):
     employee = models.ForeignKey(Resource, on_delete=models.CASCADE, verbose_name='ansatt', null=True, default=None)
     email = models.EmailField('Epostadresse', null=True)
     dn = models.CharField('DN', max_length=300, blank=True, null=True)
-    customer = models.ForeignKey(Customer, on_delete=models.PROTECT, verbose_name='Kunde', null=True, default=None)
+    customer = models.ForeignKey(Customer, related_name='users', on_delete=models.PROTECT, verbose_name='Kunde', null=True, default=None)
+    products = models.ManyToManyField(Product, related_name='users', verbose_name='tjenester', blank=True)
 
     class Meta:
         verbose_name = 'bruker'
@@ -41,6 +42,9 @@ class User(models.Model):
 
     def has_ad(self):
         return self.ad_object is not None
+
+    def has_product(self, product):
+        return product in self.products.all()
 
     def display_name(self):
         return self.ad_object.displayName
