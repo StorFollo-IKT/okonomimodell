@@ -2,6 +2,7 @@ import datetime
 
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError
+from django.db.models import ProtectedError
 
 from ad_import.load_data import LoadUsers
 from costs.models import Customer, User
@@ -43,4 +44,8 @@ class Command(BaseCommand):
                             raise e
 
                 inactive = load.get_inactive()
-                inactive.delete()
+                for user in inactive:
+                    try:
+                        user.delete()
+                    except ProtectedError:
+                        print('Protected relations:', user)
