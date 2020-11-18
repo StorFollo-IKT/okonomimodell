@@ -19,5 +19,12 @@ class CostDistribution(models.Model):
         verbose_name = 'kostnadsfordeling'
         verbose_name_plural = 'kostnadsfordelinger'
 
+    def __str__(self):
+        return '%s%% of %skr = %skr' % (
+            self.percentage, self.application.total_year(), self.amount())
+
     def customer(self):
         return self.application.customer
+
+    def amount(self):
+        return self.application.cost() * (self.percentage/100)
