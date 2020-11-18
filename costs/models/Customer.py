@@ -37,9 +37,5 @@ class Customer(models.Model):
     def workstations_active(self, days=90):
         return self.workstations.filter(last_logon__gte=datetime.datetime.today() - datetime.timedelta(days=days))
 
-    def users(self):
-        from . import User
-        return User.objects.filter(customer=self)
-
     def employees(self):
         return Resource.objects.filter(company=self.company)
