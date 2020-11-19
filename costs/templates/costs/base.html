@@ -50,6 +50,9 @@
             {% if perms.costs.view_application %}
                 <li><a href="{% url 'costs:portfolio' %}">Porteføljeoversikt</a></li>
             {% endif %}
+            {% if perms.costs.view_workstation %}
+                <li><a href="{% url 'costs:workstations' %}">Arbeidsstasjoner</a></li>
+            {% endif %}
             {% if perms.costs.view_appplication %}
                 <li><a href="{% url 'costs:report' %}">Rapport</a></li>
             {% endif %}

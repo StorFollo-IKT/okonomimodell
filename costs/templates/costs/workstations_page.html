@@ -1,4 +1,31 @@
 {% extends 'costs/base.html' %}
 {% block body %}
-    {% include 'costs/workstations.html' %}
+    <table>
+        <tr>
+            <th>Kunde</th>
+            <th>Navn</th>
+            <th>Merke</th>
+            <th>Modell</th>
+            <th>Serienummer</th>
+            <th>Bruker</th>
+            <th>Ansatt</th>
+        </tr>
+        {% for workstation in workstations %}
+            <tr>
+                <td>{{ workstation.customer }}</td>
+                <td>{{ workstation.name }}</td>
+                <td>{{ workstation.manufacturer }}</td>
+                <td>{{ workstation.model }}</td>
+                <td>{{ workstation.serial }}</td>
+                <td>{{ workstation.user.display_name|default:"" }}</td>
+                {% if workstation.user.employee %}
+                    <td>
+                        <a href="{% url 'employee_info_browser:resource' %}?value={{ workstation.user.employee.resourceId }}">{{ workstation.user.employee.resourceId }}</a>
+                    </td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
