@@ -4,16 +4,14 @@ from typing import Dict, List
 from costs.models import Product, User
 from invoice.models import Invoice, InvoiceLine
 
-account = '119520'
-
 
 class BuildProductLines:
-    def build_lines(self, invoice: Invoice):
+    def build_lines(self, invoice: Invoice, type_filter: str = None, account: str = '119520'):
         if invoice.locked:
             print('Invoice %s is locked' % invoice)
             return
 
-        products = self.get_products(invoice.customer)
+        products = self.get_products(invoice.customer, type_filter)
         for product, cost_centers in products.items():
             for cost_center, functions in cost_centers.items():
                 for function, users in functions.items():
@@ -61,8 +59,10 @@ class BuildProductLines:
 
         return users
 
-    def get_products(self, customer):
+    def get_products(self, customer, type_filter: str = None):
         products = Product.objects.exclude(users=None)
+        if type_filter:
+            products = Product.objects.filter(type__type=type_filter)
         users = {}
         for product in products:
             users[product] = self.product_users(customer, product)
