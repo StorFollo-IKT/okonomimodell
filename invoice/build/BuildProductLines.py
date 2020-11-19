@@ -41,7 +41,11 @@ class BuildProductLines:
             if not user.employee:
                 print('%s is not employed' % user)
                 continue
-            employment = user.employee.main_position()
+            if not user.employee.employments.all():
+                print('%s has no employments' % user)
+                continue
+
+            employment = user.employee.main_position(assume=True)
             if not employment:
                 print('%s has no main position' % user)
                 continue
