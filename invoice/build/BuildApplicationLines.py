@@ -11,7 +11,7 @@ class BuildApplicationLines:
             self.application_line(invoice, app)
 
     @staticmethod
-    def application_line(invoice: Invoice, app: Application):
+    def application_line(invoice: Invoice, app: Application, debug=False):
         if app.distributions.count() > 0:
             if not app.cost():
                 print('%s has no cost' % app)
@@ -20,16 +20,18 @@ class BuildApplicationLines:
                 print('Distribution for %s is not valid' % app)
                 return
 
-            print(app)
+            if debug:
+                print(app)
             for distribution in app.distributions.all():
-                print(
-                    '%s%% of %skr = %skr'
-                    % (
-                        distribution.percentage,
-                        distribution.application.total_year(),
-                        distribution.amount(),
+                if debug:
+                    print(
+                        '%s%% of %skr = %skr'
+                        % (
+                            distribution.percentage,
+                            distribution.application.total_year(),
+                            distribution.amount(),
+                        )
                     )
-                )
 
                 text = '%s' % app.name
 
@@ -41,5 +43,6 @@ class BuildApplicationLines:
                     function=distribution.function.value,
                     amount=(distribution.amount() / 12) * 1.25,
                 )
-                print(line)
+                if debug:
+                    print(line)
                 line.save()
