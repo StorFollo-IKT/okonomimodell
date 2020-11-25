@@ -8,9 +8,22 @@ from invoice.models import Invoice
 
 
 class Command(BaseCommand):
+    def add_arguments(self, parser):
+        customers = Customer.objects.all().values_list('id', flat=True)
+        customers = list(customers)
+        customers.append('all')
+        parser.add_argument('customer', type=str, choices=customers)
+
     def handle(self, *args, **options):
-        customer = 'AK'
-        customer_obj = Customer.objects.get(id=customer)
+        if options['customer'] == 'all':
+            for customer in Customer.objects.all():
+                self.run(customer)
+        else:
+            customer = Customer.objects.get(id=options['customer'])
+            self.run(customer)
+
+    @staticmethod
+    def run(customer_obj):
         today = datetime.date.today()
         try:
             invoice = Invoice.objects.get(
