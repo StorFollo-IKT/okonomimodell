@@ -44,4 +44,5 @@ class Command(BaseCommand):
             workbook.close()
             print('Saved invoice to', invoice_file)
             invoice.exported = True
+            invoice.locked = True
             invoice.save()
