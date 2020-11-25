@@ -1,5 +1,3 @@
-import typing
-
 import csv
 
 from costs.models import Product, User, Customer
@@ -10,6 +8,7 @@ class M365Exception(Exception):
 
 
 class M365License:
+    # https://docs.microsoft.com/en-us/azure/active-directory/enterprise-users/licensing-service-plan-reference
     mappings = {'M365EDU_A3_STUUSEBNFT': None,
                 'M365EDU_A3_FACULTY': None,
                 'OFFICESUBSCRIPTION_FACULTY': None,
