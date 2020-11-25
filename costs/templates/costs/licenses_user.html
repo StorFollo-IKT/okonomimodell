@@ -1,0 +1,22 @@
+{% extends 'costs/base.html' %}
+
+{% block body %}
+    <table>
+        <tr>
+            <th>Kunde</th>
+            <th>Bruker</th>
+            <th>Avdeling</th>
+            <th>Ressursnummer</th>
+        </tr>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.customer }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.ad_object.department }}</td>
+                <td>
+                    <a href="{% url 'employee_info_browser:resource' %}?company={{ user.customer.company }}&amp;employee={{ user.employee.resourceId }}">{{ user.employee.resourceId }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

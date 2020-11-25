@@ -11,7 +11,7 @@ from urllib.parse import urlencode
 
 from costs.forms import ApplicationForm, CostDistributionForm, ServerForm
 from costs.models import Application, CostDistribution, Customer, Department, \
-    Product, ProductDelivery, Sector, Server, ServerType, Workstation
+    Product, ProductDelivery, Sector, Server, ServerType, Workstation, User
 from costs.utils import field_names, filter_list
 
 
@@ -386,3 +386,28 @@ def cost_distribution_delete(request):
     distribution = CostDistribution.objects.get(id=distribution_id)
     distribution.delete()
     return HttpResponseRedirect(reverse('costs:cost_distribution') + '?application=%s' % distribution.application_id)
+
+
+def licenses(request):
+    products = Product.objects.filter(type__type='Lisens')
+    product_arg = request.GET.get('product')
+    if request.GET.get('user'):
+        products = products.filter(user__id=request.GET.get('user'))
+    if product_arg:
+        users = User.objects.filter(products__name=product_arg)
+        return render(request, 'costs/licenses_user.html', {'users': users, 'title': product_arg})
+
+    customer_licenses = {}
+    customers_with_licences = []
+    for product in products:
+        for customer in Customer.objects.all():
+            if customer not in customer_licenses:
+                customer_licenses[customer] = {}
+
+            product_users = product.users.filter(customer=customer)
+            if product_users and customer not in customers_with_licences:
+                customers_with_licences.append(customer)
+            customer_licenses[customer][product] = product_users
+
+    return render(request, 'costs/licenses.html', {'title': 'Lisenser', 'products': products,
+                  'customer_licences': customer_licenses, 'customers': customers_with_licences})

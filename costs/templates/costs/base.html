@@ -61,6 +61,9 @@
             {% if perms.employee_info.view_resource %}
                 <li><a href="{% url 'employee_info_browser:index' %}">Ansatte</a></li>
             {% endif %}
+            {% if perms.costs.view_product %}
+                <li><a href="{% url 'costs:licences' %}">Lisenser</a></li>
+            {% endif %}
             {% if perms.costs.add_application %}
                 <li><a href="{% url 'costs:application_form' %}">Ny applikasjon</a></li>
             {% endif %}
