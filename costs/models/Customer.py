@@ -32,10 +32,11 @@ class Customer(models.Model):
         return cost
 
     def servers_active(self, days=90):
-        return self.servers.filter(last_logon__gte=datetime.datetime.today() - datetime.timedelta(days=days))
+        return self.servers.filter(ad_object__lastLogon__gte=datetime.datetime.today() - datetime.timedelta(days=days))
 
     def workstations_active(self, days=90):
-        return self.workstations.filter(last_logon__gte=datetime.datetime.today() - datetime.timedelta(days=days))
+        return self.workstations.filter(
+            ad_object__lastLogon__gte=datetime.datetime.today() - datetime.timedelta(days=days))
 
     def employees(self):
         return Resource.objects.filter(company=self.company)
