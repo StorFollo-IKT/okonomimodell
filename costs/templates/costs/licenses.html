@@ -1,0 +1,24 @@
+{% extends 'costs/base.html' %}
+{% load filter %}
+
+{% block body %}
+    <table>
+        <tr>
+            <th>Lisens</th>
+            <th>Brukere totalt</th>
+            {% for customer in customers %}
+                <th>{{ customer.name }}</th>
+            {% endfor %}
+        </tr>
+        {% for product in products.all %}
+            <tr>
+                <td><a href="{% url 'costs:licences' %}?product={{ product.name|urlencode }}">{{ product.name }}</a>
+                </td>
+                <td>{{ product.users.count }}</td>
+                {% for customer in customers %}
+                    <td>{{ product.users|filter_customer:customer }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
