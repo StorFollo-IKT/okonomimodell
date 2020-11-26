@@ -3,13 +3,15 @@ import datetime
 from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 from employee_info.models import CostCenter, Function, Resource
 from urllib.parse import urlencode
 
 from costs.forms import ApplicationForm, CostDistributionForm, ServerForm
+from costs.import_utils import WorkstationsSCCM
 from costs.models import Application, CostDistribution, Customer, Department, \
     Product, ProductDelivery, Sector, Server, ServerType, Workstation, User
 from costs.utils import field_names, filter_list
@@ -411,3 +413,12 @@ def licenses(request):
 
     return render(request, 'costs/licenses.html', {'title': 'Lisenser', 'products': products,
                   'customer_licences': customer_licenses, 'customers': customers_with_licences})
+
+
+@csrf_exempt
+def import_sccm(request):
+    if request.method != 'POST':
+        return HttpResponseBadRequest('Request method must be POST')
+    load = WorkstationsSCCM()
+    load.load_string(request.GET.get('customer'), request.body)
+    return HttpResponse('OK')

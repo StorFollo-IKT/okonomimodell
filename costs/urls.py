@@ -28,5 +28,6 @@ urlpatterns = [
     path('ansvar', views.departments, name='departments'),
     path('accounts/profile/', views.applications),
     path('rapport', views.report, name='report'),
-    path('lisenser', views.licenses, name='licences')
+    path('lisenser', views.licenses, name='licences'),
+    path('import/sccm', views.import_sccm)
 ]
