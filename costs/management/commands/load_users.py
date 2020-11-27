@@ -37,7 +37,17 @@ class Command(BaseCommand):
                         user.email = ad_user.mail
                         user.ad_object = ad_user
                         user.dn = ad_user.distinguishedName
-                        user.customer = customer
+                        if ad_user.company:
+                            try:
+                                user_customer = Customer.objects.get(name__iexact=ad_user.company)
+                                if user_customer != customer:
+                                    print('Company %s matched customer %s' % (ad_user.company, user_customer))
+                                    user.customer = user_customer
+                            except Customer.DoesNotExist:
+                                print('Company %s does not exist as customer' % ad_user.company)
+                                user.customer = customer
+                        else:
+                            user.customer = customer
                         try:
                             user.save()
                         except IntegrityError as e:
