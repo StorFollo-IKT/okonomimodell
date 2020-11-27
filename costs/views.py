@@ -419,6 +419,7 @@ def licenses(request):
 def import_sccm(request):
     if request.method != 'POST':
         return HttpResponseBadRequest('Request method must be POST')
-    load = WorkstationsSCCM()
-    load.load_string(request.GET.get('customer'), request.body)
+    customer = Customer.objects.get(id=request.GET.get('customer'))
+    load = WorkstationsSCCM(customer)
+    load.save_file(request.body)
     return HttpResponse('OK')

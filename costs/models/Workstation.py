@@ -50,6 +50,9 @@ class Workstation(models.Model):
         verbose_name_plural = 'arbeidsstasjoner'
         ordering = ['customer', 'model']
 
+    def __str__(self):
+        return self.name
+
     def ad_computer_lookup(self) -> ADWorkstation:
         return ADWorkstation.objects.get(distinguishedName=self.distinguishedName)
 
@@ -58,7 +61,7 @@ class Workstation(models.Model):
             sAMAccountName__iexact=self.user_name, directory=directory
         )
 
-    def user_lookup(self, directory=None):
+    def user_lookup(self, directory: Directory):
         ad_user = self.ad_user_lookup(directory)
         return User.objects.get(ad_object=ad_user)
 
