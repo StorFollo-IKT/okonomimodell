@@ -22,18 +22,27 @@ class Command(BaseCommand):
                 continue
 
             if not user.ad_object.employeeID:
-                continue
+                if user.ad_object.employeeNumber:
+                    try:
+                        employee = Resource.objects.get(company=user.customer.company,
+                                                        socialSecurityNumber=user.ad_object.employeeNumber)
+                        user.employee = employee
+                        user.save()
+                    except Resource.DoesNotExist:
+                        print('No resource in company %s with SSN %s' % (user.customer.company,
+                                                                         user.ad_object.employeeNumber))
 
-            try:
-                resource_id = int(user.ad_object.employeeID)
-            except ValueError:
-                print('Invalid resource ID for %s: %s' % (user, user.ad_object.employeeID))
-                continue
+            else:
+                try:
+                    resource_id = int(user.ad_object.employeeID)
+                except ValueError:
+                    print('Invalid resource ID for %s: %s' % (user, user.ad_object.employeeID))
+                    continue
 
-            try:
-                employee = Resource.objects.get(company=user.customer.company,
-                                                resourceId=resource_id)
-                user.employee = employee
-                user.save()
-            except Resource.DoesNotExist:
-                print('No resource in company %s with resourceId %s' % (user.customer.company, resource_id))
+                try:
+                    employee = Resource.objects.get(company=user.customer.company,
+                                                    resourceId=resource_id)
+                    user.employee = employee
+                    user.save()
+                except Resource.DoesNotExist:
+                    print('No resource in company %s with resourceId %s' % (user.customer.company, resource_id))
