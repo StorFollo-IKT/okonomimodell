@@ -1,7 +1,7 @@
 import os
 from django.core.management.base import BaseCommand
 
-from costs.M365License import M365License, M365Exception
+from costs.import_utils import M365License, M365Exception
 from costs.models import Customer
 
 
