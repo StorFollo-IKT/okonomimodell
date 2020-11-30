@@ -1,6 +1,43 @@
 {% extends 'costs/base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'admin/css/changelists.css' %}" type="text/css">
+{% endblock %}
 {% block body %}
-    <table>
+    <div class="module filtered" id="changelist">
+        <div id="changelist-filter">
+            <h2>Filtrering</h2>
+            <h3>Etter kunde</h3>
+            <ul>
+                <li><a href="{% url 'costs:workstations' %}">Alle</a></li>
+                {% for customer in customers %}
+                    <li {% if customer.id == selected_customer %} class="selected" {% endif %}
+                    ><a href="{% url 'costs:workstations' %}?customer={{ customer.id }}&amp;has_employee={{ has_employee }}&amp;has_user={{ has_user }}">{{ customer.name }}</a></li>
+                {% endfor %}
+            </ul>
+            <h3>Har bruker</h3>
+            <ul id="has_user">
+                <li data-value="true"><a href="?customer={{ selected_customer }}&amp;has_employee={{ has_employee }}&amp;has_user=true">Ja</a>
+                </li>
+                <li data-value="false">
+                    <a href="?customer={{ selected_customer }}&amp;has_employee={{ has_employee }}&amp;has_user=false">Nei</a>
+                </li>
+                <li data-value="null"><a href="?customer={{ selected_customer }}&amp;has_employee={{ has_employee }}">-</a></li>
+            </ul>
+        <h3>Er ansatt</h3>
+            <ul id="has_employee">
+                <li data-value="true"><a href="?customer={{ selected_customer }}&amp;has_employee=true&amp;has_user={{ has_user }}">Ja</a>
+                </li>
+                <li data-value="false">
+                    <a href="?customer={{ selected_customer }}&amp;has_employee=false&amp;has_user={{ has_user }}">Nei</a>
+                </li>
+                <li data-value="null"><a href="?customer={{ selected_customer }}&amp;has_user={{ has_user }}">-</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="results">
+    <table id="workstations">
+        <thead>
         <tr>
             <th>Kunde</th>
             <th>Navn</th>
@@ -10,6 +47,8 @@
             <th>Bruker</th>
             <th>Ansatt</th>
         </tr>
+        </thead>
+        <tbody>
         {% for workstation in workstations %}
             <tr>
                 <td>{{ workstation.customer }}</td>
@@ -27,5 +66,32 @@
                 {% endif %}
             </tr>
         {% endfor %}
+        </tbody>
     </table>
+    </div>
+    <script>$(document).ready(function () {
+        $('#workstations').DataTable({
+            "order": [[3, "asc"]],
+            fixedHeader: {
+                headerOffset: $('.myNav').outerHeight()
+            }
+        });
+    });</script>
+    <script>
+    const urlParams = new URLSearchParams(window.location.search);
+
+    function filter_check(field) {
+        let value = urlParams.get(field);
+        if (value === 'None') {
+            value = null;
+        }
+        console.log(field);
+        console.log(value);
+
+        $("#"+field+">li[data-value='"+value+"']").addClass('selected');
+    }
+    filter_check('has_user')
+    filter_check('has_employee')
+
+    </script>
 {% endblock %}

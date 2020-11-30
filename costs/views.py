@@ -246,8 +246,29 @@ def sectors(request):
 @permission_required('costs.view_workstation')
 def workstations(request):
     workstations_obj = Workstation.objects.all()
+    if request.GET.get('customer'):
+        workstations_obj = workstations_obj.filter(customer__id=request.GET.get('customer'))
+        print(workstations_obj)
+    has_employee = request.GET.get('has_employee')
+    if has_employee == 'true':
+        workstations_obj = workstations_obj.exclude(user__employee=None)
+    elif has_employee == 'false':
+        workstations_obj = workstations_obj.filter(user__employee=None)
+
+    has_user = request.GET.get('has_user')
+    if has_user == 'true':
+        workstations_obj = workstations_obj.exclude(user=None)
+    elif has_user == 'false':
+        workstations_obj = workstations_obj.filter(user=None)
+
     return render(request, 'costs/workstations_page.html',
-                  {'workstations': workstations_obj})
+                  {'workstations': workstations_obj,
+                   'customers': Customer.objects.exclude(workstations=None),
+                   'selected_customer': request.GET.get('customer'),
+                   'has_employee': has_employee,
+                   'has_user': has_user,
+                   }
+                  )
 
 
 @permission_required('costs.view_application')
