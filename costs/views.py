@@ -4,13 +4,13 @@ from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from employee_info.models import CostCenter, Function, Resource
 from urllib.parse import urlencode
 
-from costs.forms import ApplicationForm, CostDistributionForm, ServerForm
+from costs.forms import ApplicationForm, CostDistributionForm, ServerForm, ProductDeliveryForm
 from costs.import_utils import WorkstationsSCCM
 from costs.models import Application, CostDistribution, Customer, Department, \
     Product, ProductDelivery, Sector, Server, ServerType, Workstation, User
@@ -444,3 +444,44 @@ def import_sccm(request):
     load = WorkstationsSCCM(customer)
     load.save_file(request.body)
     return HttpResponse('OK')
+
+
+@permission_required('costs.show_customer')
+def customer_company(request):
+    customer = request.GET.get('customer')
+    customer_obj = get_object_or_404(Customer, id=customer)
+    return HttpResponse(customer_obj.company.companyCode)
+
+
+@permission_required('costs.change_productdelivery')
+def product_delivery(request):
+    delivery_id = request.GET.get('id')
+    if delivery_id:
+        delivery_obj = ProductDelivery.objects.get(id=delivery_id)
+    else:
+        delivery_obj = None
+
+    form = ProductDeliveryForm(request.POST or None, instance=delivery_obj)
+    if request.method == 'POST':
+        fields = request.POST.dict()
+        print(fields)
+
+        if fields['cost_center']:
+            cost_center_obj = CostCenter.objects.get(company__customer__id=form.data['customer'],
+                                                     value=form.data['cost_center'])
+            fields['cost_center'] = cost_center_obj.id
+
+        if fields['function']:
+            function_obj = Function.objects.get(company__customer__id=form.data['customer'],
+                                                value=form.data['function'])
+            fields['function'] = function_obj.id
+
+        print(fields)
+        form = ProductDeliveryForm(fields, instance=delivery_obj)
+
+        if form.is_valid():
+            delivery_obj = form.save()
+        # return redirect('costs:portfolio')
+
+    return render(request, 'costs/product_delivery_form.html', {'form': form,
+                                                                'delivery': delivery_obj})

@@ -29,5 +29,7 @@ urlpatterns = [
     path('accounts/profile/', views.applications),
     path('rapport', views.report, name='report'),
     path('lisenser', views.licenses, name='licences'),
-    path('import/sccm', views.import_sccm)
+    path('import/sccm', views.import_sccm),
+    path('tjenesteleveranse', views.product_delivery, name='product_delivery'),
+    path('kunde/firma', views.customer_company, name='customer_company'),
 ]

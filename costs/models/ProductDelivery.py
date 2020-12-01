@@ -1,4 +1,5 @@
 from django.db import models
+from employee_info.models import CostCenter, Function
 
 from . import Customer, Product, Sector
 
@@ -9,6 +10,10 @@ class ProductDelivery(models.Model):
     amount = models.IntegerField(verbose_name='Antall')
     sector = models.ForeignKey(Sector, verbose_name='Sektor', on_delete=models.PROTECT, related_name='deliveries',
                                blank=True, null=True)
+    account = models.CharField('konto', max_length=6, blank=True, null=True)
+    cost_center = models.ForeignKey(CostCenter, on_delete=models.PROTECT, blank=True, null=True,
+                                    verbose_name='ansvar')
+    function = models.ForeignKey(Function, on_delete=models.PROTECT, verbose_name='funksjon', blank=True, null=True)
 
     class Meta:
         verbose_name = 'tjenesteleveranse'

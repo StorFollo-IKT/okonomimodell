@@ -149,7 +149,13 @@
                     <tr>
                         <td>{{ delivery.sector.name }}</td>
                         <td>{{ delivery.customer.name }}</td>
-                        <td>{{ delivery.product.name }}</td>
+                        {% if perms.costs.change_product %}
+                            <td>
+                                <a href="{% url 'costs:product_delivery' %}?id={{ delivery.id }}">{{ delivery.product.name }}</a>
+                            </td>
+                        {% else %}
+                            <td>{{ delivery.product.name }}</td>
+                        {% endif %}
                         <td data-sort="{{ delivery.product.price }}" class="currency">{{ delivery.product.price|intcomma }}&nbsp;kr</td>
                         <td class="currency">{{ delivery.amount }}</td>
                         <td data-sort="{{ delivery.sum }}" class="currency">{{ delivery.sum|intcomma }}&nbsp;kr</td>
