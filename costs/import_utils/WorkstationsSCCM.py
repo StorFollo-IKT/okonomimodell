@@ -25,12 +25,17 @@ class WorkstationsSCCM:
             fp.write(string)
 
     def load(self):
+        directories = Directory.objects.values_list('dns_name', flat=True)
+        directories = list(directories)
+
         for workstation in self.load_json():
             try:
                 workstation_obj = Workstation.objects.get(
                     serial=workstation['SerialNumber0']
                 )
             except Workstation.DoesNotExist:
+                if workstation['Full_Domain_Name0'] not in directories:
+                    continue
                 workstation_obj = Workstation(serial=workstation['SerialNumber0'])
 
             workstation_obj.name = workstation['Name0']
