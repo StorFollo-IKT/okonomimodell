@@ -34,8 +34,12 @@ class WorkstationsSCCM:
                 workstation_obj = Workstation(serial=workstation['SerialNumber0'])
 
             workstation_obj.name = workstation['Name0']
-            workstation_obj.distinguishedName = workstation['Distinguished_Name0']
-            workstation_obj.ad_object = lookup_ad_object(workstation_obj)
+            if workstation['Distinguished_Name0']:
+                workstation_obj.distinguishedName = workstation['Distinguished_Name0']
+                workstation_obj.ad_object = lookup_ad_object(workstation_obj)
+            else:
+                print('%s has no AD object' % workstation['Name0'])
+
             workstation_obj.manufacturer = workstation['Manufacturer0']
             workstation_obj.model = workstation['Model0']
             workstation_obj.user_name = workstation['User_Name0']
