@@ -1,3 +1,9 @@
+import datetime
+
+from costs.models import Customer
+from invoice.models import Invoice
+
+
 class InvoiceUtils:
     @staticmethod
     def tax_code(company, percent=25):
@@ -19,3 +25,17 @@ class InvoiceUtils:
                 return '2C'
             else:
                 raise AttributeError('Invalid tax amount')
+
+    @staticmethod
+    def get_latest_invoice(customer_obj: Customer):
+        today = datetime.date.today()
+        try:
+            return Invoice.objects.get(
+                customer=customer_obj, date__year=today.year, date__month=today.month
+            )
+        except Invoice.DoesNotExist:
+            print(
+                'No invoice created for %s %s-%s'
+                % (customer_obj, today.year, today.month)
+            )
+            return
