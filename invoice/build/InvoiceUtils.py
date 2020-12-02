@@ -7,17 +7,15 @@ from invoice.models import Invoice
 class InvoiceUtils:
     @staticmethod
     def tax_code(company, percent=25):
+        if percent == 0:
+            return '0'
         if company == 'AK':
-            if percent == 0:
-                return '0'
-            elif percent == 25:
+            if percent == 25:
                 return '06'
             else:
                 raise AttributeError('Invalid tax amount')
         elif company == 'FK':
-            if percent == 0:
-                return '0'
-            elif percent == 25:
+            if percent == 25:
                 return '2A'
             elif percent == 15:
                 return '2B'
