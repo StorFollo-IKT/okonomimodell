@@ -50,9 +50,9 @@ class ServerAdmin(admin.ModelAdmin):
 
 @admin.register(ProductDelivery)
 class ProductDeliveryAdmin(admin.ModelAdmin):
-    list_display = ['customer', 'product', 'amount', 'sum']
+    list_display = ['customer', 'product', 'amount', 'sum', 'account']
     readonly_fields = ['sum']
-    list_filter = ['customer', 'product']
+    list_filter = ['customer', 'account', 'product__type', 'product']
 
 
 class IsEmployeeFilter(admin.SimpleListFilter):
