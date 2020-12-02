@@ -20,7 +20,7 @@ class Sector(models.Model):
         """
         cost = 0
         for app in self.applications.all():
-            cost += app.cost()
+            cost += app.total_year()
         for delivery in self.deliveries.all():
             cost += delivery.sum_year()
 

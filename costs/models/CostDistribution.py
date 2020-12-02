@@ -27,4 +27,4 @@ class CostDistribution(models.Model):
         return self.application.customer
 
     def amount(self):
-        return self.application.cost() * (self.percentage/100)
+        return self.application.total_year() * (self.percentage/100)

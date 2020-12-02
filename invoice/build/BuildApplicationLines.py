@@ -14,7 +14,7 @@ class BuildApplicationLines:
     @staticmethod
     def application_line(invoice: Invoice, app: Application, debug=False):
         if app.distributions.count() > 0:
-            if not app.cost():
+            if not app.total_year():
                 print('%s has no cost' % app)
                 return
             if not app.distribution_valid():

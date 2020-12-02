@@ -93,6 +93,10 @@
                 <td data-sort="{{ application.server_cost_year }}">{{ application.server_cost_year|intcomma }}kr</td>
             </tr>
             {% endif %}
+            <tr>
+                <th>Totalt</th>
+                <td>{{ application.total_year|intcomma }}kr</td>
+            </tr>
 
         </table>
         <br />

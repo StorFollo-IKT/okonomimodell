@@ -25,7 +25,7 @@ class Customer(models.Model):
         """
         cost = 0
         for application in self.applications.all():
-            cost += application.cost()
+            cost += application.total_year()
         for product in self.deliveries.all():
             cost += product.sum_year()
 
@@ -40,3 +40,17 @@ class Customer(models.Model):
 
     def employees(self):
         return Resource.objects.filter(company=self.company)
+
+    def products(self):
+        return self.users.products
+
+    def licenses(self):
+        # return self.users.all().exclude(products=None)
+        from costs.models import Product
+        licenses_obj = []
+        license_users = {}
+        for product in Product.objects.filter(type__type='Lisens'):
+            if product.users.filter(customer=self):
+                license_users[product] = product.users.filter(customer=self)
+
+        return license_users

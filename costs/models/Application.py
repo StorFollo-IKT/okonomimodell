@@ -57,16 +57,13 @@ class Application(models.Model):
         """
         return self.external_cost + self.licence_cost
 
-    def cost(self):
-        """
-        Total cost per year
-        """
-        return self.server_cost_year() + self.external_cost + self.licence_cost
-
     def internal_cost_total_year(self):
         return self.internal_hour_cost_year() + self.server_cost_year()
 
     def total_year(self):
+        """
+        Total cost per year including internal hours
+        """
         return self.server_cost_year() + self.external_cost_total() + self.internal_hour_cost_year()
 
     def distribution_valid(self):

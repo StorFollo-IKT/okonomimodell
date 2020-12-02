@@ -10,7 +10,7 @@
     <!--suppress HtmlFormInputWithoutLabel -->
     <form method="post">
         {% csrf_token %}
-        <p>Bel&oslash;p til fordeling: {{ application.cost|intcomma }}kr</p>
+        <p>Bel&oslash;p til fordeling: {{ application.total_year|intcomma }}kr</p>
         <table id="costDistributionTable">
             <thead>
             <tr>
@@ -100,9 +100,9 @@
 
         function sum(id, percent) {
             var sumField = '#distributionSum' + id
-            var sum = (parseInt(percent) / 100 * {{ application.cost }}).toFixed(0)
+            var sum = (parseInt(percent) / 100 * {{ application.total_year }}).toFixed(0)
             $(sumField).val(sum.toLocaleString() + ' kr');
-        };
+        }
 
         $('table tr').on('keyup', '.percent', function () {
             validatePercent();
