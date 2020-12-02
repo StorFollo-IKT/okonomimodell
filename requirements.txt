@@ -1,7 +1,7 @@
 django
 django-allauth
-django-stamdata3>=0.5
-django-ad-import>=0.4
+django-stamdata3>=0.7
+django-ad-import>=0.5
 python-ldap
 django_extensions
 pygraphviz
