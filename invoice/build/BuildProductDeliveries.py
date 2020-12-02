@@ -20,8 +20,8 @@ class BuildProductDeliveries:
                                account=delivery.account,
                                cost_center=delivery.cost_center.value,
                                function=delivery.function.value,
-                               amount=delivery.sum() * 1.25,
-                               tax_code=InvoiceUtils.tax_code(invoice.customer.id, 25),
+                               amount=delivery.sum(),
+                               tax_code=InvoiceUtils.tax_code(invoice.customer.id, 0),
                                text=text,
                                )
             line.save()

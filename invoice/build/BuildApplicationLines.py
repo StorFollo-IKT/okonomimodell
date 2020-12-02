@@ -42,8 +42,8 @@ class BuildApplicationLines:
                     account=distribution.account,
                     cost_center=distribution.cost_center.value,
                     function=distribution.function.value,
-                    amount=(distribution.amount() / 12) * 1.25,
-                    tax_code=InvoiceUtils.tax_code(invoice.customer.id, 25),
+                    amount=(distribution.amount() / 12),
+                    tax_code=InvoiceUtils.tax_code(invoice.customer.id, 0),
                 )
                 if debug:
                     print(line)

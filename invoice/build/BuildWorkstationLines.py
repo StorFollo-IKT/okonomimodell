@@ -57,8 +57,8 @@ class BuildWorkstationLines:
                     account=account,
                     cost_center=cost_center.value,
                     function=function,
-                    amount=(product.price * len(workstations)) * 1.25,
-                    tax_code=InvoiceUtils.tax_code(invoice.customer.id, 25),
+                    amount=(product.price * len(workstations)),
+                    tax_code=InvoiceUtils.tax_code(invoice.customer.id, 0),
                 )
                 try:
                     line.save()

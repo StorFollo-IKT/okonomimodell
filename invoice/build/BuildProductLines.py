@@ -26,8 +26,8 @@ class BuildProductLines:
                         account=account,
                         cost_center=cost_center,
                         function=function,
-                        amount=(product.price * len(users)) * 1.25,
-                        tax_code=InvoiceUtils.tax_code(invoice.customer.id, 25),
+                        amount=(product.price * len(users)),
+                        tax_code=InvoiceUtils.tax_code(invoice.customer.id, 0),
                     )
                     try:
                         line.save()
