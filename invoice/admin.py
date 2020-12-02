@@ -12,3 +12,4 @@ class InvoiceAdmin(admin.ModelAdmin):
 @admin.register(InvoiceLine)
 class InvoiceLineAdmin(admin.ModelAdmin):
     list_display = ['invoice', 'text', 'amount']
+    list_filter = ['invoice__customer', 'invoice']
