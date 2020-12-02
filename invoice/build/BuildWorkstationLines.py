@@ -2,6 +2,7 @@ from django.db import IntegrityError
 from django.db.models import QuerySet
 
 from costs.models import Product, Workstation
+from invoice.build.InvoiceUtils import InvoiceUtils
 from invoice.models import Invoice, InvoiceLine
 
 
@@ -57,6 +58,7 @@ class BuildWorkstationLines:
                     cost_center=cost_center.value,
                     function=function,
                     amount=(product.price * len(workstations)) * 1.25,
+                    tax_code=InvoiceUtils.tax_code(invoice.customer.id, 25),
                 )
                 try:
                     line.save()

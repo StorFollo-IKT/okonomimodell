@@ -1,4 +1,5 @@
 from costs.models import Application
+from invoice.build.InvoiceUtils import InvoiceUtils
 from invoice.models import InvoiceLine, Invoice
 
 
@@ -42,6 +43,7 @@ class BuildApplicationLines:
                     cost_center=distribution.cost_center.value,
                     function=distribution.function.value,
                     amount=(distribution.amount() / 12) * 1.25,
+                    tax_code=InvoiceUtils.tax_code(invoice.customer.id, 25),
                 )
                 if debug:
                     print(line)

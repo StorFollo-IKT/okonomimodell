@@ -2,6 +2,7 @@ from django.db import IntegrityError
 from typing import Dict, List
 
 from costs.models import Product, User
+from invoice.build.InvoiceUtils import InvoiceUtils
 from invoice.models import Invoice, InvoiceLine
 
 
@@ -26,6 +27,7 @@ class BuildProductLines:
                         cost_center=cost_center,
                         function=function,
                         amount=(product.price * len(users)) * 1.25,
+                        tax_code=InvoiceUtils.tax_code(invoice.customer.id, 25),
                     )
                     try:
                         line.save()
