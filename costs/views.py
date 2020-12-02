@@ -411,6 +411,7 @@ def cost_distribution_delete(request):
     return HttpResponseRedirect(reverse('costs:cost_distribution') + '?application=%s' % distribution.application_id)
 
 
+@permission_required('costs.show_product')
 def licenses(request):
     products = Product.objects.filter(type__type='Lisens')
     product_arg = request.GET.get('product')
@@ -433,7 +434,8 @@ def licenses(request):
             customer_licenses[customer][product] = product_users
 
     return render(request, 'costs/licenses.html', {'title': 'Lisenser', 'products': products,
-                  'customer_licences': customer_licenses, 'customers': customers_with_licences})
+                                                   'customer_licences': customer_licenses,
+                                                   'customers': customers_with_licences})
 
 
 @csrf_exempt
