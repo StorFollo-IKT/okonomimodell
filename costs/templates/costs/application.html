@@ -39,6 +39,7 @@
             {% endif %}
             <th>Type</th>
             <th>Tjeneste</th>
+        <th title="Applikasjonens andel av serverens driftskostnad per m&aring;ned">Kostnad</th>
         </tr>
             {% for server in application.servers.all %}
                 <tr>
@@ -47,6 +48,7 @@
                 {% endif %}
                 <td>{{ server.type|default:"" }}</td>
                     <td>{{ server.product.name }}</td>
+                <td>{{ server.application_cost|intcomma }}kr</td>
                 </tr>
             {% endfor %}
         {% endif %}
@@ -88,7 +90,7 @@
             {% if application.servers.count %}
             <tr>
                 <th>{{ application.servers.count }} server(e):</th>
-                <td data-sort="{{ application.server_cost }}">{{ application.server_cost|intcomma }}kr</td>
+                <td data-sort="{{ application.server_cost_year }}">{{ application.server_cost_year|intcomma }}kr</td>
             </tr>
             {% endif %}
 
