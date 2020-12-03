@@ -36,4 +36,4 @@ class Command(BaseCommand):
             return
 
         build = BuildWorkstationLines()
-        build.build_lines(invoice, '127000')
+        build.build_lines(invoice, '120007')
