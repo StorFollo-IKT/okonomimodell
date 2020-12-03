@@ -15,7 +15,7 @@ class BuildProductDeliveries:
         deliveries = deliveries.filter(customer=invoice.customer)
 
         for delivery in deliveries:
-            text = '%d stk %s' % (delivery.amount, delivery.product.name)
+            text = '%s, %d stk' % (delivery.amount, delivery.product.name)
             line = InvoiceLine(invoice=invoice,
                                account=delivery.account,
                                cost_center=delivery.cost_center.value,

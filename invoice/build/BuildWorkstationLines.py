@@ -49,7 +49,7 @@ class BuildWorkstationLines:
 
         for cost_center, functions in workstation_count.items():
             for function, workstations in functions.items():
-                text = 'Drift av %d arbeidsstajon(er)' % len(workstations)
+                text = 'Drift av arbeidsstajon, %d stk' % len(workstations)
 
                 line = InvoiceLine(
                     invoice=invoice,

@@ -16,7 +16,7 @@ class BuildProductLines:
         for product, cost_centers in products.items():
             for cost_center, functions in cost_centers.items():
                 for function, users in functions.items():
-                    text = '%s for %d bruker(e)' % (product.name, len(users))
+                    text = '%s, %d stk' % (product.name, len(users))
                     if function is None:
                         function = 0
 
