@@ -17,7 +17,7 @@ class Command(BaseCommand):
         product_types = ProductType.objects.all().values_list('type', flat=True)
         product_types = list(product_types)
 
-        parser.add_argument('--customer', nargs='?', choices=customers, help='Kunde')
+        parser.add_argument('--customer', nargs='+', choices=customers, help='Kunde')
         parser.add_argument('-t', '--type', nargs='+', choices=product_types, help='Tjenestetype')
 
     def handle(self, *args, **options):
