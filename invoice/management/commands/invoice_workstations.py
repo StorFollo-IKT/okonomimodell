@@ -1,16 +1,13 @@
-import datetime
-
 from django.core.management.base import BaseCommand
 
 from costs.models import Customer
-from invoice.build import BuildWorkstationLines
-from invoice.models import Invoice
+from invoice.build import BuildWorkstationLines, InvoiceUtils
 
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
         customers = Customer.objects.all().values_list('id', flat=True)
-        parser.add_argument('--customer', nargs='?',
+        parser.add_argument('--customer', nargs='+',
                             choices=list(customers), help='Kunde')
 
     def handle(self, *args, **options):
@@ -23,16 +20,8 @@ class Command(BaseCommand):
 
     @staticmethod
     def run(customer_obj):
-        today = datetime.date.today()
-        try:
-            invoice = Invoice.objects.get(
-                customer=customer_obj, date__year=today.year, date__month=today.month
-            )
-        except Invoice.DoesNotExist:
-            print(
-                'No invoice created for %s %s-%s'
-                % (customer_obj, today.year, today.month)
-            )
+        invoice = InvoiceUtils.get_latest_invoice(customer_obj)
+        if not invoice:
             return
 
         build = BuildWorkstationLines()
