@@ -31,8 +31,18 @@ class Command(BaseCommand):
                         except User.DoesNotExist:
                             # print('No user for AD object %s' % ad_user)
                             user = User(ad_object=ad_user)
+                        except ProtectedError as e:
+                            print(e)
+                            continue
 
-                        user.number = ad_user.employeeID
+                        try:
+                            if ad_user.employeeID:
+                                user.number = int(ad_user.employeeID)
+                            else:
+                                user.number = None
+                        except ValueError as e:
+                            print(e)
+
                         user.name = ad_user.displayName
                         user.email = ad_user.mail
                         user.ad_object = ad_user
