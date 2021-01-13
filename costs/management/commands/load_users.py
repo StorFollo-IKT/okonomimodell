@@ -79,3 +79,5 @@ class Command(BaseCommand):
                         user.delete()
                     except ProtectedError:
                         print('Protected relations:', user)
+                    except IntegrityError:
+                        print('Integrity error:', user)
