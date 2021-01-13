@@ -11,9 +11,19 @@ now = datetime.datetime.now()
 
 
 class Command(BaseCommand):
+    def add_arguments(self, parser):
+        customers = Customer.objects.all().values_list('id', flat=True)
+        parser.add_argument('--customer', nargs='?',
+                            choices=list(customers), help='Kunde')
+
     def handle(self, *args, **options):
         load = LoadUsers()
-        for customer in Customer.objects.all():
+        if options['customer']:
+            customers = [Customer.objects.get(id=options['customer'])]
+        else:
+            customers = Customer.objects.all()
+
+        for customer in customers:
             for directory in customer.ad_directories.all():
                 print(directory)
                 load.connect(directory=directory)
