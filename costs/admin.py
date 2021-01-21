@@ -81,7 +81,7 @@ class UserAdmin(admin.ModelAdmin):
 @admin.register(Workstation)
 class WorkstationAdmin(admin.ModelAdmin):
     list_select_related = ['ad_object']
-    list_display = ['name', 'manufacturer', 'model', 'user_display_name']
+    list_display = ['name', 'manufacturer', 'model', 'owner_display_name', 'user_display_name']
     list_filter = ['ad_object__directory', 'ad_object__lastLogon', 'customer', 'manufacturer', 'model']
     readonly_fields = ['ad_object', 'user']
 

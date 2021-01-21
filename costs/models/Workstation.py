@@ -5,7 +5,7 @@ from ad_import.models import (
     User as ADUser,
     Directory,
 )
-from . import Customer, User
+from . import Customer, User, Product
 
 
 class Workstation(models.Model):
@@ -34,8 +34,16 @@ class Workstation(models.Model):
     )
     user = models.ForeignKey(
         User,
+        on_delete=models.SET_NULL,
+        verbose_name='siste bruker',
+        null=True,
+        default=None,
+        related_name='workstations_user',
+    )
+    owner = models.ForeignKey(
+        User,
         on_delete=models.PROTECT,
-        verbose_name='bruker',
+        verbose_name='eier',
         null=True,
         default=None,
         related_name='workstations',
@@ -44,6 +52,19 @@ class Workstation(models.Model):
     user_domain = models.CharField(
         'brukerdomene', max_length=100, blank=True, null=True
     )
+
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.PROTECT,
+        verbose_name='tjeneste',
+        null=True,
+        default=None,
+        related_name='workstations',
+    )
+
+    leased = models.BooleanField('leid', default=False)
+    last_logon = models.DateTimeField('Siste pålogging', blank=True, null=True)
+    pus_id = models.IntegerField('PureService ID', blank=True, null=True)
 
     class Meta:
         verbose_name = 'arbeidsstasjon'
@@ -70,3 +91,7 @@ class Workstation(models.Model):
             return self.user.display_name()
         else:
             return '%s\\%s' % (self.user_domain, self.user_name)
+
+    def owner_display_name(self):
+        if self.owner:
+            return self.owner.display_name()
