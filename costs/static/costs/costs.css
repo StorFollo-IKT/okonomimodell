@@ -45,6 +45,10 @@ h3 {
   text-align: right;
 }
 
+.error {
+    color: red;
+}
+
 tfoot th {
     text-align: right;
     padding: 8px !important;
