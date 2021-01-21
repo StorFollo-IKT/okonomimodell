@@ -27,6 +27,7 @@ class WorkstationsSCCM:
     def load(self):
         directories = Directory.objects.values_list('dns_name', flat=True)
         directories = list(directories)
+        bad_directories = []
 
         for workstation in self.load_json():
             try:
@@ -35,6 +36,8 @@ class WorkstationsSCCM:
                 )
             except Workstation.DoesNotExist:
                 if workstation['Full_Domain_Name0'] not in directories:
+                    if workstation['Full_Domain_Name0'] not in bad_directories and workstation['Full_Domain_Name0'] is not None:
+                        bad_directories.append(workstation['Full_Domain_Name0'])
                     continue
                 workstation_obj = Workstation(serial=workstation['SerialNumber0'])
 
@@ -64,6 +67,8 @@ class WorkstationsSCCM:
                 workstation_obj.customer = self.customer
 
             workstation_obj.save()
+        if bad_directories:
+            print('Directories not found:\n%s' % '\n'.join(bad_directories))
 
 
 def lookup_directory(directory_name: str) -> Directory:
