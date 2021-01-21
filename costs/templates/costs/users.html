@@ -1,0 +1,28 @@
+{% extends 'costs/base.html' %}
+
+{% block body %}
+    <table>
+        <thead>
+
+        </thead>
+        <tbody>
+        <tr>
+            <th>Navn</th>
+            <th>Ansvar</th>
+            <th>Ressursnummer</th>
+            <th>Funksjon</th>
+        </tr>
+
+        {% for user in users %}
+            <tr>
+                <td>{{ user.name }}</td>
+                <td>{{ user.department }}</td>
+                <td>
+                    <a href="{% url 'employee_info_browser:resource' %}?company={{ user.company }}&amp;employee={{ user.employee.resourceId }}">{{ user.employee.resourceId }}</a>
+                </td>
+                <td>{{ user.employee.main_position.function }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
