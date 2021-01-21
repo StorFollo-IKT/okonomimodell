@@ -25,7 +25,7 @@ class HasAdFilter(admin.SimpleListFilter):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'type', 'price']
+    list_display = ['name', 'type', 'price', 'user_count']
     list_filter = ['type']
 
 

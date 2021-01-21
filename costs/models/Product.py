@@ -24,3 +24,6 @@ class Product(models.Model):
 
     def __str__(self):
         return '%s: %s' % (self.type, self.name)
+
+    def user_count(self):
+        return self.users.count()
