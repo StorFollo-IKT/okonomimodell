@@ -487,3 +487,16 @@ def product_delivery(request):
 
     return render(request, 'costs/product_delivery_form.html', {'form': form,
                                                                 'delivery': delivery_obj})
+
+
+@permission_required('costs.show_product')
+def products(request):
+    products_obj = Product.objects.all()
+    return render(request, 'costs/products.html', {'products': products_obj})
+
+
+@permission_required('costs.show_user')
+def product_users(request):
+    value = request.GET.get('product')
+    product_obj = Product.objects.get(name=value)
+    return render(request, 'costs/users.html', {'users': product_obj.users.all()})

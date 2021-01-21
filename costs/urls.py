@@ -32,4 +32,6 @@ urlpatterns = [
     path('import/sccm', views.import_sccm),
     path('tjenesteleveranse', views.product_delivery, name='product_delivery'),
     path('kunde/firma', views.customer_company, name='customer_company'),
+    path('tjenester', views.products, name='products'),
+    path('tjenestebrukere', views.product_users, name='product_users'),
 ]
