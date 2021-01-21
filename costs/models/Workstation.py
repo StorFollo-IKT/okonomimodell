@@ -5,6 +5,7 @@ from ad_import.models import (
     User as ADUser,
     Directory,
 )
+from employee_info.models import CostCenter, Function
 from . import Customer, User, Product
 
 
@@ -65,6 +66,24 @@ class Workstation(models.Model):
     leased = models.BooleanField('leid', default=False)
     last_logon = models.DateTimeField('Siste pålogging', blank=True, null=True)
     pus_id = models.IntegerField('PureService ID', blank=True, null=True)
+
+    cost_center = models.ForeignKey(
+        CostCenter,
+        on_delete=models.PROTECT,
+        verbose_name='ansvar',
+        null=True,
+        default=None,
+        related_name='workstations',
+    )
+
+    function = models.ForeignKey(
+        Function,
+        on_delete=models.PROTECT,
+        verbose_name='funksjon',
+        null=True,
+        default=None,
+        related_name='workstations',
+    )
 
     class Meta:
         verbose_name = 'arbeidsstasjon'
