@@ -1,6 +1,6 @@
 django~=3.1.1
 django-allauth
-django-stamdata3>=0.9
+django-stamdata3>=0.10
 django-ad-import>=0.5
 python-ldap
 django_extensions
