@@ -59,7 +59,7 @@
                 <td>{{ workstation.user.display_name|default:"" }}</td>
                 {% if workstation.user.employee %}
                     <td>
-                        <a href="{% url 'employee_info_browser:resource' %}?value={{ workstation.user.employee.resourceId }}">{{ workstation.user.employee.resourceId }}</a>
+                        <a href="{% url 'employee_info_browser:resource' %}?company={{ workstation.user.customer.company }}&amp;value={{ workstation.user.employee.resourceId }}">{{ workstation.user.employee.resourceId }}</a>
                     </td>
                 {% else %}
                     <td></td>
