@@ -2,7 +2,7 @@ from django.db import models
 from employee_info.models import CostCenter, Resource
 
 from ad_import.models import User as ADUser
-from . import Customer, Product
+from . import Customer, Product, Student
 
 
 class User(models.Model):
@@ -12,6 +12,7 @@ class User(models.Model):
                                      related_name='users')
     name = models.CharField('Navn', max_length=100, null=True)
     employee = models.ForeignKey(Resource, on_delete=models.CASCADE, verbose_name='ansatt', null=True, default=None)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, verbose_name='elev', null=True, default=None)
     email = models.EmailField('Epostadresse', null=True)
     dn = models.CharField('DN', max_length=300, blank=True, null=True)
     customer = models.ForeignKey(Customer, related_name='users', on_delete=models.PROTECT, verbose_name='Kunde', null=True, default=None)
