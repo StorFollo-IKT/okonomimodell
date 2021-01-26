@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from costs.models import Application, CostDistribution, Customer, Department, Product, ProductDelivery, ProductGroup, \
-    ProductType, Sector, Server, User, ServerType, Workstation
+    ProductType, Sector, Server, User, ServerType, Workstation, Student
 
 admin.site.register(Customer)
 admin.site.register(ProductType)
@@ -100,3 +100,9 @@ class SectorAdmin(admin.ModelAdmin):
 @admin.register(CostDistribution)
 class CostDistributionAdmin(admin.ModelAdmin):
     list_display = ['application', 'cost_center']
+
+
+@admin.register(Student)
+class StudentAdmin(admin.ModelAdmin):
+    list_display = ['customer', 'firstName', 'lastName']
+    list_filter = ['customer']
