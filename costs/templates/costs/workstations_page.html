@@ -45,7 +45,9 @@
             <th>Modell</th>
             <th>Serienummer</th>
             <th>Bruker</th>
+            <th>Sist pålogget</th>
             <th>Ansatt</th>
+            <th>Ansvar</th>
         </tr>
         </thead>
         <tbody>
@@ -56,14 +58,22 @@
                 <td>{{ workstation.manufacturer }}</td>
                 <td>{{ workstation.model }}</td>
                 <td>{{ workstation.serial }}</td>
-                <td>{{ workstation.user.display_name|default:"" }}</td>
+            {% if workstation.user %}
+                <td><a href="{% url 'costs:user' %}?id={{ workstation.user.id }}">{{ workstation.user.display_name}}</a> </td>
+            {% else %}
+                <td></td>
+            {% endif %}
+            <td>{{ workstation.last_logon }}</td>
                 {% if workstation.user.employee %}
                     <td>
                         <a href="{% url 'employee_info_browser:resource' %}?company={{ workstation.user.customer.company }}&amp;value={{ workstation.user.employee.resourceId }}">{{ workstation.user.employee.resourceId }}</a>
                     </td>
+                {% elif workstation.user.student %}
+                    <td>Elev</td>
                 {% else %}
                     <td></td>
                 {% endif %}
+                <td>{{ workstation.get_cost_center|default:"" }}</td>
             </tr>
         {% endfor %}
         </tbody>
