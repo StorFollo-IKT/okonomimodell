@@ -3,13 +3,20 @@
         <th>Navn</th>
         <th>Merke</th>
         <th>Modell</th>
+        {% if show_pus %}
+            <th></th>
+        {% endif %}
     </tr>
     {% for workstation in workstations %}
         <tr>
             <td>{{ workstation.name }}</td>
             <td>{{ workstation.manufacturer }}</td>
             <td>{{ workstation.model }}</td>
+            {% if show_pus and workstation.pus_id %}
+                <td>
+                    <a href="https://storfolloikt.pureservice.com/agent/app#/asset/{{ workstation.pus_id }}/details">PUS</a>
+                </td>
+            {% endif %}
         </tr>
-
     {% endfor %}
 </table>
