@@ -114,3 +114,16 @@ class Workstation(models.Model):
     def owner_display_name(self):
         if self.owner:
             return self.owner.display_name()
+
+    def last_logon_ad(self):
+        if self.ad_object:
+            return self.ad_object.lastLogon
+
+    def get_cost_center(self):
+        if self.cost_center:
+            return self.cost_center
+        elif self.user:
+            if self.user.employee:
+                return self.user.employee.main_position().costCenter
+            elif self.user.student:
+                return None  # TODO: Check student school
