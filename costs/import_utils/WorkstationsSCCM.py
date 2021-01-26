@@ -24,7 +24,7 @@ class WorkstationsSCCM:
         with open(self.file, mode) as fp:
             fp.write(string)
 
-    def load(self):
+    def load(self, require_ad=True):
         directories = Directory.objects.values_list('dns_name', flat=True)
         directories = list(directories)
         bad_directories = []
@@ -47,6 +47,8 @@ class WorkstationsSCCM:
                 workstation_obj.ad_object = lookup_ad_object(workstation_obj)
             else:
                 print('%s has no AD object' % workstation['Name0'])
+                if require_ad:
+                    continue
 
             workstation_obj.manufacturer = workstation['Manufacturer0']
             workstation_obj.model = workstation['Model0']
