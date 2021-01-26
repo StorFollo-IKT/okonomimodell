@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import json
 
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
@@ -54,6 +56,9 @@ class WorkstationsSCCM:
             workstation_obj.model = workstation['Model0']
             workstation_obj.user_name = workstation['User_Name0']
             workstation_obj.user_domain = workstation['User_Domain0']
+            if workstation['Last_Logon_Timestamp0']:
+                date = datetime.strptime(workstation['Last_Logon_Timestamp0'][0:-1], '%Y-%m-%dT%H:%M:%S.%f')
+                workstation_obj.last_logon = date
 
             if is_server(workstation_obj):
                 continue
