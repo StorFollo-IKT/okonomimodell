@@ -1,0 +1,50 @@
+{% extends 'costs/base.html' %}
+
+{% block body %}
+    <table>
+        <tr>
+            <th>Kunde</th>
+            <td>{{ user.customer }}</td>
+        </tr>
+        <tr>
+            <th>Navn</th>
+            <td>{{ user.name }}</td>
+        </tr>
+        <tr>
+            <th>AD</th>
+            <td>{{ user.ad_object }}</td>
+        </tr>
+        {% if user.employee %}
+            <tr>
+                <th>Ansatt</th>
+                <td>{{ user.employee }}</td>
+            </tr>
+        {% endif %}
+        {% if user.student %}
+            <tr>
+                <th>Elev</th>
+                <td>{{ user.student }}</td>
+            </tr>
+        {% endif %}
+
+    </table>
+
+    {% if user.workstations.count %}
+        <br/>
+        <h2>Primærbruker av arbeidsstasjoner</h2>
+        {% include 'costs/workstations.html' with workstations=user.workstations.all %}
+    {% endif %}
+    {% if user.workstations_user.count %}
+        <br/>
+        <h2>Siste bruker av arbeidsstasjoner</h2>
+        {% include 'costs/workstations.html' with workstations=user.workstations_user.all %}
+    {% endif %}
+
+
+    <br/>
+    {% if show_pus and user.pus_id %}
+        <a href="https://storfolloikt.pureservice.com/agent/app#/user/{{ user.pus_id }}/information">Vis bruker i
+            PureService</a>
+    {% endif %}
+
+{% endblock %}

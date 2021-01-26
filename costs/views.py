@@ -500,3 +500,10 @@ def product_users(request):
     value = request.GET.get('product')
     product_obj = Product.objects.get(name=value)
     return render(request, 'costs/users.html', {'users': product_obj.users.all()})
+
+
+@permission_required('costs.show_user')
+def user(request):
+    user_id = request.GET.get('id')
+    user_obj = User.objects.get(id=user_id)
+    return render(request, 'costs/user.html', {'user': user_obj, 'title': 'Bruker %s' % user_obj.name})

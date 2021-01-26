@@ -34,4 +34,5 @@ urlpatterns = [
     path('kunde/firma', views.customer_company, name='customer_company'),
     path('tjenester', views.products, name='products'),
     path('tjenestebrukere', views.product_users, name='product_users'),
+    path('bruker', views.user, name='user'),
 ]
