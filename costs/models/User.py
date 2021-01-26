@@ -17,6 +17,7 @@ class User(models.Model):
     dn = models.CharField('DN', max_length=300, blank=True, null=True)
     customer = models.ForeignKey(Customer, related_name='users', on_delete=models.PROTECT, verbose_name='Kunde', null=True, default=None)
     products = models.ManyToManyField(Product, related_name='users', verbose_name='tjenester', blank=True)
+    pus_id = models.IntegerField('PureService ID', blank=True, null=True)
 
     class Meta:
         verbose_name = 'bruker'
