@@ -379,7 +379,7 @@ def cost_distribution(request):
                     distribution_obj = CostDistribution(application=app)
 
                 cost_center = CostCenter.objects.get(company=app.customer.company, value=row[1])
-                function = Function.objects.get(company=app.customer.company, value=row[2])
+                function = Function.objects.get(company=None, value=row[2])
             except ObjectDoesNotExist:
                 continue
 
@@ -474,7 +474,7 @@ def product_delivery(request):
             fields['cost_center'] = cost_center_obj.id
 
         if fields['function']:
-            function_obj = Function.objects.get(company__customer__id=form.data['customer'],
+            function_obj = Function.objects.get(company=None,
                                                 value=form.data['function'])
             fields['function'] = function_obj.id
 
