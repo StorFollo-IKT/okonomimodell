@@ -48,6 +48,9 @@
             <th>Sist pålogget</th>
             <th>Ansatt</th>
             <th>Ansvar</th>
+            {% if show_pus %}
+            <th title="Link til PureService">PUS</th>
+            {% endif %}
         </tr>
         </thead>
         <tbody>
@@ -74,6 +77,15 @@
                     <td></td>
                 {% endif %}
                 <td>{{ workstation.get_cost_center|default:"" }}</td>
+                {% if show_pus %}
+                    {% if workstation.pus_id %}
+                        <td title="Vis ressurs {{ workstation.pus_id }} i PureService">
+                            <a href="https://storfolloikt.pureservice.com/agent/app#/asset/{{ workstation.pus_id }}/details">{{ workstation.pus_id }}</a>
+                        </td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                {% endif %}
             </tr>
         {% endfor %}
         </tbody>

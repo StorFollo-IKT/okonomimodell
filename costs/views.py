@@ -248,7 +248,6 @@ def workstations(request):
     workstations_obj = Workstation.objects.all()
     if request.GET.get('customer'):
         workstations_obj = workstations_obj.filter(customer__id=request.GET.get('customer'))
-        print(workstations_obj)
     has_employee = request.GET.get('has_employee')
     if has_employee == 'true':
         workstations_obj = workstations_obj.exclude(user__employee=None)
@@ -267,6 +266,7 @@ def workstations(request):
                    'selected_customer': request.GET.get('customer'),
                    'has_employee': has_employee,
                    'has_user': has_user,
+                   'show_pus': request.user.email.find('@storfolloikt.no') > -1,
                    }
                   )
 
@@ -506,4 +506,8 @@ def product_users(request):
 def user(request):
     user_id = request.GET.get('id')
     user_obj = User.objects.get(id=user_id)
-    return render(request, 'costs/user.html', {'user': user_obj, 'title': 'Bruker %s' % user_obj.name})
+    return render(request, 'costs/user.html', {
+        'user': user_obj,
+        'title': 'Bruker %s' % user_obj.name,
+        'show_pus': request.user.email.find('@storfolloikt.no') > -1
+    })
