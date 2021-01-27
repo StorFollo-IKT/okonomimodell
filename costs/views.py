@@ -252,7 +252,7 @@ def workstations(request):
     if has_employee == 'true':
         workstations_obj = workstations_obj.exclude(user__employee=None)
     elif has_employee == 'false':
-        workstations_obj = workstations_obj.filter(user__employee=None)
+        workstations_obj = workstations_obj.filter(user__employee=None, user__student=None)
 
     has_user = request.GET.get('has_user')
     if has_user == 'true':
