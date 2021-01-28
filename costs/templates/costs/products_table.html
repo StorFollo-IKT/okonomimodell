@@ -1,0 +1,23 @@
+{% load humanize %}
+<table id="products">
+    <thead>
+    <tr>
+        <th>Tjeneste</th>
+        <th>Type</th>
+        <th>Pris per m&aring;ned</th>
+        <th>Brukere</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for product in products %}
+        <tr>
+            <td>{{ product.name }}</td>
+            <td>{{ product.type }}</td>
+            <td>{{ product.price|intcomma }}</td>
+            <td>
+                <a href="{% url 'costs:product_users' %}?product={{ product.name|urlencode }}">{{ product.user_count }}</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

@@ -42,6 +42,12 @@
         {% include 'costs/workstations.html' with workstations=user.workstations_user.all %}
     {% endif %}
     <br/>
+
+    {% if perms.costs.view_product and user.products.count %}
+        <h2>Tjenester</h2>
+        {% include 'costs/products_table.html' with products=user.products.all %}
+    {% endif %}
+
     {% if show_pus and user.pus_id %}
         <a href="https://storfolloikt.pureservice.com/agent/app#/user/{{ user.pus_id }}/information">Vis bruker i
             PureService</a>

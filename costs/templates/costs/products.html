@@ -2,24 +2,7 @@
 {% load humanize %}
 
 {% block body %}
-    <table id="products">
-        <thead>
-        <tr>
-            <th>Tjeneste</th>
-            <th>Pris per m&aring;ned</th>
-            <th>Brukere</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for product in products %}
-            <tr>
-                <td>{{ product.name }}</td>
-                <td>{{ product.price|intcomma }}</td>
-                <td><a href="{% url 'costs:product_users' %}?product={{ product.name|urlencode }}">{{ product.user_count }}</a></td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+{% include 'costs/products_table.html' %}
     <script>
         $(document).ready(function () {
             // Setup - add a text input to each footer cell
