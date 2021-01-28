@@ -13,22 +13,27 @@ class BuildWorkstationLines:
 
         workstation: Workstation
         for workstation in workstations.all():
-            if not workstation.user:
-                # print('%s has no user' % workstation)
-                continue
-            if not workstation.user.employee:
-                print('%s is not employed' % workstation.user)
-                continue
-            main_position = workstation.user.employee.main_position(assume=True)
-            if not main_position:
-                print('Main position for %s %s not found' % (workstation.user.employee.resourceId, workstation.user.employee))
-                continue
+            if not workstation.cost_center:
+                if not workstation.user:
+                    # print('%s has no user' % workstation)
+                    continue
+                if not workstation.user.employee:
+                    print('%s is not employed' % workstation.user)
+                    continue
 
-            cost_center = main_position.costCenter
-            if not main_position.function:
-                function = function_fallback
+                main_position = workstation.user.employee.main_position(assume=True)
+                if not main_position:
+                    print('Main position for %s %s not found' % (workstation.user.employee.resourceId, workstation.user.employee))
+                    continue
+
+                cost_center = main_position.costCenter
+                if not main_position.function:
+                    function = function_fallback
+                else:
+                    function = main_position.function.value
             else:
-                function = main_position.function.value
+                cost_center = workstation.cost_center
+                function = workstation.function
 
             if cost_center not in workstation_count:
                 workstation_count[cost_center] = {}
