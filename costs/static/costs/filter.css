@@ -13,11 +13,16 @@
 
 #filter h2 {
     font-size: 14px;
+    margin: 0;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     padding: 5px 15px;
     margin-bottom: 12px;
     border-bottom: none;
+    text-align: left;
+    background: #79aec8;
+    color: #fff;
+    font-weight: 400;
 }
 
 #filter h3 {
@@ -25,6 +30,7 @@
     font-size: 14px;
     padding: 0 15px;
     margin-bottom: 10px;
+    margin-top: unset;
 }
 
 #filter ul {
