@@ -17,6 +17,7 @@ urlpatterns = [
     path('servere', views.servers_all, name='servers'),
     path('servere/<str:customer>', views.servers_all, name='servers'),
     path('arbeidsstasjoner', views.workstations, name='workstations'),
+    path('arbeidsstasjon', views.workstation, name='workstation'),
     path('kunder', views.customers, name='customers'),
     path('portefolje', views.portfolio, name='portfolio'),
     path('applikasjoner', views.applications, name='applications'),

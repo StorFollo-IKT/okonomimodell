@@ -9,7 +9,7 @@
     </tr>
     {% for workstation in workstations %}
         <tr>
-            <td>{{ workstation.name }}</td>
+            <td><a href="{% url 'costs:workstation' %}?id={{ workstation.id }}">{{ workstation.name }}</a></td>
             <td>{{ workstation.manufacturer }}</td>
             <td>{{ workstation.model }}</td>
             {% if show_pus and workstation.pus_id %}

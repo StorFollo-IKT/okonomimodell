@@ -39,7 +39,7 @@
         {% for workstation in workstations %}
             <tr>
                 <td>{{ workstation.customer }}</td>
-                <td>{{ workstation.name }}</td>
+                <td><a href="{% url 'costs:workstation' %}?id={{ workstation.id }}">{{ workstation.name }}</a></td>
                 <td>{{ workstation.manufacturer }}</td>
                 <td>{{ workstation.model }}</td>
                 <td>{{ workstation.serial }}</td>

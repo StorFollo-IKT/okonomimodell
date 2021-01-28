@@ -1,0 +1,84 @@
+{% extends 'costs/base.html' %}
+
+{% block body %}
+    <table>
+        <tr>
+            <th>Kunde</th>
+            <td>{{ workstation.customer }}</td>
+        </tr>
+        <tr>
+            <th>Navn</th>
+            <td>{{ workstation.name }}</td>
+        </tr>
+        {% if perms.ad_import.view_workstation and workstation.ad_object %}
+            <tr>
+                <th>Domene</th>
+                <td>{{ workstation.ad_object.directory.dns_name }}</td>
+            </tr>
+        {% endif %}
+        <tr>
+            <th>Merke</th>
+            <td>{{ workstation.manufacturer }}</td>
+        </tr>
+        <tr>
+            <th>Modell</th>
+            <td>{{ workstation.model }}</td>
+        </tr>
+        <tr>
+            <th>Serienummer</th>
+            <td>{{ workstation.serial }}</td>
+        </tr>
+        {% if perms.costs.view_user and workstation.owner %}
+            <tr>
+                <th>Eier</th>
+                <td>
+                    <a href="{% url 'costs:user' %}?id={{ workstation.owner.id }}">{{ workstation.owner.display_name }}</a>
+                </td>
+            </tr>
+        {% endif %}
+        {% if perms.costs.view_user and workstation.user %}
+            <tr>
+                <th>Siste bruker</th>
+                <td>
+                    <a href="{% url 'costs:user' %}?id={{ workstation.user.id }}">{{ workstation.user.display_name }}</a>
+                </td>
+            </tr>
+        {% endif %}
+        {% if workstation.last_logon %}
+            <tr>
+                <th>Siste pålogging</th>
+                <td>{{ workstation.last_logon }}</td>
+            </tr>
+        {% endif %}
+        {% if show_pus and workstation.pus_id %}
+            <tr>
+                <th>PureService</th>
+                <td>
+                    <a href="https://storfolloikt.pureservice.com/agent/app#/asset/{{ workstation.pus_id }}/details">{{ workstation.pus_id }}</a>
+                </td>
+            </tr>
+        {% endif %}
+        <tr>
+            <th>Leid</th>
+            <td>{% include 'employee_info/boolean.html' with value=workstation.leased %}</td>
+        </tr>
+        {% if workstation.product %}
+            <tr>
+                <th>Tjeneste</th>
+                <td>{{ workstation.product }}</td>
+            </tr>
+        {% endif %}
+        {% if workstation.cost_center %}
+            <tr>
+                <th>Ansvar</th>
+                <td>{{ workstation.cost_center }}</td>
+            </tr>
+        {% endif %}
+        {% if workstation.function %}
+            <tr>
+                <th>Funksjon</th>
+                <td>{{ workstation.function }}</td>
+            </tr>
+        {% endif %}
+    </table>
+{% endblock %}

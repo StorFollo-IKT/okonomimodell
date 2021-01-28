@@ -3,7 +3,7 @@ import datetime
 from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
-from django.http import HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponseBadRequest, HttpResponse, Http404
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -279,6 +279,20 @@ def workstations(request):
                    'show_pus': request.user.email.find('@storfolloikt.no') > -1,
                    }
                   )
+
+
+@permission_required('costs.view_workstation')
+def workstation(request):
+    key = request.GET.get('id')
+    if key:
+        workstation_obj = Workstation.objects.get(id=key)
+    else:
+        raise Http404('Arbeidsstasjon ikke funnet')
+
+    return render(request, 'costs/workstation.html',
+                  {'title': workstation_obj.name,
+                   'workstation': workstation_obj,
+                   'show_pus': request.user.email.find('@storfolloikt.no') > -1})
 
 
 @permission_required('costs.view_application')
