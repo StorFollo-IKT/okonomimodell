@@ -246,23 +246,26 @@ def sectors(request):
 @permission_required('costs.view_workstation')
 def workstations(request):
     workstations_obj = Workstation.objects.all()
-    if request.GET.get('customer'):
+
+    if request.GET.get('customer_name'):
+        workstations_obj = workstations_obj.filter(customer__name=request.GET.get('customer_name'))
+    elif request.GET.get('customer'):
         workstations_obj = workstations_obj.filter(customer__id=request.GET.get('customer'))
     has_employee = request.GET.get('has_employee')
-    if has_employee == 'true':
+    if has_employee == 'true' or has_employee == 'Ja':
         workstations_obj = workstations_obj.exclude(user__employee=None)
-    elif has_employee == 'false':
+    elif has_employee == 'false' or has_employee == 'Nei':
         workstations_obj = workstations_obj.filter(user__employee=None, user__student=None)
 
     has_user = request.GET.get('has_user')
-    if has_user == 'true':
+    if has_user == 'true' or has_user == 'Ja':
         workstations_obj = workstations_obj.exclude(user=None)
-    elif has_user == 'false':
+    elif has_user == 'false' or has_user == 'Nei':
         workstations_obj = workstations_obj.filter(user=None)
 
     return render(request, 'costs/workstations_page.html',
                   {'workstations': workstations_obj,
-                   'customers': Customer.objects.exclude(workstations=None),
+                   'customers': filter_list('name', queryset=Customer.objects.exclude(workstations=None)),
                    'selected_customer': request.GET.get('customer'),
                    'has_employee': has_employee,
                    'has_user': has_user,
