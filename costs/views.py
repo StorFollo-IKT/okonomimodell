@@ -104,7 +104,7 @@ def server_form(request):
 def applications(request, customer=None, vendor=None, department=None, sector=None):
     apps = Application.objects.all()
     title = Application._meta.verbose_name_plural
-    sectors = None
+    sectors_available = None
 
     if not customer:
         customer = request.GET.get('customer')
@@ -118,35 +118,31 @@ def applications(request, customer=None, vendor=None, department=None, sector=No
 
     if customer and department:
         apps = apps.filter(customer__name=customer, department__number=department)
-        selected_customer = customer
     elif customer:
         apps = apps.filter(customer__name=customer)
-        sectors = Sector.objects.filter(customer__name=customer)
+        sectors_available = Sector.objects.filter(customer__name=customer)
         title += ' hos %s' % customer
-        selected_customer = customer
+
     if vendor:
         apps = apps.filter(vendor=vendor)
         title += ' levert av %s' % vendor
 
     if sector:
-        sector_obj = Sector.objects.get(customer__name=customer,
-                                        name=sector)
-        apps = sector_obj.applications
+        apps = apps.filter(sector__name=sector)
         title += ' i sektor %s' % sector
 
     if server:
         apps = Application.objects.filter(servers__name=server, servers__customer__name=customer)
         title += ' på server %s' % server
 
+    if not sectors_available:
+        sectors_available = Sector.objects.order_by('name').values_list('name', flat=True).distinct()
+
     apps = apps.order_by('name')
     return render(request, 'costs/applications.htm', {'applications': apps,
                                                       'title': title,
-                                                      'customers': Customer.objects.all(),
-                                                      'sectors': sectors,
-                                                      'selected_customer': customer,
-                                                      'selected_department': department,
-                                                      'selected_vendor': vendor,
-                                                      'selected_sector': sector})
+                                                      'customers': filter_list('name', model=Customer),
+                                                      'sectors': filter_list('name', queryset=sectors_available)})
 
 
 @permission_required('costs.view_application')

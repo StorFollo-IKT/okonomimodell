@@ -1,34 +1,25 @@
 {% extends 'costs/base.html' %}
 {% load static %}
 {% block head %}
-    <link rel="stylesheet" href="{% static 'admin/css/changelists.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'costs/filter.css' %}" type="text/css">
+    <script type="application/javascript" src="{% static 'costs/filter.js' %}"></script>
 {% endblock %}
 {% block body %}
-    <div class="module filtered" id="changelist">
-        <div id="changelist-filter">
-            <h2>Filtrering</h2>
-            <h3>Etter kunde</h3>
-            <ul>
-                <li><a href="{% url 'costs:applications' %}">Alle</a></li>
-                {% for customer in customers.all %}
-                    <li {% if customer.name == selected_customer %} class="selected" {% endif %}
-                    ><a href="{% url 'costs:applications' customer=customer.name %}">{{ customer.name }}</a></li>
-                {% endfor %}
-            </ul>
-            {% if selected_customer %}
-                <h3>Etter sektor</h3>
-                <ul>
-                    <li><a href="{% url 'costs:applications' customer=selected_customer %}">Alle</a></li>
-                    {% for sector in sectors.all %}
-                        <li {% if sector.department_prefix == selected_sector %} class="selected" {% endif %}
-                        >
-                            <a href="{% url 'costs:applications' customer=selected_customer %}?sector={{ sector.name }}">{{ sector.name }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        </div>
+    <div id="filter">
+        <h2>Filtrering</h2>
     </div>
+    {{ customers|json_script:'customer-data' }}
+    {{ sectors|json_script:'sector-data' }}
+    {{ vendors|json_script:'vendor-data' }}
+    <script>
+        const filter_group = new filterGroup('filter')
+        filter_group.addFilterJson('customer', 'Etter kunde')
+        {% if sectors %}
+        filter_group.addFilterJson('sector', 'Etter sektor')
+        {% endif %}
+    </script>
+
+{#    {{ sectors_unique|json_script:'sector-data' }}#}
     <div class="results">
         <table id="apps" class="display">
             <thead>
@@ -49,7 +40,7 @@
                     {% if application.department %}
                         <td>{{ application.sector.name }}</td>
                         <td>
-                            <a href="{% url 'costs:applications' customer=application.customer.name department=application.department.number %}">{{ application.department.name }}</a>
+                            <a href="{% url 'costs:applications' %}?customer={{ application.customer.name}}&amp;department={{ application.department.number }}">{{ application.department.name }}</a>
                         </td>
                     {% else %}
                         <td></td>
