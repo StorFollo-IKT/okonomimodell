@@ -3,16 +3,14 @@
 {% block body %}
     <table>
         <thead>
-
-        </thead>
-        <tbody>
         <tr>
             <th>Navn</th>
             <th>Ansvar</th>
             <th>Ressursnummer</th>
             <th>Funksjon</th>
         </tr>
-
+        </thead>
+        <tbody>
         {% for user in users %}
             <tr>
                 <td><a href="{% url 'costs:user' %}?id={{ user.id }}">{{ user.name }}</a></td>
