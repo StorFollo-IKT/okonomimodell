@@ -13,3 +13,4 @@ from .Application import Application
 from .CostDistribution import CostDistribution
 from .ProductDelivery import ProductDelivery
 from .ProductGroup import ProductGroup
+from .ProductMapping import ProductMapping
