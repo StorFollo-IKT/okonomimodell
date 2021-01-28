@@ -9,11 +9,13 @@
         <h2>Filtrering</h2>
     </div>
     {{ customers|json_script:'customer_name-data' }}
+    {{ os|json_script:'os-data' }}
     <script>
         const filter_group = new filterGroup('filter')
         filter_group.addFilterJson('customer_name', 'Etter kunde')
         filter_group.addFilterBool('user', 'Har bruker')
         filter_group.addFilterBool('employee', 'Er ansatt')
+        filter_group.addFilterJson('os', 'Operativsystem')
     </script>
     <div class="results">
     <table id="workstations">

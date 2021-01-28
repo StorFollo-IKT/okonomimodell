@@ -263,8 +263,19 @@ def workstations(request):
     elif has_user == 'false' or has_user == 'Nei':
         workstations_obj = workstations_obj.filter(user=None)
 
+    os = request.GET.get('os')
+    if os:
+        workstations_obj = workstations_obj.filter(ad_object__operatingSystem=os)
+
+    if workstations_obj:
+        os = filter_list('ad_object__operatingSystem', queryset=workstations_obj)
+        os = list(dict.fromkeys(os))
+    else:
+        os = []
+
     return render(request, 'costs/workstations_page.html',
                   {'workstations': workstations_obj,
+                   'os': os,
                    'customers': filter_list('name', queryset=Customer.objects.exclude(workstations=None)),
                    'selected_customer': request.GET.get('customer'),
                    'has_employee': has_employee,
