@@ -62,6 +62,10 @@ class filterGroup {
    */
   constructor (parentElementId) {
     this.parentElement = document.getElementById(parentElementId)
+    if (this.parentElement === null) {
+      console.error('Element with id "'+parentElementId+'" not found')
+      return
+    }
     this.filters = {}
     this.params = new URLSearchParams(window.location.search)
   }
@@ -86,7 +90,17 @@ class filterGroup {
    * @param {string} header Header text for the filter list
    */
   addFilterJson (field, header) {
-    const values = JSON.parse(document.getElementById(field + '-data').textContent)
+    const data_element = document.getElementById(field + '-data')
+    if (data_element === null) {
+      console.error('Data element not found for ' + field)
+      return
+    }
+    const values = JSON.parse(data_element.textContent)
+    this.addFilter(field, values, header)
+  }
+
+  addFilterBool(field, header) {
+    const values = ['Ja', 'Nei']
     this.addFilter(field, values, header)
   }
 
