@@ -1,9 +1,42 @@
+from typing import Optional
+
 import requests
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from costs.models import Workstation, Customer
 from employee_info.models import CostCenter, Function
+
+customers = {
+    9: Customer.objects.get(id='FK'),
+    10: Customer.objects.get(id='VK'),
+    11: Customer.objects.get(id='AK'),
+    196: Customer.objects.get(id='SFI'),
+    225: Customer.objects.get(id='KF'),
+    226: Customer.objects.get(id='BB'),
+}
+
+status = {
+    12: 'Lager',
+    21: 'Feilmeldt',
+    30: 'Forsvunnet/stjålet',
+    32: 'Ikke meldt ut i PUS',
+    33: 'Kassert',
+}
+
+
+def get_customer(pus_workstation) -> Optional[Customer]:
+    pus_customer = pus_workstation['assets_UDF_95_Firma_32__40_kommune_47_IKS_47_kunde_41_ItemId']
+    pus_id = pus_workstation['id']
+    if not pus_customer:
+        print('%s har ikke kunde' % pus_id)
+        return
+
+    if pus_customer not in customers:
+        print('Ukjent kundeid for ressurs %d: %s' % (pus_id, pus_customer))
+        return
+
+    return customers[pus_customer]
 
 
 class Command(BaseCommand):
@@ -26,7 +59,22 @@ class Command(BaseCommand):
                 continue
 
             workstation_obj.pus_id = workstation['id']
-            workstation_obj.save()
+
+            customer = get_customer(workstation)
+            if customer.id != 'SFI':
+                workstation_obj.customer = customer
+            else:
+                if workstation_obj.user and workstation_obj.user.customer:
+                    print('%s er registrert med kunde StorFollo IKT, men bruker overstyrer til %s' % (
+                    workstation_obj, workstation_obj.user.customer))
+                    workstation_obj.customer = workstation_obj.user.customer
+                else:
+                    workstation_obj.customer = None
+                    workstation_obj.cost_center = None
+                    workstation_obj.function = None
+                    workstation_obj.save()
+                    print('%s er er registrert med kunde StorFollo IKT, men har ikke aktiv bruker' % workstation_obj)
+                    continue
 
             pus_customer = workstation['assets_UDF_95_Firma_32__40_kommune_47_IKS_47_kunde_41_ItemId']
 
