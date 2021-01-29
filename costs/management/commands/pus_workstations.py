@@ -92,6 +92,7 @@ class Command(BaseCommand):
                     print('Kunde %s er ikke knyttet mot firma' % customer)
                     continue
 
+            if workstation_obj.customer and workstation_obj.customer.company is not None:
                 if workstation['assets_UDF_95_Ansvar'] is not None and \
                         len(workstation['assets_UDF_95_Ansvar']) == 3 and \
                         workstation['assets_UDF_95_Funksjon'] == '' and \
@@ -126,5 +127,9 @@ class Command(BaseCommand):
                             workstation['assets_UDF_95_Funksjon']))
                 else:
                     workstation_obj.function = None
+            else:
+                # print('Kunde %s er ikke knyttet mot firma (ressurs %s)' % (customer, workstation_obj.pus_id))
+                workstation_obj.cost_center = None
+                workstation_obj.function = None
 
-                workstation_obj.save()
+            workstation_obj.save()
