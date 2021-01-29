@@ -76,7 +76,12 @@ class Command(BaseCommand):
                     print('%s er er registrert med kunde StorFollo IKT, men har ikke aktiv bruker' % workstation_obj)
                     continue
 
-            pus_customer = workstation['assets_UDF_95_Firma_32__40_kommune_47_IKS_47_kunde_41_ItemId']
+            if workstation['assets_UDF_95_Eie_47_LeieItemId'] == 202:
+                workstation_obj.leased = False
+            elif workstation['assets_UDF_95_Eie_47_LeieItemId'] == 203:
+                workstation_obj.leased = True
+            elif workstation['assets_UDF_95_Eie_47_LeieItemId'] is not None:
+                print('Ugyldig verdi for eie/leie: %s' % workstation['assets_UDF_95_Eie_47_LeieItemId'])
 
             if pus_customer:
                 if pus_customer not in customers:
