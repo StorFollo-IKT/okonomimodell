@@ -13,8 +13,8 @@
                 <li>Arbeidsstasjoner aktive siste 90 dager: {{ customer.workstations_active.count }}</li>
              {% endif %}
             {% if customer.users.count > 0 %}
-                <li>Brukere: {{ customer.users.count }}</li>
-             {% endif %}
+                <li>Brukere: <a href="{% url 'costs:users' %}?customer={{ customer.id }}">{{ customer.users.count }}</a></li>
+            {% endif %}
             {% if customer.employees.count > 0 %}
                 <li>Ansatte: {{ customer.employees.count }}</li>
              {% endif %}

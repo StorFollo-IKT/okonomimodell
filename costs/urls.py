@@ -36,4 +36,5 @@ urlpatterns = [
     path('tjenester', views.products, name='products'),
     path('tjenestebrukere', views.product_users, name='product_users'),
     path('bruker', views.user, name='user'),
+    path('brukere', views.users, name='users'),
 ]

@@ -105,7 +105,6 @@ def applications(request, customer=None, vendor=None, department=None, sector=No
     apps = Application.objects.all()
     title = Application._meta.verbose_name_plural
     sectors_available = None
-
     if not customer:
         customer = request.GET.get('customer')
     if not vendor:
@@ -528,6 +527,13 @@ def product_users(request):
     value = request.GET.get('product')
     product_obj = Product.objects.get(name=value)
     return render(request, 'costs/users.html', {'users': product_obj.users.all()})
+
+
+@permission_required('costs.show_user')
+def users(request):
+    customer = request.GET.get('customer')
+    users_obj = User.objects.filter(customer_id=customer)
+    return render(request, 'costs/users.html', {'users': users_obj})
 
 
 @permission_required('costs.show_user')
