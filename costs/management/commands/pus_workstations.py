@@ -62,7 +62,7 @@ class Command(BaseCommand):
                     try:
                         function = Function.objects.get(
                             value=workstation['assets_UDF_95_Funksjon'],
-                            company=customer.company)
+                            company=None)
                         workstation_obj.function = function
                     except Function.DoesNotExist:
                         print('Ugyldig funksjon ressurs %d %s: %s' % (
