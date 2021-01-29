@@ -42,7 +42,8 @@ def index(request):
 
 @permission_required('costs.view_customer')
 def customers(request):
-    return render(request, 'costs/customers.html', {'customers': Customer.objects.all()})
+    customers_obj = Customer.objects.select_related().all()
+    return render(request, 'costs/customers.html', {'customers': customers_obj})
 
 
 @permission_required('costs.add_application')
@@ -258,6 +259,12 @@ def workstations(request):
     elif has_user == 'false' or has_user == 'Nei':
         workstations_obj = workstations_obj.filter(user=None)
 
+    has_student = request.GET.get('student')
+    if has_student == 'Ja':
+        workstations_obj = workstations_obj.exclude(user__student=None)
+    elif has_student == 'Nei':
+        workstations_obj = workstations_obj.filter(user__student=None)
+
     os = request.GET.get('os')
     if os:
         workstations_obj = workstations_obj.filter(ad_object__operatingSystem=os)
@@ -269,7 +276,7 @@ def workstations(request):
         os = []
 
     workstations_obj = workstations_obj.select_related(
-        'user__employee', 'user__customer__company', 'user__ad_object',
+        'user__employee', 'user__student', 'user__customer__company', 'user__ad_object',
         'ad_object', 'customer', 'owner', 'product', 'cost_center',
         'function')
 
@@ -545,3 +552,20 @@ def user(request):
         'title': 'Bruker %s' % user_obj.name,
         'show_pus': request.user.email.find('@storfolloikt.no') > -1
     })
+
+
+@permission_required('costs.show_product')
+def product(request):
+    value = request.GET.get('value')
+    product_obj = Product.objects.get(id=value)
+
+
+def users_not_employed_with_workstations(request):
+    users = User.objects.filter(employee__employments=None).exclude(employee=None).exclude(workstations=None)
+    print(users)
+    return render(request, 'costs/user_workstations.html', {'users': users, 'title': 'Arbeidsstasjoner tilhørende brukere som har sluttet'})
+
+
+@permission_required('costs.show_user')
+def mismatch(request):
+    pass
