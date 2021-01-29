@@ -247,13 +247,13 @@ def workstations(request):
         workstations_obj = workstations_obj.filter(customer__name=request.GET.get('customer_name'))
     elif request.GET.get('customer'):
         workstations_obj = workstations_obj.filter(customer__id=request.GET.get('customer'))
-    has_employee = request.GET.get('has_employee')
+    has_employee = request.GET.get('has_employee') or request.GET.get('employee')
     if has_employee == 'true' or has_employee == 'Ja':
         workstations_obj = workstations_obj.exclude(user__employee=None)
     elif has_employee == 'false' or has_employee == 'Nei':
         workstations_obj = workstations_obj.filter(user__employee=None, user__student=None)
 
-    has_user = request.GET.get('has_user')
+    has_user = request.GET.get('has_user') or request.GET.get('user')
     if has_user == 'true' or has_user == 'Ja':
         workstations_obj = workstations_obj.exclude(user=None)
     elif has_user == 'false' or has_user == 'Nei':
