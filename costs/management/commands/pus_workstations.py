@@ -57,6 +57,8 @@ class Command(BaseCommand):
                             workstation_obj.pus_id,
                             customer.company,
                             workstation['assets_UDF_95_Ansvar']))
+                else:
+                    workstation_obj.cost_center = None
 
                 if workstation['assets_UDF_95_Funksjon']:
                     try:
@@ -69,5 +71,7 @@ class Command(BaseCommand):
                             workstation_obj.pus_id,
                             customer.company,
                             workstation['assets_UDF_95_Funksjon']))
+                else:
+                    workstation_obj.function = None
 
                 workstation_obj.save()
