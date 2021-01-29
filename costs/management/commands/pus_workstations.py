@@ -43,13 +43,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         headers = {'user-agent': 'StorFollo IKT okonomimodell', 'X-Authorization-Key': settings.PUS_API_KEY}
 
-        customers = {
-            9: Customer.objects.get(id='FK'),
-            10: Customer.objects.get(id='VK'),
-            11: Customer.objects.get(id='AK'),
-            196: Customer.objects.get(id='SFI'),
-        }
-
         response = requests.get(settings.PUS_URL + '/agent/api/asset', headers=headers)
         workstations = response.json()
         if 'message' in workstations:
@@ -85,14 +78,15 @@ class Command(BaseCommand):
             elif workstation['assets_UDF_95_Eie_47_LeieItemId'] is not None:
                 print('Ugyldig verdi for eie/leie: %s' % workstation['assets_UDF_95_Eie_47_LeieItemId'])
 
-            if pus_customer:
-                if pus_customer not in customers:
-                    print('Ukjent kundeid for ressurs %d: %s' % (workstation_obj.pus_id, pus_customer))
-
-                customer = customers[pus_customer]
-                if not customer.company:
-                    print('Kunde %s er ikke knyttet mot firma' % customer)
+            if workstation['statusId'] != 4:  # Ikke i bruk
+                if workstation['statusId'] == 33:  # Kassert
+                    workstation_obj.ad_object.delete()
+                    workstation_obj.delete()
                     continue
+                elif workstation['statusId'] == 12:  # Lager
+                    workstation_obj.customer = None
+                elif workstation['statusId'] not in status:
+                    print('Ukjent status %d' % workstation['statusId'])
 
             if workstation_obj.customer and workstation_obj.customer.company is not None:
                 if workstation['assets_UDF_95_Ansvar'] is not None and \
