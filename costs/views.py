@@ -335,14 +335,10 @@ def portfolio(request):
     return render(request, 'costs/portfolio.html',
                   {'applications': applications_obj,
                    'deliveries': deliveries_obj,
-                   'applications_unique': applications_unique,
-                   'customers': Customer.objects.all(),
-                   'sectors': sectors_unique,
-                   'vendors': vendors_unique,
-                   'selected_application': application_name,
-                   'selected_customer': customer,
-                   'selected_vendor': vendor,
-                   'selected_sector': sector
+                   'customers_filter': filter_list('name', model=Customer),
+                   'sectors_filter': list(sectors_unique),
+                   'vendors_filter': list(vendors_unique),
+                   'applications_filter': list(applications_unique),
                    })
 
 

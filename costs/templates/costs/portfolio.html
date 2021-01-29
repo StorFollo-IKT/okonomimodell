@@ -2,66 +2,28 @@
 {% load humanize %}
 {% load static %}
 {% block head %}
-    <link rel="stylesheet" href="{% static 'admin/css/changelists.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'costs/filter.css' %}" type="text/css">
+    <script type="application/javascript" src="{% static 'costs/filter.js' %}"></script>
     <script type="text/javascript" charset="utf8" src="{% static 'costs/table.js' %}"></script>
 {% endblock %}
 {% block body %}
-    <div class="module filtered" id="changelist">
-        <div id="changelist-filter">
-            <h2>Filtrering</h2>
-            <h3>Etter kunde</h3>
-            <ul>
-                <li>
-                    <a href="{% url 'costs:portfolio' %}?customer=all&amp;sector={{ selected_sector }}&amp;vendor={{ selected_vendor }}&amp;application={{ selected_application }}">Alle</a>
-                </li>
-                {% for customer in customers.all %}
-                    <li {% if customer.name == selected_customer %} class="selected" {% endif %}
-                    >
-                        <a href="{% url 'costs:portfolio' %}?customer={{ customer.name }}&amp;sector={{ selected_sector }}&amp;vendor={{ selected_vendor }}&amp;application={{ selected_application }}">{{ customer.name }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
+    {{ customers_filter|json_script:'customer-data' }}
+    {{ vendors_filter|json_script:'vendor-data' }}
+    {{ sectors_filter|json_script:'sector-data' }}
+    {{ applications_filter|json_script:'application-data' }}
 
-            <h3>Etter sektor</h3>
-            <ul>
-                <li>
-                    <a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector=all&amp;vendor={{ selected_vendor }}&amp;application={{ selected_application }}">Alle</a>
-                </li>
-                {% for sector in sectors.all %}
-                    <li {% if sector == selected_sector %} class="selected" {% endif %}
-                    >
-                        <a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector={{ sector }}&amp;vendor={{ selected_vendor }}&amp;application={{ selected_application }}">{{ sector }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-
-            <h3>Etter leverand&oslash;r</h3>
-            <ul>
-                <li>
-                    <a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector={{ selected_sector }}&amp;vendor=all&amp;application={{ selected_application }}">Alle</a>
-                </li>
-                {% for vendor in vendors %}
-                    <li {% if vendor == selected_vendor %} class="selected" {% endif %}
-                    >
-                        <a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector={{ selected_sector }}&amp;vendor={{ vendor }}&amp;application={{ selected_application }}">{{ vendor }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-
-            <h3>Etter applikasjon</h3>
-            <ul>
-                <li>
-                    <a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector={{ selected_sector }}&amp;vendor={{ selected_vendor }}&amp;application=all">Alle</a>
-                </li>
-                {% for application in applications_unique %}
-                    <li {% if application == selected_application %} class="selected" {% endif %}
-                    >
-                        <a href="{% url 'costs:portfolio' %}?customer={{ selected_customer }}&amp;sector={{ selected_sector }}&amp;vendor={{ selected_vendor }}&amp;application={{ application }}">{{ application }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
+    <div id="filter">
+        <h2>Filtrering</h2>
     </div>
+
+    <script>
+        const filter_group = new filterGroup('filter')
+        filter_group.addFilterJson('customer', 'Etter kunde')
+        filter_group.addFilterJson('sector', 'Etter sektor')
+        filter_group.addFilterJson('vendor', 'Etter leverandør')
+        filter_group.addFilterJson('application', 'Etter applikasjon')
+    </script>
+
     <div id="total"><div id="totalLabel">TOTALT PER ÅR: </div><div id="totalSum"></div></div>
     <h2>Applikasjoner</h2>
     <div class="results">
