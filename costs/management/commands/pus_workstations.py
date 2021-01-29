@@ -52,6 +52,8 @@ class Command(BaseCommand):
 
         response = requests.get(settings.PUS_URL + '/agent/api/asset', headers=headers)
         workstations = response.json()
+        if 'message' in workstations:
+            raise RuntimeError(workstations['message'])
         for workstation in workstations['assets']:
             try:
                 workstation_obj = Workstation.objects.get(serial=workstation['uniqueId'])
