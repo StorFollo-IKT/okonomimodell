@@ -81,7 +81,7 @@
             {% endfor %}
             </tbody>
         </table>
-        {% if selected_vendor == 'all' and selected_application == 'all' %}
+        {% if deliveries.count %}
             <h2>Tjenester</h2>
             <table id="svcs" class="display">
                 <thead>
