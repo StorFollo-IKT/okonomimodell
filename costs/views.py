@@ -327,6 +327,7 @@ def portfolio(request):
     if application_name and application_name != 'all':
         applications_obj = applications_obj.filter(name=application_name)
 
+    applications_obj = applications_obj.select_related('customer', 'department', 'sector')
     # applications_unique = Application.objects.order_by('name').values_list('name', flat=True).distinct()
     applications_unique = applications_obj.order_by('name').values_list('name', flat=True).distinct()
     sectors_unique = Sector.objects.order_by('name').values_list('name', flat=True).distinct()
