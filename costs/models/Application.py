@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Sum
 
 from . import Customer, Department, Product, Sector, Server, User
+product_hour = Product.objects.get(name='Drift av applikasjon per time')
 
 
 class Application(models.Model):
@@ -32,8 +33,7 @@ class Application(models.Model):
         ordering = ['customer', 'name']
 
     def internal_hour_cost(self):
-        product = Product.objects.get(name='Drift av applikasjon per time')
-        return self.internal_hours * product.price
+        return self.internal_hours * product_hour.price
 
     def internal_hour_cost_year(self):
         return self.internal_hour_cost() * 12
