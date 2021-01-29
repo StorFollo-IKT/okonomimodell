@@ -263,11 +263,16 @@ def workstations(request):
     if os:
         workstations_obj = workstations_obj.filter(ad_object__operatingSystem=os)
 
-    if workstations_obj:
+    if workstations_obj is not None:
         os = filter_list('ad_object__operatingSystem', queryset=workstations_obj)
         os = list(dict.fromkeys(os))
     else:
         os = []
+
+    workstations_obj = workstations_obj.select_related(
+        'user__employee', 'user__customer__company', 'user__ad_object',
+        'ad_object', 'customer', 'owner', 'product', 'cost_center',
+        'function')
 
     return render(request, 'costs/workstations_page.html',
                   {'workstations': workstations_obj,
@@ -285,7 +290,9 @@ def workstations(request):
 def workstation(request):
     key = request.GET.get('id')
     if key:
-        workstation_obj = Workstation.objects.get(id=key)
+        workstation_obj = Workstation.objects.select_related(
+            'customer', 'ad_object__directory', 'owner__ad_object',
+            'user__ad_object', 'user__employee', 'cost_center', 'function').get(id=key)
     else:
         raise Http404('Arbeidsstasjon ikke funnet')
 
