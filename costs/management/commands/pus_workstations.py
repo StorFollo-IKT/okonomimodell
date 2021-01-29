@@ -39,6 +39,13 @@ class Command(BaseCommand):
                     print('Kunde %s er ikke knyttet mot firma' % customer)
                     continue
 
+                if workstation['assets_UDF_95_Ansvar'] is not None and \
+                        len(workstation['assets_UDF_95_Ansvar']) == 3 and \
+                        workstation['assets_UDF_95_Funksjon'] == '' and \
+                        len(workstation['assets_UDF_95_Kommentar']) == 4:
+                    workstation['assets_UDF_95_Funksjon'] = workstation['assets_UDF_95_Ansvar']
+                    workstation['assets_UDF_95_Ansvar'] = workstation['assets_UDF_95_Kommentar']
+
                 if workstation['assets_UDF_95_Ansvar']:
                     try:
                         cost_center = CostCenter.objects.get(
