@@ -61,8 +61,8 @@ class Command(BaseCommand):
                         if ad_user.company:
                             try:
                                 user_customer = Customer.objects.get(name__iexact=ad_user.company)
-                                if user_customer != customer:
-                                    print('Company %s matched customer %s' % (ad_user.company, user_customer))
+                                if user_customer != customer or user_customer != user.customer:
+                                    # print('Company %s matched customer %s' % (ad_user.company, user_customer))
                                     user.customer = user_customer
                             except Customer.DoesNotExist:
                                 print('Company %s does not exist as customer' % ad_user.company)
