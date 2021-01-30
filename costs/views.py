@@ -243,10 +243,13 @@ def sectors(request):
 def workstations(request):
     workstations_obj = Workstation.objects.all()
 
-    if request.GET.get('customer_name'):
+    if request.GET.get('customer'):
         workstations_obj = workstations_obj.filter(customer__name=request.GET.get('customer_name'))
-    elif request.GET.get('customer'):
-        workstations_obj = workstations_obj.filter(customer__id=request.GET.get('customer'))
+    elif request.GET.get('customer_name'):
+        if request.GET.get('customer_name') == 'Ingen':
+            workstations_obj = workstations_obj.filter(customer=None)
+        else:
+            workstations_obj = workstations_obj.filter(customer__id=request.GET.get('customer'))
     has_employee = request.GET.get('has_employee') or request.GET.get('employee')
     if has_employee == 'true' or has_employee == 'Ja':
         workstations_obj = workstations_obj.exclude(user__employee=None)
@@ -269,6 +272,12 @@ def workstations(request):
     if os:
         workstations_obj = workstations_obj.filter(ad_object__operatingSystem=os)
 
+    cost_center = request.GET.get('cost_center')
+    if cost_center == 'Ja':
+        workstations_obj = workstations_obj.exclude(cost_center=None)
+    elif cost_center == 'Nei':
+        workstations_obj = workstations_obj.filter(cost_center=None)
+
     if workstations_obj is not None:
         os = filter_list('ad_object__operatingSystem', queryset=workstations_obj)
         os = list(dict.fromkeys(os))
@@ -280,10 +289,13 @@ def workstations(request):
         'ad_object', 'customer', 'owner', 'product', 'cost_center',
         'function')
 
+    customer_list = filter_list('name', queryset=Customer.objects.exclude(workstations=None))
+    customer_list.append('Ingen')
+
     return render(request, 'costs/workstations_page.html',
                   {'workstations': workstations_obj,
                    'os': os,
-                   'customers': filter_list('name', queryset=Customer.objects.exclude(workstations=None)),
+                   'customers': customer_list,
                    'selected_customer': request.GET.get('customer'),
                    'has_employee': has_employee,
                    'has_user': has_user,
