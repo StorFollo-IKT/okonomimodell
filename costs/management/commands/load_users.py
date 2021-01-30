@@ -33,17 +33,18 @@ class Command(BaseCommand):
                         ad_user = load.load_user(user_data)
                         if not ad_user:
                             continue
-                        try:
-                            user = User.objects.get(ad_object=ad_user)
-                            if ad_user.disabled():
-                                user.delete()
-                                continue
-                        except User.DoesNotExist:
-                            # print('No user for AD object %s' % ad_user)
-                            user = User(ad_object=ad_user)
-                        except ProtectedError as e:
-                            print(e)
+                        if ad_user.disabled():
+                            ad_user.delete()
                             continue
+                        else:
+                            try:
+                                user = User.objects.get(ad_object=ad_user)
+                            except User.DoesNotExist:
+                                # print('No user for AD object %s' % ad_user)
+                                user = User(ad_object=ad_user)
+                            except ProtectedError as e:
+                                print(e)
+                                continue
 
                         try:
                             if ad_user.employeeID:
