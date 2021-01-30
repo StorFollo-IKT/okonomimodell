@@ -244,12 +244,12 @@ def workstations(request):
     workstations_obj = Workstation.objects.all()
 
     if request.GET.get('customer'):
-        workstations_obj = workstations_obj.filter(customer__name=request.GET.get('customer_name'))
+        workstations_obj = workstations_obj.filter(customer__id=request.GET.get('customer'))
     elif request.GET.get('customer_name'):
         if request.GET.get('customer_name') == 'Ingen':
             workstations_obj = workstations_obj.filter(customer=None)
         else:
-            workstations_obj = workstations_obj.filter(customer__id=request.GET.get('customer'))
+            workstations_obj = workstations_obj.filter(customer__name=request.GET.get('customer_name'))
     has_employee = request.GET.get('has_employee') or request.GET.get('employee')
     if has_employee == 'true' or has_employee == 'Ja':
         workstations_obj = workstations_obj.exclude(user__employee=None)
