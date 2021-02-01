@@ -121,9 +121,6 @@ class Workstation(models.Model):
 
     def get_cost_center(self):
         if self.cost_center:
-            return self.cost_center
-        elif self.user:
-            if self.user.employee:
-                return self.user.employee.main_position().costCenter
-            elif self.user.student:
-                return None  # TODO: Check student school
+            return '%s %s' % (self.cost_center.value, self.cost_center.description)
+        elif self.user and self.user.student:
+            return None  # TODO: Check student school
